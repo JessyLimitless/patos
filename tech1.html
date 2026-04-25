@@ -320,6 +320,259 @@
         </div>
     </div>
 
+    <!-- Implementation Issues -->
+    <div class="w-full max-w-4xl mb-10">
+
+        <!-- Section header -->
+        <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-red-50 text-red-600 rounded-xl">
+                <i data-lucide="triangle-alert" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">구현의 핵심 난제 2가지</h2>
+                <p class="text-slate-500 text-xs mt-0.5">기술보다 이 두 가지가 더 오래 걸린다</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+
+            <!-- Issue 1 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-5 py-3.5 bg-amber-50 border-b border-amber-100">
+                    <div class="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center shrink-0">
+                        <span class="text-white font-black text-xs">1</span>
+                    </div>
+                    <span class="font-bold text-amber-900 text-sm">시나리오 초안 수립 — 암묵지를 꺼내는 것 자체가 난제</span>
+                </div>
+                <div class="p-5">
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div>
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">문제</div>
+                            <div class="space-y-2">
+                                <div class="flex items-start gap-2">
+                                    <span class="text-red-400 font-bold text-xs mt-0.5 shrink-0">✗</span>
+                                    <p class="text-xs text-slate-600">수행일지에는 <span class="font-semibold">"결과"만 기록</span>된다. "03:14 신고접수 → 03:27 현장도착" — 왜 이장한테 먼저 전화했는지, 차를 어디 세웠는지는 없다.</p>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <span class="text-red-400 font-bold text-xs mt-0.5 shrink-0">✗</span>
+                                    <p class="text-xs text-slate-600">20년 경력의 <span class="font-semibold">판단은 기록되지 않는다.</span> 몸이 기억하는 것, 눈으로 읽는 것은 문서화가 안 돼 있다.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">해법 — Palantir FDE 방식</div>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-500 font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
+                                    <span class="text-xs text-slate-600">수행일지 수백 건 분석 → 반복 패턴 추출</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-500 font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
+                                    <span class="text-xs text-slate-600">베테랑 인터뷰 — <span class="font-semibold">"왜 그 판단을 했나"</span> 한 가지만 질문</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-500 font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
+                                    <span class="text-xs text-slate-600">초안 시나리오 작성 → 소방관 검토 → 피드백</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-600 font-bold text-[10px] flex items-center justify-center shrink-0">↻</span>
+                                    <span class="text-xs text-slate-500">이 루프가 기술 구현보다 10배 느리다 — 통상 6개월~1년</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 bg-amber-50/50 rounded-xl px-3 py-2.5">
+                        <p class="text-xs text-amber-800"><span class="font-bold">PATOS 현실적 접근:</span> 고흥소방서 1개소, 소록마을 한정. 소방관 1~2명 인터뷰 3회. 질문은 하나 — <span class="font-semibold">"이 마을에서 밤에 불 났을 때 가장 먼저 하는 게 뭐예요? 왜요?"</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue 2 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-5 py-3.5 bg-red-50 border-b border-red-100">
+                    <div class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center shrink-0">
+                        <span class="text-white font-black text-xs">2</span>
+                    </div>
+                    <span class="font-bold text-red-900 text-sm">돌발상황 대처 — 상황이 바뀌면 추론 전체가 역전된다</span>
+                </div>
+                <div class="p-5">
+                    <!-- Example -->
+                    <div class="bg-slate-900 rounded-xl p-4 mb-5 font-mono text-xs">
+                        <div class="text-slate-500 mb-2 font-sans text-[10px] uppercase tracking-widest">돌발 시나리오 예시</div>
+                        <div class="space-y-1.5">
+                            <div><span class="text-orange-400">T+2분</span> <span class="text-slate-300">이장 전화 → 응답 없음</span></div>
+                            <div class="pl-4 text-slate-500">↳ "이장 2분 도착" 전제 붕괴 → 자율방재단 전환 → ETA 재계산 → 위험도 재평가</div>
+                            <div class="mt-2"><span class="text-red-400">T+3분</span> <span class="text-slate-300">이웃 "나도 연기 들어와요" 2차 신고</span></div>
+                            <div class="pl-4 text-slate-500">↳ 단독 화재 → 확산 화재로 분류 변경 → 우선순위 전체 재계산 → 자원 배분 전면 재수립</div>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="network" class="w-4 h-4 text-indigo-600"></i>
+                                <span class="text-xs font-bold text-indigo-800">TypeDB의 장점</span>
+                            </div>
+                            <p class="text-xs text-indigo-700 mb-2">관계 그래프 전체를 연쇄 재계산할 수 있다.</p>
+                            <div class="text-[10px] font-mono text-indigo-600 bg-white/70 rounded-lg px-2 py-1.5 leading-relaxed">
+                                이장 → 응답없음 플래그<br>
+                                → 연결된 노드 상태 업데이트<br>
+                                → 판단 규칙 자동 재평가
+                            </div>
+                            <p class="text-[11px] text-indigo-500 mt-2"><span class="font-semibold">한계:</span> 분기를 설계자가 미리 전부 정의해야 함. 돌발 조합이 늘면 기하급수적으로 복잡해짐.</p>
+                        </div>
+                        <div class="bg-violet-50 rounded-xl p-4 border border-violet-100">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="brain" class="w-4 h-4 text-violet-600"></i>
+                                <span class="text-xs font-bold text-violet-800">LLM의 장점</span>
+                            </div>
+                            <p class="text-xs text-violet-700 mb-2">사전 정의 없이 맥락으로 판단한다.</p>
+                            <div class="text-[10px] font-mono text-violet-600 bg-white/70 rounded-lg px-2 py-1.5 leading-relaxed">
+                                "이장이 안 받아.<br>
+                                지금 뭐가 바뀌어야 해?"<br>
+                                → 알아서 추론
+                            </div>
+                            <p class="text-[11px] text-violet-500 mt-2"><span class="font-semibold">한계:</span> 정상 흐름에 쓰기엔 느리고 비용이 있음. 돌발 상황에만 쓰는 게 효율적.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-xl px-4 py-3">
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">설계 해법 — 이중 분기</div>
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold text-white bg-indigo-600 px-2 py-0.5 rounded">정상 흐름</span>
+                                <span class="text-xs text-slate-400">TypeDB 규칙 처리 — 빠르고 예측 가능</span>
+                            </div>
+                            <span class="text-slate-600 font-bold">+</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold text-white bg-violet-600 px-2 py-0.5 rounded">돌발 상황</span>
+                                <span class="text-xs text-slate-400">LLM 추론 — 느리지만 유연</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2">이 분기 자체를 시스템이 판단하게 하면 TypeDB 구현 범위를 "정상 케이스만"으로 좁힐 수 있다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue 3 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-5 py-3.5 bg-violet-50 border-b border-violet-100">
+                    <div class="w-6 h-6 rounded-full bg-violet-600 flex items-center justify-center shrink-0">
+                        <span class="text-white font-black text-xs">3</span>
+                    </div>
+                    <span class="font-bold text-violet-900 text-sm">플랫폼화 — 암묵지를 코딩 없이 입력하는 인터페이스를 어떻게 만드냐</span>
+                </div>
+                <div class="p-5">
+
+                    <!-- WordPress vs Palantir comparison -->
+                    <div class="grid sm:grid-cols-3 gap-3 mb-5">
+                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
+                            <div class="text-xs font-bold text-slate-500 mb-1.5">WordPress</div>
+                            <div class="text-[11px] text-slate-600 leading-relaxed">누구나 <span class="font-semibold">콘텐츠</span>를 올린다.<br>글 쓰는 법은 누구나 안다.</div>
+                            <div class="mt-2 text-[10px] text-slate-400">입력 대상: 텍스트·이미지</div>
+                        </div>
+                        <div class="rounded-xl border border-indigo-200 p-4 bg-indigo-50">
+                            <div class="text-xs font-bold text-indigo-600 mb-1.5">Palantir Foundry</div>
+                            <div class="text-[11px] text-indigo-700 leading-relaxed">전문가가 <span class="font-semibold">판단 규칙</span>을 올린다.<br>FDE가 현장에서 받아 적는다.</div>
+                            <div class="mt-2 text-[10px] text-indigo-400">입력 대상: 추론 규칙·관계</div>
+                        </div>
+                        <div class="rounded-xl border border-violet-200 p-4 bg-violet-50">
+                            <div class="text-xs font-bold text-violet-600 mb-1.5">PATOS 플랫폼 (목표)</div>
+                            <div class="text-[11px] text-violet-700 leading-relaxed">소방관이 <span class="font-semibold">암묵지</span>를 올린다.<br>코딩 없이, 클릭으로.</div>
+                            <div class="mt-2 text-[10px] text-violet-400">입력 대상: 현장 판단 경험</div>
+                        </div>
+                    </div>
+
+                    <!-- Core challenge -->
+                    <div class="bg-slate-900 rounded-xl p-4 mb-4 font-mono text-xs">
+                        <div class="text-slate-500 mb-2 font-sans text-[10px] uppercase tracking-widest">핵심 질문</div>
+                        <div class="space-y-2">
+                            <div class="flex items-start gap-2">
+                                <span class="text-red-400 shrink-0">✗</span>
+                                <span class="text-slate-400">"접근로 1.8m이면 도보 진입" — 소방관이 코딩으로 입력?</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="text-emerald-400 shrink-0">✓</span>
+                                <span class="text-slate-300">"접근로 1.8m이면 도보 진입" — 소방관이 <span class="text-emerald-300 font-semibold">폼에 체크하면</span> 시스템에 반영?</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Platform layer diagram -->
+                    <div class="space-y-1.5 mb-4">
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">플랫폼 레이어 구조</div>
+                        <div class="flex items-center gap-2 p-2.5 rounded-lg bg-violet-50 border border-violet-100">
+                            <span class="text-[10px] font-bold text-violet-600 w-20 shrink-0">현장 레이어</span>
+                            <span class="text-xs text-violet-700">소방관이 입력 — 마을별 암묵지, 건물 특이사항, 판단 규칙</span>
+                            <span class="ml-auto text-[10px] font-bold text-violet-400 bg-violet-100 px-2 py-0.5 rounded-full whitespace-nowrap">각 소방서마다 다름</span>
+                        </div>
+                        <div class="flex items-center justify-center text-slate-300 text-xs">↕ 분리</div>
+                        <div class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-100 border border-slate-200">
+                            <span class="text-[10px] font-bold text-slate-600 w-20 shrink-0">플랫폼 코어</span>
+                            <span class="text-xs text-slate-600">추론 엔진 + 온톨로지 + LLM 연결 — 공통 인프라</span>
+                            <span class="ml-auto text-[10px] font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full whitespace-nowrap">전국 공통</span>
+                        </div>
+                    </div>
+
+                    <!-- Business implication -->
+                    <div class="bg-violet-50 border border-violet-100 rounded-xl px-4 py-3">
+                        <p class="text-xs text-violet-900"><span class="font-bold">플랫폼이 되면:</span> 고흥소방서가 올린 암묵지, 여수소방서가 올린 암묵지가 각각 다른 레이어로 쌓인다. 코어는 하나, 현장 지식은 무한히 추가된다. 이게 Palantir의 사업 모델이고 PATOS가 전국으로 확장되는 경로다.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Next Steps -->
+        <div class="mt-5 bg-slate-900 rounded-2xl overflow-hidden shadow-xl">
+            <div class="px-5 py-3.5 bg-slate-800 border-b border-white/10 flex items-center gap-2">
+                <i data-lucide="arrow-right-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span class="text-xs font-bold text-white tracking-widest uppercase">지금 당장 해야 하는 것 3가지</span>
+            </div>
+            <div class="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+
+                <div class="p-5">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0">
+                            <span class="text-amber-300 font-black text-xs">1</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">소방관 인터뷰</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">고흥소방서 1~2명, 3회. 질문은 하나만 — <span class="text-slate-300 font-semibold">"이 마을에서 밤에 불 났을 때 가장 먼저 하는 게 뭐예요? 왜요?"</span></p>
+                    <div class="text-[11px] text-amber-400 font-semibold">→ 이슈 1 해결의 시작점</div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-7 h-7 rounded-full bg-violet-500/20 border border-violet-400/30 flex items-center justify-center shrink-0">
+                            <span class="text-violet-300 font-black text-xs">2</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">Claude API 연동</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">TypeDB 없이 goheung_dataset.json + Claude API 직접 연결. <span class="text-slate-300 font-semibold">"서울 자녀 연락이 의미없다"는 판단을 시스템이 스스로 하는지</span> 검증.</p>
+                    <div class="text-[11px] text-violet-400 font-semibold">→ 이슈 2 해결의 최단 경로</div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0">
+                            <span class="text-emerald-300 font-black text-xs">3</span>
+                        </div>
+                        <span class="text-sm font-bold text-white">실사용자 1곳 확보</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">고흥군청 또는 소방서 한 곳에서 <span class="text-slate-300 font-semibold">"써보고 싶다"는 말 한 마디.</span> 거기서부터 예산과 사람이 붙는다.</p>
+                    <div class="text-[11px] text-emerald-400 font-semibold">→ 이슈 3 플랫폼화의 출발점</div>
+                </div>
+
+            </div>
+            <div class="px-5 py-3 bg-slate-800/50 border-t border-white/10">
+                <p class="text-[11px] text-slate-500 text-center">PATOS의 현재 역할 — <span class="text-slate-300 font-semibold">"이 문제가 실재한다"는 것을 보여주는 것.</span> 완성품이 아니라 대화의 시작점이다.</p>
+            </div>
+        </div>
+
+    </div>
+
     <!-- Tacit Knowledge Container Framework -->
     <div class="w-full max-w-4xl mb-8">
         <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
