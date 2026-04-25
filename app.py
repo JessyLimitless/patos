@@ -25,7 +25,7 @@ import fire_spread as fire_mod
 BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
 DATASET_PATH = os.path.join(BASE_DIR, "data", "goheung_dataset.json")
 OUTPUT_PATH  = os.path.join(BASE_DIR, "simulation_result.json")
-PORT = 8000
+PORT = int(os.environ.get('PORT', 8000))
 
 
 # ── Mock TypeDB 추론 엔진 ────────────────────────────────────────────────────
@@ -404,5 +404,6 @@ if __name__ == "__main__":
     print(f"     - 시나리오: {len(result['scenarios'])}건")
     print(f"     - 구조 대상: {total_targets}명 분석")
 
-    threading.Timer(1.2, lambda: webbrowser.open(f"http://localhost:{PORT}")).start()
+    if os.environ.get('PORT') is None:
+        threading.Timer(1.2, lambda: webbrowser.open(f"http://localhost:{PORT}")).start()
     serve()
