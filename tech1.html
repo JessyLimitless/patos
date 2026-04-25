@@ -47,6 +47,100 @@
         <p class="text-slate-500 text-lg">Predictive Agentic Triage OS — 지능형 재난 대응 데이터 흐름도</p>
     </div>
 
+    <!-- Scenario Card: FIRE-2026-001 -->
+    <div class="w-full max-w-4xl mb-10">
+
+        <!-- Incident Header Bar -->
+        <div class="bg-red-600 text-white rounded-t-2xl px-5 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-white rounded-full animate-pulse inline-block"></span>
+                <span class="text-xs font-bold tracking-widest uppercase">FIRE-2026-001 · 신고 접수 03:14</span>
+            </div>
+            <span class="text-xs font-bold bg-white/20 border border-white/30 px-2.5 py-0.5 rounded-full">CRITICAL</span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="bg-slate-900 rounded-b-2xl p-6 sm:p-8 text-white shadow-xl">
+
+            <!-- Location + Victim -->
+            <div class="grid sm:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1.5">발화 위치</div>
+                    <div class="text-xl font-extrabold tracking-tight">소록마을 23-7</div>
+                    <div class="text-sm text-slate-400 mt-1">전라남도 고흥군 도양읍 · 심야 수면 중</div>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <span class="text-[11px] bg-orange-500/15 text-orange-300 border border-orange-500/25 px-2 py-0.5 rounded-full">샌드위치 패널</span>
+                        <span class="text-[11px] bg-red-500/15 text-red-300 border border-red-500/25 px-2 py-0.5 rounded-full">접근로 1.8m — 소방차 진입 불가</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1.5">최우선 구조 대상</div>
+                    <div class="text-xl font-extrabold tracking-tight">마순례 · 84세</div>
+                    <div class="flex flex-wrap gap-1.5 mt-2">
+                        <span class="text-[11px] bg-violet-500/15 text-violet-300 border border-violet-500/25 px-2 py-0.5 rounded-full">난청</span>
+                        <span class="text-[11px] bg-violet-500/15 text-violet-300 border border-violet-500/25 px-2 py-0.5 rounded-full">거동불편</span>
+                        <span class="text-[11px] bg-violet-500/15 text-violet-300 border border-violet-500/25 px-2 py-0.5 rounded-full">독거</span>
+                    </div>
+                    <div class="text-xs text-slate-500 mt-2">자력 대피 불가 · 화재 경보 인지 불가</div>
+                </div>
+            </div>
+
+            <!-- Critical Time Gap -->
+            <div class="bg-red-950/40 border border-red-500/20 rounded-xl p-4 mb-6">
+                <div class="text-[10px] text-red-400 font-bold uppercase tracking-widest mb-3">생존 가능 시간 vs 대응 시간</div>
+                <div class="grid grid-cols-3 gap-3 text-center mb-4">
+                    <div>
+                        <div class="text-2xl font-black text-red-400">1.5분</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">HCN 치사 농도</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-orange-400">2.5분</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">플래시오버</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-slate-400">12분</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">소방차 ETA</div>
+                    </div>
+                </div>
+                <!-- Timeline bar -->
+                <div class="relative h-3 bg-slate-800 rounded-full overflow-hidden mb-2">
+                    <div class="absolute left-0 top-0 h-full bg-gradient-to-r from-red-600 to-red-500 rounded-l-full" style="width:12.5%"></div>
+                    <div class="absolute top-0 h-full bg-orange-500/80" style="left:12.5%; width:8.3%"></div>
+                    <div class="absolute top-0 h-full w-0.5 bg-red-400" style="left:12.4%"></div>
+                    <div class="absolute top-0 h-full w-0.5 bg-orange-400" style="left:20.7%"></div>
+                    <div class="absolute top-0 h-full w-0.5 bg-slate-400" style="left:99.5%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-600 mb-2">
+                    <span>0</span><span>1.5분</span><span>2.5분</span><span style="margin-left:auto">12분</span>
+                </div>
+                <div class="text-center text-xs text-red-300 font-semibold">
+                    소방차 도착까지 <span class="text-red-400 font-black">9.5분의 공백</span> — 표준 대응으로는 생존 불가
+                </div>
+            </div>
+
+            <!-- PATOS 4-Step Response -->
+            <div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-3">PATOS 자율 대응 시퀀스</div>
+            <div class="grid grid-cols-4 gap-2">
+                <div class="bg-white/5 rounded-xl p-3 text-center border border-white/5">
+                    <div class="text-base font-black text-sky-400">~3초</div>
+                    <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">신호 수신<br>STT 변환</div>
+                </div>
+                <div class="bg-white/5 rounded-xl p-3 text-center border border-white/5">
+                    <div class="text-base font-black text-sky-400">~7초</div>
+                    <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">지식 그래프<br>매핑</div>
+                </div>
+                <div class="bg-white/5 rounded-xl p-3 text-center border border-white/5">
+                    <div class="text-base font-black text-sky-400">~15초</div>
+                    <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">온톨로지<br>추론</div>
+                </div>
+                <div class="bg-emerald-500/10 rounded-xl p-3 text-center border border-emerald-500/25">
+                    <div class="text-base font-black text-emerald-400">15초~</div>
+                    <div class="text-[10px] text-emerald-300 mt-1 leading-relaxed">도보 선발대<br>ARS 발령</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Tacit Knowledge Container Framework -->
     <div class="w-full max-w-4xl mb-8">
         <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
