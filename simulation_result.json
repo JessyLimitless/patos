@@ -1,0 +1,1012 @@
+{
+  "generated_at": "2026-04-25T10:50:35.099668",
+  "system_version": "PATOS v4.4",
+  "location": "전남 고흥군 도양읍 소록마을",
+  "live_weather": {
+    "source": "KMA / Open-Meteo",
+    "station": "고흥 관측소 (ASOS 165)",
+    "observed_at": "2026-04-25 10:50:35 KST",
+    "temperature_c": 18.1,
+    "humidity_pct": 53,
+    "wind_speed_ms": 3.52,
+    "wind_direction": "동",
+    "wind_direction_deg": 75.0,
+    "conditions": "맑음",
+    "fire_risk": {
+      "index": 15.9,
+      "level": "낮음",
+      "color": "#16a34a"
+    },
+    "is_live": true
+  },
+  "scenarios": [
+    {
+      "scenario_id": "FIRE-2026-001",
+      "label": "시나리오 A — 초임계 / CRITICAL",
+      "severity": "CRITICAL",
+      "incident": {
+        "scenario_id": "FIRE-2026-001",
+        "label": "시나리오 A — 초임계 / CRITICAL",
+        "severity": "CRITICAL",
+        "timestamp": "2026-04-24T02:15:34",
+        "location": "전남 고흥군 도양읍 소록마을 23-7",
+        "building_id": "BLDG-007",
+        "resident_ids": [
+          "PERSON-001"
+        ],
+        "call_content": "불이야! 소록마을 안쪽 마 노인네 집에 불이 났어요! 빨리요! 거기 어르신 귀가 어두우셔서 모르실 것 같아요!",
+        "fire_origin": "전기 합선 추정",
+        "weather": {
+          "wind_speed_ms": 7.2,
+          "humidity_pct": 22,
+          "temperature_c": 11.5,
+          "conditions": "건조"
+        },
+        "estimated_spread_time_min": 7
+      },
+      "knowledge_lineage": [
+        {
+          "label": "Building Code",
+          "val": "샌드위치 패널 / 1.8m 접근로",
+          "trust": 99.2,
+          "icon": "home"
+        },
+        {
+          "label": "Demography",
+          "val": "84세 / 난청 / 거동불편 / 당뇨",
+          "trust": 97.5,
+          "icon": "user-x"
+        },
+        {
+          "label": "Dynamics",
+          "val": "풍속 7.2m/s / 습도 22%",
+          "trust": 94.8,
+          "icon": "wind"
+        }
+      ],
+      "reasoning_chain": [
+        {
+          "step": 1,
+          "type": "physical_hazard",
+          "label": "Physical Hazard",
+          "icon": "home",
+          "content": "샌드위치 패널 및 1.8m 접근로 구조 분석 결과, 소방력 접근 지연에 따른 대형 화재 전이 임계치 초과 판정.",
+          "score": 90
+        },
+        {
+          "step": 2,
+          "type": "cognitive_vulnerability",
+          "label": "Cognitive Reliability",
+          "icon": "target",
+          "content": "거주자 난청 특성 데이터 가중치 적용 시, 표준 대피 가이드 도달률 유의미성 미달 확인.",
+          "score": 100
+        }
+      ],
+      "priority_targets": [
+        {
+          "rank": 1,
+          "person_id": "PERSON-001",
+          "name": "마순례",
+          "age": 84,
+          "conditions": [
+            "난청",
+            "거동불편",
+            "당뇨"
+          ],
+          "lives_alone": true,
+          "cognitive_vulnerability_score": 100,
+          "physical_isolation_score": 90,
+          "total_priority_score": 96.0,
+          "rescue_actions": [
+            "이장단 ARS 즉시 발송 (청각 경보 대체)",
+            "들것·이동 보조 장비 지참",
+            "독거 확인 후 즉시 구조",
+            "도보 진입 특화 분대 우선 배정"
+          ],
+          "location": {
+            "lat": 34.6112,
+            "lon": 127.2901,
+            "consented": true
+          }
+        }
+      ],
+      "action_protocol": {
+        "ars_message": "[긴급] 마순례(84세) 어르신 댁 화재 발생. 난청으로 자력 인지 불가. 즉시 방문 구조를 지지합니다.",
+        "mdt_message": "접근로 1.8m 협로 경보. 소방차 직접 진입 불가. 도보 진입 특화 분대 우선 배정 완료. 샌드위치 패널 유독가스 주의.",
+        "village_broadcast": "소록마을 주민 여러분, 긴급 화재 상황입니다. 전남 고흥군 도양읍 소록마을 23-7 인근 화재 발생. 신속히 대피하시고 이웃 어르신들을 도와주십시오."
+      },
+      "confidence": 99.4,
+      "fire_spread": {
+        "material": "샌드위치 패널",
+        "effective_rate_m2_min": 18.85,
+        "time_engulf_min": 4.5,
+        "time_flashover_min": 2.5,
+        "time_structural_min": 3.2,
+        "neighbor_risk_min": 6.6,
+        "produces_toxic_gas": true,
+        "rescue_window_min": 2.0,
+        "fire_service_eta_min": 12,
+        "rescue_before_eta": false,
+        "heat_release_kw": 6000.0,
+        "timeline": [
+          {
+            "t_min": 0.0,
+            "label": "신고 접수",
+            "icon": "phone",
+            "color": "#6b7280",
+            "desc": "119 신고 수신 — PATOS 대응 시작"
+          },
+          {
+            "t_min": 0.8,
+            "label": "유독가스 발생",
+            "icon": "wind",
+            "color": "#7c3aed",
+            "desc": "폴리우레탄/석면 연소 → HCN·CO 발생 시작"
+          },
+          {
+            "t_min": 2.5,
+            "label": "플래시오버",
+            "icon": "flame",
+            "color": "#dc2626",
+            "desc": "실내 전체 발화 — 생존 불가 환경 도달"
+          },
+          {
+            "t_min": 3.2,
+            "label": "구조 붕괴",
+            "icon": "building-2",
+            "color": "#1a1a1a",
+            "desc": "건물 구조부 열손상 → 붕괴 위험"
+          },
+          {
+            "t_min": 4.5,
+            "label": "전소",
+            "icon": "x-circle",
+            "color": "#374151",
+            "desc": "건물 완전 소실"
+          },
+          {
+            "t_min": 6.6,
+            "label": "인접 건물 위험",
+            "icon": "alert-triangle",
+            "color": "#f97316",
+            "desc": "방사열·비화로 인접 구조물 발화 위험 시작"
+          },
+          {
+            "t_min": 12,
+            "label": "소방차 도착",
+            "icon": "truck",
+            "color": "#2563eb",
+            "desc": "고흥소방서 도착 예상 (ETA 12분)"
+          }
+        ],
+        "risk_label": "극위험 — 즉시 대응",
+        "risk_color": "#7f1d1d"
+      },
+      "weather_live": {
+        "wind_speed_ms": 7.2,
+        "humidity_pct": 22,
+        "temperature_c": 11.5,
+        "conditions": "건조",
+        "live_reference": {
+          "source": "KMA / Open-Meteo",
+          "station": "고흥 관측소 (ASOS 165)",
+          "observed_at": "2026-04-25 10:50:35 KST",
+          "temperature_c": 18.1,
+          "humidity_pct": 53,
+          "wind_speed_ms": 3.52,
+          "wind_direction": "동",
+          "wind_direction_deg": 75.0,
+          "conditions": "맑음",
+          "fire_risk": {
+            "index": 15.9,
+            "level": "낮음",
+            "color": "#16a34a"
+          },
+          "is_live": true
+        },
+        "fire_risk": {
+          "index": 15.9,
+          "level": "낮음",
+          "color": "#16a34a"
+        }
+      },
+      "rescue_critical_min": 2.0
+    },
+    {
+      "scenario_id": "FIRE-2026-002",
+      "label": "시나리오 B — 고위험 / HIGH",
+      "severity": "HIGH",
+      "incident": {
+        "scenario_id": "FIRE-2026-002",
+        "label": "시나리오 B — 고위험 / HIGH",
+        "severity": "HIGH",
+        "timestamp": "2026-04-24T02:43:11",
+        "location": "전남 고흥군 도양읍 소록마을 12-3",
+        "building_id": "BLDG-003",
+        "resident_ids": [
+          "PERSON-003",
+          "PERSON-002"
+        ],
+        "call_content": "여보세요 119죠? 소록마을 12번지 쪽에서 연기가 나고 있어요. 이 할아버지 혼자 사시는데 치매가 있으셔서 대피를 못 하실 것 같아요.",
+        "fire_origin": "보일러실",
+        "weather": {
+          "wind_speed_ms": 5.5,
+          "humidity_pct": 31,
+          "temperature_c": 10.2,
+          "conditions": "흐림"
+        },
+        "estimated_spread_time_min": 12
+      },
+      "knowledge_lineage": [
+        {
+          "label": "Building Code",
+          "val": "경량 목구조 / 2.5m 접근로",
+          "trust": 99.2,
+          "icon": "home"
+        },
+        {
+          "label": "Demography",
+          "val": "78세 / 치매 / 고혈압 / 난청",
+          "trust": 97.5,
+          "icon": "user-x"
+        },
+        {
+          "label": "Dynamics",
+          "val": "풍속 5.5m/s / 습도 31%",
+          "trust": 94.8,
+          "icon": "wind"
+        }
+      ],
+      "reasoning_chain": [
+        {
+          "step": 1,
+          "type": "physical_hazard",
+          "label": "Physical Hazard",
+          "icon": "home",
+          "content": "경량 목구조 및 2.5m 접근로 구조 분석 결과, 소방력 접근 지연에 따른 대형 화재 전이 임계치 초과 판정.",
+          "score": 55
+        },
+        {
+          "step": 2,
+          "type": "cognitive_vulnerability",
+          "label": "Cognitive Reliability",
+          "icon": "target",
+          "content": "거주자 난청 특성 데이터 가중치 적용 시, 표준 대피 가이드 도달률 유의미성 미달 확인.",
+          "score": 95
+        }
+      ],
+      "priority_targets": [
+        {
+          "rank": 1,
+          "person_id": "PERSON-003",
+          "name": "이봉길",
+          "age": 78,
+          "conditions": [
+            "치매",
+            "고혈압",
+            "난청"
+          ],
+          "lives_alone": true,
+          "cognitive_vulnerability_score": 95,
+          "physical_isolation_score": 55,
+          "total_priority_score": 79.0,
+          "rescue_actions": [
+            "이장단 ARS 즉시 발송 (청각 경보 대체)",
+            "직접 방문 구조대 파견 (인지 판단 불가)",
+            "독거 확인 후 즉시 구조",
+            "도보 진입 특화 분대 우선 배정"
+          ],
+          "location": {
+            "lat": 34.6098,
+            "lon": 127.2885,
+            "consented": true
+          }
+        },
+        {
+          "rank": 2,
+          "person_id": "PERSON-002",
+          "name": "김복순",
+          "age": 79,
+          "conditions": [
+            "치매",
+            "고혈압"
+          ],
+          "lives_alone": true,
+          "cognitive_vulnerability_score": 60,
+          "physical_isolation_score": 55,
+          "total_priority_score": 58.0,
+          "rescue_actions": [
+            "직접 방문 구조대 파견 (인지 판단 불가)",
+            "독거 확인 후 즉시 구조",
+            "도보 진입 특화 분대 우선 배정"
+          ],
+          "location": {
+            "lat": 34.6098,
+            "lon": 127.2885,
+            "consented": true
+          }
+        }
+      ],
+      "action_protocol": {
+        "ars_message": "[긴급] 이봉길(78세) 어르신 댁 화재 발생. 난청으로 자력 인지 불가. 즉시 방문 구조를 지지합니다.",
+        "mdt_message": "접근로 2.5m 협로 경보. 소방차 직접 진입 불가. 도보 진입 특화 분대 우선 배정 완료. 경량 목구조 유독가스 주의.",
+        "village_broadcast": "소록마을 주민 여러분, 긴급 화재 상황입니다. 전남 고흥군 도양읍 소록마을 12-3 인근 화재 발생. 신속히 대피하시고 이웃 어르신들을 도와주십시오."
+      },
+      "confidence": 96.6,
+      "fire_spread": {
+        "material": "경량 목구조",
+        "effective_rate_m2_min": 11.58,
+        "time_engulf_min": 7.3,
+        "time_flashover_min": 4.0,
+        "time_structural_min": 5.9,
+        "neighbor_risk_min": 9.7,
+        "produces_toxic_gas": false,
+        "rescue_window_min": 3.2,
+        "fire_service_eta_min": 12,
+        "rescue_before_eta": false,
+        "heat_release_kw": 4000.0,
+        "timeline": [
+          {
+            "t_min": 0.0,
+            "label": "신고 접수",
+            "icon": "phone",
+            "color": "#6b7280",
+            "desc": "119 신고 수신 — PATOS 대응 시작"
+          },
+          {
+            "t_min": 4.0,
+            "label": "플래시오버",
+            "icon": "flame",
+            "color": "#dc2626",
+            "desc": "실내 전체 발화 — 생존 불가 환경 도달"
+          },
+          {
+            "t_min": 5.9,
+            "label": "구조 붕괴",
+            "icon": "building-2",
+            "color": "#1a1a1a",
+            "desc": "건물 구조부 열손상 → 붕괴 위험"
+          },
+          {
+            "t_min": 7.3,
+            "label": "전소",
+            "icon": "x-circle",
+            "color": "#374151",
+            "desc": "건물 완전 소실"
+          },
+          {
+            "t_min": 9.7,
+            "label": "인접 건물 위험",
+            "icon": "alert-triangle",
+            "color": "#f97316",
+            "desc": "방사열·비화로 인접 구조물 발화 위험 시작"
+          },
+          {
+            "t_min": 12,
+            "label": "소방차 도착",
+            "icon": "truck",
+            "color": "#2563eb",
+            "desc": "고흥소방서 도착 예상 (ETA 12분)"
+          }
+        ],
+        "risk_label": "극위험 — 즉시 대응",
+        "risk_color": "#7f1d1d"
+      },
+      "weather_live": {
+        "wind_speed_ms": 5.5,
+        "humidity_pct": 31,
+        "temperature_c": 10.2,
+        "conditions": "흐림",
+        "live_reference": {
+          "source": "KMA / Open-Meteo",
+          "station": "고흥 관측소 (ASOS 165)",
+          "observed_at": "2026-04-25 10:50:35 KST",
+          "temperature_c": 18.1,
+          "humidity_pct": 53,
+          "wind_speed_ms": 3.52,
+          "wind_direction": "동",
+          "wind_direction_deg": 75.0,
+          "conditions": "맑음",
+          "fire_risk": {
+            "index": 15.9,
+            "level": "낮음",
+            "color": "#16a34a"
+          },
+          "is_live": true
+        },
+        "fire_risk": {
+          "index": 15.9,
+          "level": "낮음",
+          "color": "#16a34a"
+        }
+      },
+      "rescue_critical_min": 3.2
+    },
+    {
+      "scenario_id": "FIRE-2026-003",
+      "label": "시나리오 C — 보통 / MODERATE",
+      "severity": "MODERATE",
+      "incident": {
+        "scenario_id": "FIRE-2026-003",
+        "label": "시나리오 C — 보통 / MODERATE",
+        "severity": "MODERATE",
+        "timestamp": "2026-04-24T03:07:22",
+        "location": "전남 고흥군 도양읍 소록마을 35-9",
+        "building_id": "BLDG-010",
+        "resident_ids": [
+          "PERSON-008",
+          "PERSON-009"
+        ],
+        "call_content": "소록마을이에요. 35번지 창고에서 불이 났어요. 연기가 집 안으로 들어가고 있어요. 강 씨 내외분이 계신 것 같아요.",
+        "fire_origin": "주방 가스레인지",
+        "weather": {
+          "wind_speed_ms": 3.2,
+          "humidity_pct": 45,
+          "temperature_c": 13.0,
+          "conditions": "맑음"
+        },
+        "estimated_spread_time_min": 18
+      },
+      "knowledge_lineage": [
+        {
+          "label": "Building Code",
+          "val": "조적조 / 3.5m 접근로",
+          "trust": 99.2,
+          "icon": "home"
+        },
+        {
+          "label": "Demography",
+          "val": "75세 / 당뇨 / 관절염",
+          "trust": 97.5,
+          "icon": "user-x"
+        },
+        {
+          "label": "Dynamics",
+          "val": "풍속 3.2m/s / 습도 45%",
+          "trust": 94.8,
+          "icon": "wind"
+        }
+      ],
+      "reasoning_chain": [
+        {
+          "step": 1,
+          "type": "physical_hazard",
+          "label": "Physical Hazard",
+          "icon": "home",
+          "content": "조적조 구조물, 접근로 3.5m 확인. 소방력 접근 가능 판정. 표준 대응 절차 적용.",
+          "score": 8
+        },
+        {
+          "step": 2,
+          "type": "cognitive_vulnerability",
+          "label": "Cognitive Reliability",
+          "icon": "target",
+          "content": "75세 고령 + 당뇨, 관절염 복합 조건. 부분 대피 지원 판정.",
+          "score": 20
+        }
+      ],
+      "priority_targets": [
+        {
+          "rank": 1,
+          "person_id": "PERSON-008",
+          "name": "강덕현",
+          "age": 75,
+          "conditions": [
+            "당뇨",
+            "관절염"
+          ],
+          "lives_alone": false,
+          "cognitive_vulnerability_score": 20,
+          "physical_isolation_score": 8,
+          "total_priority_score": 15.2,
+          "rescue_actions": [],
+          "location": {
+            "lat": 34.6101,
+            "lon": 127.2893,
+            "consented": false
+          }
+        },
+        {
+          "rank": 2,
+          "person_id": "PERSON-009",
+          "name": "윤금순",
+          "age": 73,
+          "conditions": [
+            "고혈압",
+            "당뇨"
+          ],
+          "lives_alone": false,
+          "cognitive_vulnerability_score": 0,
+          "physical_isolation_score": 8,
+          "total_priority_score": 3.2,
+          "rescue_actions": [],
+          "location": {
+            "lat": 34.6101,
+            "lon": 127.2893,
+            "consented": false
+          }
+        }
+      ],
+      "action_protocol": {
+        "ars_message": "[긴급] 강덕현(75세) 어르신 댁 화재 발생. 당뇨, 관절염. 즉각 대응 바랍니다.",
+        "mdt_message": "접근로 3.5m 확인. 차량 진입 가능. 조적조 구조물 화재 대응 절차 적용.",
+        "village_broadcast": "소록마을 주민 여러분, 긴급 화재 상황입니다. 전남 고흥군 도양읍 소록마을 35-9 인근 화재 발생. 신속히 대피하시고 이웃 어르신들을 도와주십시오."
+      },
+      "confidence": 86.4,
+      "fire_spread": {
+        "material": "조적조",
+        "effective_rate_m2_min": 2.31,
+        "time_engulf_min": 36.8,
+        "time_flashover_min": 11.4,
+        "time_structural_min": 33.1,
+        "neighbor_risk_min": 32.0,
+        "produces_toxic_gas": false,
+        "rescue_window_min": 9.1,
+        "fire_service_eta_min": 12,
+        "rescue_before_eta": false,
+        "heat_release_kw": 1500.0,
+        "timeline": [
+          {
+            "t_min": 0.0,
+            "label": "신고 접수",
+            "icon": "phone",
+            "color": "#6b7280",
+            "desc": "119 신고 수신 — PATOS 대응 시작"
+          },
+          {
+            "t_min": 11.4,
+            "label": "플래시오버",
+            "icon": "flame",
+            "color": "#dc2626",
+            "desc": "실내 전체 발화 — 생존 불가 환경 도달"
+          },
+          {
+            "t_min": 12,
+            "label": "소방차 도착",
+            "icon": "truck",
+            "color": "#2563eb",
+            "desc": "고흥소방서 도착 예상 (ETA 12분)"
+          },
+          {
+            "t_min": 32.0,
+            "label": "인접 건물 위험",
+            "icon": "alert-triangle",
+            "color": "#f97316",
+            "desc": "방사열·비화로 인접 구조물 발화 위험 시작"
+          },
+          {
+            "t_min": 33.1,
+            "label": "구조 붕괴",
+            "icon": "building-2",
+            "color": "#1a1a1a",
+            "desc": "건물 구조부 열손상 → 붕괴 위험"
+          },
+          {
+            "t_min": 36.8,
+            "label": "전소",
+            "icon": "x-circle",
+            "color": "#374151",
+            "desc": "건물 완전 소실"
+          }
+        ],
+        "risk_label": "심각 — 소방차 도착 전 플래시오버",
+        "risk_color": "#dc2626"
+      },
+      "weather_live": {
+        "wind_speed_ms": 3.2,
+        "humidity_pct": 45,
+        "temperature_c": 13.0,
+        "conditions": "맑음",
+        "live_reference": {
+          "source": "KMA / Open-Meteo",
+          "station": "고흥 관측소 (ASOS 165)",
+          "observed_at": "2026-04-25 10:50:35 KST",
+          "temperature_c": 18.1,
+          "humidity_pct": 53,
+          "wind_speed_ms": 3.52,
+          "wind_direction": "동",
+          "wind_direction_deg": 75.0,
+          "conditions": "맑음",
+          "fire_risk": {
+            "index": 15.9,
+            "level": "낮음",
+            "color": "#16a34a"
+          },
+          "is_live": true
+        },
+        "fire_risk": {
+          "index": 15.9,
+          "level": "낮음",
+          "color": "#16a34a"
+        }
+      },
+      "rescue_critical_min": 9.1
+    },
+    {
+      "scenario_id": "FIRE-2026-004",
+      "label": "시나리오 D — 초임계 / CRITICAL",
+      "severity": "CRITICAL",
+      "incident": {
+        "scenario_id": "FIRE-2026-004",
+        "label": "시나리오 D — 초임계 / CRITICAL",
+        "severity": "CRITICAL",
+        "timestamp": "2026-04-24T01:52:07",
+        "location": "전남 고흥군 도양읍 소록마을 27-2",
+        "building_id": "BLDG-008",
+        "resident_ids": [
+          "PERSON-015"
+        ],
+        "call_content": "소록마을인데요, 지금 조 할머니 댁에서 불꽃이 보여요! 비닐하우스 쪽이요. 심야에 혼자 계실 텐데! 치매도 있으셔서 어디 계신지도 몰라요!",
+        "fire_origin": "비닐하우스 내 담뱃불 추정",
+        "weather": {
+          "wind_speed_ms": 6.8,
+          "humidity_pct": 18,
+          "temperature_c": 9.8,
+          "conditions": "건조"
+        },
+        "estimated_spread_time_min": 4
+      },
+      "knowledge_lineage": [
+        {
+          "label": "Building Code",
+          "val": "비닐하우스 / 1.5m 접근로",
+          "trust": 99.2,
+          "icon": "home"
+        },
+        {
+          "label": "Demography",
+          "val": "88세 / 난청 / 치매 / 고혈압",
+          "trust": 97.5,
+          "icon": "user-x"
+        },
+        {
+          "label": "Dynamics",
+          "val": "풍속 6.8m/s / 습도 18%",
+          "trust": 94.8,
+          "icon": "wind"
+        }
+      ],
+      "reasoning_chain": [
+        {
+          "step": 1,
+          "type": "physical_hazard",
+          "label": "Physical Hazard",
+          "icon": "home",
+          "content": "비닐하우스 및 1.5m 접근로 구조 분석 결과, 소방력 접근 지연에 따른 대형 화재 전이 임계치 초과 판정.",
+          "score": 100
+        },
+        {
+          "step": 2,
+          "type": "cognitive_vulnerability",
+          "label": "Cognitive Reliability",
+          "icon": "target",
+          "content": "거주자 난청 특성 데이터 가중치 적용 시, 표준 대피 가이드 도달률 유의미성 미달 확인.",
+          "score": 100
+        }
+      ],
+      "priority_targets": [
+        {
+          "rank": 1,
+          "person_id": "PERSON-015",
+          "name": "조옥순",
+          "age": 88,
+          "conditions": [
+            "난청",
+            "치매",
+            "고혈압",
+            "거동불편"
+          ],
+          "lives_alone": true,
+          "cognitive_vulnerability_score": 100,
+          "physical_isolation_score": 100,
+          "total_priority_score": 100.0,
+          "rescue_actions": [
+            "이장단 ARS 즉시 발송 (청각 경보 대체)",
+            "직접 방문 구조대 파견 (인지 판단 불가)",
+            "들것·이동 보조 장비 지참",
+            "독거 확인 후 즉시 구조",
+            "도보 진입 특화 분대 우선 배정"
+          ],
+          "location": {
+            "lat": 34.612,
+            "lon": 127.2915,
+            "consented": true
+          }
+        }
+      ],
+      "action_protocol": {
+        "ars_message": "[긴급] 조옥순(88세) 어르신 댁 화재 발생. 난청으로 자력 인지 불가. 즉시 방문 구조를 지지합니다.",
+        "mdt_message": "접근로 1.5m 협로 경보. 소방차 직접 진입 불가. 도보 진입 특화 분대 우선 배정 완료. 비닐하우스 유독가스 주의.",
+        "village_broadcast": "소록마을 주민 여러분, 긴급 화재 상황입니다. 전남 고흥군 도양읍 소록마을 27-2 인근 화재 발생. 신속히 대피하시고 이웃 어르신들을 도와주십시오."
+      },
+      "confidence": 99.9,
+      "fire_spread": {
+        "material": "비닐하우스",
+        "effective_rate_m2_min": 34.52,
+        "time_engulf_min": 2.5,
+        "time_flashover_min": 1.5,
+        "time_structural_min": 1.5,
+        "neighbor_risk_min": 4.8,
+        "produces_toxic_gas": true,
+        "rescue_window_min": 1.2,
+        "fire_service_eta_min": 12,
+        "rescue_before_eta": false,
+        "heat_release_kw": 8500.0,
+        "timeline": [
+          {
+            "t_min": 0.0,
+            "label": "신고 접수",
+            "icon": "phone",
+            "color": "#6b7280",
+            "desc": "119 신고 수신 — PATOS 대응 시작"
+          },
+          {
+            "t_min": 0.4,
+            "label": "유독가스 발생",
+            "icon": "wind",
+            "color": "#7c3aed",
+            "desc": "폴리우레탄/석면 연소 → HCN·CO 발생 시작"
+          },
+          {
+            "t_min": 1.5,
+            "label": "플래시오버",
+            "icon": "flame",
+            "color": "#dc2626",
+            "desc": "실내 전체 발화 — 생존 불가 환경 도달"
+          },
+          {
+            "t_min": 1.5,
+            "label": "구조 붕괴",
+            "icon": "building-2",
+            "color": "#1a1a1a",
+            "desc": "건물 구조부 열손상 → 붕괴 위험"
+          },
+          {
+            "t_min": 2.5,
+            "label": "전소",
+            "icon": "x-circle",
+            "color": "#374151",
+            "desc": "건물 완전 소실"
+          },
+          {
+            "t_min": 4.8,
+            "label": "인접 건물 위험",
+            "icon": "alert-triangle",
+            "color": "#f97316",
+            "desc": "방사열·비화로 인접 구조물 발화 위험 시작"
+          },
+          {
+            "t_min": 12,
+            "label": "소방차 도착",
+            "icon": "truck",
+            "color": "#2563eb",
+            "desc": "고흥소방서 도착 예상 (ETA 12분)"
+          }
+        ],
+        "risk_label": "극위험 — 즉시 대응",
+        "risk_color": "#7f1d1d"
+      },
+      "weather_live": {
+        "wind_speed_ms": 6.8,
+        "humidity_pct": 18,
+        "temperature_c": 9.8,
+        "conditions": "건조",
+        "live_reference": {
+          "source": "KMA / Open-Meteo",
+          "station": "고흥 관측소 (ASOS 165)",
+          "observed_at": "2026-04-25 10:50:35 KST",
+          "temperature_c": 18.1,
+          "humidity_pct": 53,
+          "wind_speed_ms": 3.52,
+          "wind_direction": "동",
+          "wind_direction_deg": 75.0,
+          "conditions": "맑음",
+          "fire_risk": {
+            "index": 15.9,
+            "level": "낮음",
+            "color": "#16a34a"
+          },
+          "is_live": true
+        },
+        "fire_risk": {
+          "index": 15.9,
+          "level": "낮음",
+          "color": "#16a34a"
+        }
+      },
+      "rescue_critical_min": 1.2
+    },
+    {
+      "scenario_id": "FIRE-2026-005",
+      "label": "시나리오 E — 고위험 / HIGH",
+      "severity": "HIGH",
+      "incident": {
+        "scenario_id": "FIRE-2026-005",
+        "label": "시나리오 E — 고위험 / HIGH",
+        "severity": "HIGH",
+        "timestamp": "2026-04-24T03:31:45",
+        "location": "전남 고흥군 도양읍 소록마을 3-5",
+        "building_id": "BLDG-002",
+        "resident_ids": [
+          "PERSON-013"
+        ],
+        "call_content": "거기 박 할아버지 댁 아닌가요? 샌드위치 패널 집인데 불이 엄청 빨리 번질 것 같아요. 골목이 좁아서 차가 못 들어가요!",
+        "fire_origin": "주방",
+        "weather": {
+          "wind_speed_ms": 4.8,
+          "humidity_pct": 27,
+          "temperature_c": 10.8,
+          "conditions": "건조"
+        },
+        "estimated_spread_time_min": 8
+      },
+      "knowledge_lineage": [
+        {
+          "label": "Building Code",
+          "val": "샌드위치 패널 / 2.0m 접근로",
+          "trust": 99.2,
+          "icon": "home"
+        },
+        {
+          "label": "Demography",
+          "val": "85세 / 난청 / 치매 / 심장질환",
+          "trust": 97.5,
+          "icon": "user-x"
+        },
+        {
+          "label": "Dynamics",
+          "val": "풍속 4.8m/s / 습도 27%",
+          "trust": 94.8,
+          "icon": "wind"
+        }
+      ],
+      "reasoning_chain": [
+        {
+          "step": 1,
+          "type": "physical_hazard",
+          "label": "Physical Hazard",
+          "icon": "home",
+          "content": "샌드위치 패널 및 2.0m 접근로 구조 분석 결과, 소방력 접근 지연에 따른 대형 화재 전이 임계치 초과 판정.",
+          "score": 75
+        },
+        {
+          "step": 2,
+          "type": "cognitive_vulnerability",
+          "label": "Cognitive Reliability",
+          "icon": "target",
+          "content": "거주자 난청 특성 데이터 가중치 적용 시, 표준 대피 가이드 도달률 유의미성 미달 확인.",
+          "score": 100
+        }
+      ],
+      "priority_targets": [
+        {
+          "rank": 1,
+          "person_id": "PERSON-013",
+          "name": "박용철",
+          "age": 85,
+          "conditions": [
+            "난청",
+            "치매",
+            "심장질환"
+          ],
+          "lives_alone": true,
+          "cognitive_vulnerability_score": 100,
+          "physical_isolation_score": 75,
+          "total_priority_score": 90.0,
+          "rescue_actions": [
+            "이장단 ARS 즉시 발송 (청각 경보 대체)",
+            "직접 방문 구조대 파견 (인지 판단 불가)",
+            "독거 확인 후 즉시 구조",
+            "도보 진입 특화 분대 우선 배정"
+          ],
+          "location": {
+            "lat": 34.609,
+            "lon": 127.2878,
+            "consented": true
+          }
+        }
+      ],
+      "action_protocol": {
+        "ars_message": "[긴급] 박용철(85세) 어르신 댁 화재 발생. 난청으로 자력 인지 불가. 즉시 방문 구조를 지지합니다.",
+        "mdt_message": "접근로 2.0m 협로 경보. 소방차 직접 진입 불가. 도보 진입 특화 분대 우선 배정 완료. 샌드위치 패널 유독가스 주의.",
+        "village_broadcast": "소록마을 주민 여러분, 긴급 화재 상황입니다. 전남 고흥군 도양읍 소록마을 3-5 인근 화재 발생. 신속히 대피하시고 이웃 어르신들을 도와주십시오."
+      },
+      "confidence": 98.4,
+      "fire_spread": {
+        "material": "샌드위치 패널",
+        "effective_rate_m2_min": 15.4,
+        "time_engulf_min": 5.5,
+        "time_flashover_min": 3.0,
+        "time_structural_min": 3.9,
+        "neighbor_risk_min": 7.8,
+        "produces_toxic_gas": true,
+        "rescue_window_min": 2.4,
+        "fire_service_eta_min": 12,
+        "rescue_before_eta": false,
+        "heat_release_kw": 6000.0,
+        "timeline": [
+          {
+            "t_min": 0.0,
+            "label": "신고 접수",
+            "icon": "phone",
+            "color": "#6b7280",
+            "desc": "119 신고 수신 — PATOS 대응 시작"
+          },
+          {
+            "t_min": 0.9,
+            "label": "유독가스 발생",
+            "icon": "wind",
+            "color": "#7c3aed",
+            "desc": "폴리우레탄/석면 연소 → HCN·CO 발생 시작"
+          },
+          {
+            "t_min": 3.0,
+            "label": "플래시오버",
+            "icon": "flame",
+            "color": "#dc2626",
+            "desc": "실내 전체 발화 — 생존 불가 환경 도달"
+          },
+          {
+            "t_min": 3.9,
+            "label": "구조 붕괴",
+            "icon": "building-2",
+            "color": "#1a1a1a",
+            "desc": "건물 구조부 열손상 → 붕괴 위험"
+          },
+          {
+            "t_min": 5.5,
+            "label": "전소",
+            "icon": "x-circle",
+            "color": "#374151",
+            "desc": "건물 완전 소실"
+          },
+          {
+            "t_min": 7.8,
+            "label": "인접 건물 위험",
+            "icon": "alert-triangle",
+            "color": "#f97316",
+            "desc": "방사열·비화로 인접 구조물 발화 위험 시작"
+          },
+          {
+            "t_min": 12,
+            "label": "소방차 도착",
+            "icon": "truck",
+            "color": "#2563eb",
+            "desc": "고흥소방서 도착 예상 (ETA 12분)"
+          }
+        ],
+        "risk_label": "극위험 — 즉시 대응",
+        "risk_color": "#7f1d1d"
+      },
+      "weather_live": {
+        "wind_speed_ms": 4.8,
+        "humidity_pct": 27,
+        "temperature_c": 10.8,
+        "conditions": "건조",
+        "live_reference": {
+          "source": "KMA / Open-Meteo",
+          "station": "고흥 관측소 (ASOS 165)",
+          "observed_at": "2026-04-25 10:50:35 KST",
+          "temperature_c": 18.1,
+          "humidity_pct": 53,
+          "wind_speed_ms": 3.52,
+          "wind_direction": "동",
+          "wind_direction_deg": 75.0,
+          "conditions": "맑음",
+          "fire_risk": {
+            "index": 15.9,
+            "level": "낮음",
+            "color": "#16a34a"
+          },
+          "is_live": true
+        },
+        "fire_risk": {
+          "index": 15.9,
+          "level": "낮음",
+          "color": "#16a34a"
+        }
+      },
+      "rescue_critical_min": 2.4
+    }
+  ]
+}

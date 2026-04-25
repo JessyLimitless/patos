@@ -1,0 +1,203 @@
+##
+## schema.tql — Agentic OS 소록마을 화재 대응 온톨로지
+## TypeDB 2.x 호환
+##
+
+define
+
+# ── Attributes ────────────────────────────────────────────────────────────────
+
+person-id         sub attribute, value string;
+building-id       sub attribute, value string;
+resource-id       sub attribute, value string;
+event-id          sub attribute, value string;
+
+name              sub attribute, value string;
+age               sub attribute, value long;
+gender            sub attribute, value string;
+phone             sub attribute, value string;
+lives-alone       sub attribute, value boolean;
+mobility-score    sub attribute, value double;
+hearing-impaired  sub attribute, value boolean;
+has-dementia      sub attribute, value boolean;
+chronic-condition sub attribute, value string;
+
+# Inferred vulnerability flags
+cognitive-vulnerability sub attribute, value boolean;
+physical-isolation      sub attribute, value boolean;
+
+address               sub attribute, value string;
+material              sub attribute, value string;
+access-road-width     sub attribute, value double;
+floor-count           sub attribute, value long;
+has-fire-detector     sub attribute, value boolean;
+has-sprinkler         sub attribute, value boolean;
+street-lighting       sub attribute, value boolean;
+fire-risk-level       sub attribute, value string;
+
+resource-type   sub attribute, value string;
+coverage-area   sub attribute, value string;
+eta-minutes     sub attribute, value long;
+latency-seconds sub attribute, value long;
+
+event-time             sub attribute, value datetime;
+call-content           sub attribute, value string;
+severity               sub attribute, value string;
+fire-origin            sub attribute, value string;
+wind-speed-ms          sub attribute, value double;
+humidity-pct           sub attribute, value long;
+spread-time-min        sub attribute, value long;
+
+priority-score         sub attribute, value double;
+rescue-action          sub attribute, value string;
+
+# ── Entity Types ──────────────────────────────────────────────────────────────
+
+person sub entity,
+    owns person-id @key,
+    owns name,
+    owns age,
+    owns gender,
+    owns phone,
+    owns lives-alone,
+    owns mobility-score,
+    owns hearing-impaired,
+    owns has-dementia,
+    owns chronic-condition,
+    owns cognitive-vulnerability,  # inferred
+    plays residence:resident,
+    plays incident:victim,
+    plays rescue-priority:target;
+
+building sub entity,
+    owns building-id @key,
+    owns address,
+    owns material,
+    owns access-road-width,
+    owns floor-count,
+    owns has-fire-detector,
+    owns has-sprinkler,
+    owns street-lighting,
+    owns fire-risk-level,
+    owns physical-isolation,       # inferred
+    plays residence:dwelling,
+    plays incident:site;
+
+fire-event sub entity,
+    owns event-id @key,
+    owns event-time,
+    owns call-content,
+    owns severity,
+    owns fire-origin,
+    owns wind-speed-ms,
+    owns humidity-pct,
+    owns spread-time-min,
+    plays incident:event,
+    plays deployment:emergency;
+
+resource sub entity,
+    owns resource-id @key,
+    owns name,
+    owns resource-type,
+    owns phone,
+    owns coverage-area,
+    owns eta-minutes,
+    owns latency-seconds,
+    plays deployment:deployed-resource;
+
+# ── Relation Types ────────────────────────────────────────────────────────────
+
+## 거주 관계: 주민이 특정 건물에 거주
+residence sub relation,
+    relates resident,
+    relates dwelling;
+
+## 사고 관계: 화재 사건 — 건물(현장) — 피해 주민
+incident sub relation,
+    relates event,
+    relates site,
+    relates victim;
+
+## 자원 배치 관계: 어떤 화재에 어떤 자원을 투입
+deployment sub relation,
+    relates emergency,
+    relates deployed-resource,
+    owns rescue-action,
+    owns priority-score;
+
+## 구조 우선순위 관계 (추론 결과 저장)
+rescue-priority sub relation,
+    relates target,
+    owns priority-score,
+    owns rescue-action;
+
+# ── Inference Rules ───────────────────────────────────────────────────────────
+
+## Rule 1: 80세 이상이면 인지 취약성 판정
+rule cognitive-vulnerability-by-age:
+when {
+    $p isa person, has age $a;
+    $a >= 80;
+} then {
+    $p has cognitive-vulnerability true;
+};
+
+## Rule 2: 난청이면 인지 취약성 판정
+rule cognitive-vulnerability-by-hearing:
+when {
+    $p isa person, has hearing-impaired true;
+} then {
+    $p has cognitive-vulnerability true;
+};
+
+## Rule 3: 치매이면 인지 취약성 판정
+rule cognitive-vulnerability-by-dementia:
+when {
+    $p isa person, has has-dementia true;
+} then {
+    $p has cognitive-vulnerability true;
+};
+
+## Rule 4: 접근로 폭 3m 미만이면 물리적 고립 판정
+rule physical-isolation-by-narrow-road:
+when {
+    $b isa building, has access-road-width $w;
+    $w < 3.0;
+} then {
+    $b has physical-isolation true;
+};
+
+## Rule 5: 샌드위치 패널 구조이면 물리적 고립 판정 (고위험 자재)
+rule physical-isolation-by-sandwich-panel:
+when {
+    $b isa building, has material "샌드위치 패널";
+} then {
+    $b has physical-isolation true;
+};
+
+## Rule 6: 비닐하우스이면 물리적 고립 판정 (최고위험 자재)
+rule physical-isolation-by-vinyl:
+when {
+    $b isa building, has material "비닐하우스";
+} then {
+    $b has physical-isolation true;
+};
+
+## Rule 7: 경량 목구조이면 물리적 고립 판정
+rule physical-isolation-by-light-wood:
+when {
+    $b isa building, has material "경량 목구조";
+} then {
+    $b has physical-isolation true;
+};
+
+## Rule 8: 화재감지기 없는 건물에 인지 취약자가 거주하면 복합 위험 판정
+## (person + building 연결이 incident relation을 통해 있을 경우)
+rule compound-risk-no-detector:
+when {
+    $p isa person, has cognitive-vulnerability true;
+    $b isa building, has has-fire-detector false;
+    (resident: $p, dwelling: $b) isa residence;
+} then {
+    $b has physical-isolation true;
+};

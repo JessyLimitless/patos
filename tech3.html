@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATOS v5 Agentic Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; color: #334155; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col items-center">
+
+    <!-- Navbar -->
+    <nav class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-slate-700 hover:text-red-600 transition-colors">
+                <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+                <span class="font-bold text-sm tracking-tight">PATOS v4.4</span>
+            </a>
+            <div class="flex items-center gap-1">
+                <a href="tech1.html" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">시스템 아키텍처</a>
+                <a href="tech2.html" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 아키텍처</a>
+                <a href="tech3.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-800 text-white">v5 로드맵</a>
+                <a href="tech4.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
+                <a href="tech5.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full py-12 px-4 sm:px-8 flex flex-col items-center">
+
+        <!-- Header -->
+        <div class="text-center mb-12 max-w-3xl">
+            <div class="inline-flex items-center justify-center p-3 bg-violet-50 text-violet-600 rounded-2xl mb-4">
+                <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3">
+                PATOS v5 Agentic Loop 로드맵
+            </h1>
+            <p class="text-slate-500 text-lg">세 가지 기술 한계를 넘는 자율 재구성 대응 시스템 설계</p>
+        </div>
+
+        <div class="w-full max-w-4xl flex flex-col gap-6">
+
+            <!-- Problem Cards -->
+            <div class="grid sm:grid-cols-3 gap-4">
+                <div class="bg-white rounded-2xl border border-red-100 p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="p-1.5 bg-red-50 rounded-lg"><i data-lucide="list-x" class="w-4 h-4 text-red-500"></i></div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide">과제 1</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Rule Explosion</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">조건 조합이 폭발적으로 늘어 수동 설정이 불가능해지는 문제</p>
+                    <div class="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                        <i data-lucide="arrow-right" class="w-3 h-3 text-violet-500"></i>
+                        <span class="text-xs font-semibold text-violet-600">LLM 자동 시나리오 생성</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl border border-orange-100 p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="p-1.5 bg-orange-50 rounded-lg"><i data-lucide="zap-off" class="w-4 h-4 text-orange-500"></i></div>
+                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">과제 2</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Static Plan</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">초기 계획이 현장 변수(불 확산, 탈출자 발생)에 대응 못하는 문제</p>
+                    <div class="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                        <i data-lucide="arrow-right" class="w-3 h-3 text-violet-500"></i>
+                        <span class="text-xs font-semibold text-violet-600">Event-driven Re-planning</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl border border-blue-100 p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="p-1.5 bg-blue-50 rounded-lg"><i data-lucide="unplug" class="w-4 h-4 text-blue-500"></i></div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide">과제 3</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Model Silo</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">화재·기상·취약성 모델이 각각 독립 실행되어 통합 추론이 안 되는 문제</p>
+                    <div class="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                        <i data-lucide="arrow-right" class="w-3 h-3 text-violet-500"></i>
+                        <span class="text-xs font-semibold text-violet-600">Model Composition Layer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- V5 Core Loop -->
+            <div class="w-full relative bg-white rounded-2xl border border-violet-200 shadow-sm p-6 sm:p-8">
+                <div class="absolute -top-3.5 left-8 bg-violet-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    v5 핵심: Agentic Re-planning Loop
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+                    <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-center">
+                        <div class="w-8 h-8 mx-auto bg-violet-600 text-white rounded-full flex items-center justify-center mb-2 font-bold text-sm">1</div>
+                        <i data-lucide="radio" class="w-5 h-5 text-violet-600 mx-auto mb-1"></i>
+                        <div class="text-sm font-bold text-slate-800">Perceive</div>
+                        <div class="text-[11px] text-slate-500 mt-1">이벤트 감지<br>상황 입력</div>
+                    </div>
+                    <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-center">
+                        <div class="w-8 h-8 mx-auto bg-violet-600 text-white rounded-full flex items-center justify-center mb-2 font-bold text-sm">2</div>
+                        <i data-lucide="brain" class="w-5 h-5 text-violet-600 mx-auto mb-1"></i>
+                        <div class="text-sm font-bold text-slate-800">Reason</div>
+                        <div class="text-[11px] text-slate-500 mt-1">LLM 추론<br>시나리오 생성</div>
+                    </div>
+                    <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-center">
+                        <div class="w-8 h-8 mx-auto bg-violet-600 text-white rounded-full flex items-center justify-center mb-2 font-bold text-sm">3</div>
+                        <i data-lucide="send" class="w-5 h-5 text-violet-600 mx-auto mb-1"></i>
+                        <div class="text-sm font-bold text-slate-800">Act</div>
+                        <div class="text-[11px] text-slate-500 mt-1">대응 지시<br>자원 배분</div>
+                    </div>
+                    <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
+                        <div class="w-8 h-8 mx-auto bg-orange-500 text-white rounded-full flex items-center justify-center mb-2 font-bold text-sm">↺</div>
+                        <i data-lucide="refresh-cw" class="w-5 h-5 text-orange-500 mx-auto mb-1"></i>
+                        <div class="text-sm font-bold text-slate-800">Re-plan</div>
+                        <div class="text-[11px] text-slate-500 mt-1">새 이벤트 발생 시<br>즉시 루프 재시작</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-start gap-3">
+                    <i data-lucide="flame" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                    <div>
+                        <div class="text-sm font-bold text-orange-800 mb-1">트리거 예시: "불이 옆집으로 번짐"</div>
+                        <div class="text-xs text-orange-700 leading-relaxed">이벤트 감지 → 기존 플랜 무효화 → 새 건물·새 취약 거주자 포함해 추론 재실행 → 우선순위 재계산 → 대응 지시 재발령</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 1 -->
+            <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div class="absolute -top-3.5 left-8 bg-red-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    해결 1. LLM 자동 시나리오 생성 — Rule Explosion 해소
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 mt-2">
+                    <div class="flex-1 bg-slate-50 rounded-xl border border-slate-200 p-4">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">AS-IS (v4)</div>
+                        <div class="space-y-2">
+                            <div class="text-[11px] font-mono bg-white p-2 rounded border border-slate-200 text-slate-600">if age >= 80 and disability: priority += 20</div>
+                            <div class="text-[11px] font-mono bg-white p-2 rounded border border-slate-200 text-slate-600">if material == "vinyl": spread_rate = 2</div>
+                            <div class="text-xs text-slate-400 text-center mt-2 italic">... 수백 개 조건 수동 작성</div>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center px-1">
+                        <i data-lucide="arrow-right" class="w-6 h-6 text-violet-400"></i>
+                    </div>
+                    <div class="flex-1 bg-violet-50 rounded-xl border border-violet-200 p-4">
+                        <div class="text-xs font-bold text-violet-500 uppercase tracking-wider mb-3">TO-BE (v5)</div>
+                        <div class="space-y-2">
+                            <div class="text-xs text-slate-700 mb-2">소방청 매뉴얼 PDF → Claude API 입력</div>
+                            <div class="text-[11px] font-mono bg-white p-2 rounded border border-violet-200 text-violet-700">문서 chunk → 추론 규칙 자동 추출 → TypeDB 스키마 자동 생성</div>
+                            <div class="text-xs text-violet-600 font-semibold mt-2">조건 추가 = 매뉴얼 파일 교체만으로 완료</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 2 -->
+            <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div class="absolute -top-3.5 left-8 bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    해결 2. Event-driven Re-planning — Static Plan 해소
+                </div>
+                <div class="grid sm:grid-cols-3 gap-3 mt-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="list" class="w-4 h-4 text-slate-500"></i>
+                            <span class="text-xs font-bold text-slate-700">이벤트 유형</span>
+                        </div>
+                        <ul class="text-xs text-slate-500 space-y-1.5">
+                            <li>• 인접 건물 화재 확산</li>
+                            <li>• 거주자 탈출 확인</li>
+                            <li>• 진입 도로 차단</li>
+                            <li>• 소방차 현장 도착</li>
+                        </ul>
+                    </div>
+                    <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="git-branch" class="w-4 h-4 text-orange-600"></i>
+                            <span class="text-xs font-bold text-orange-700">Re-planning 처리</span>
+                        </div>
+                        <ul class="text-xs text-orange-700 space-y-1.5">
+                            <li>• 기존 플랜 델타 계산</li>
+                            <li>• 영향 대상자 재식별</li>
+                            <li>• 우선순위 점수 재산출</li>
+                            <li>• 변경분만 대시보드 반영</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-center items-center">
+                        <i data-lucide="clock" class="w-5 h-5 text-slate-400 mb-2"></i>
+                        <span class="text-xs font-bold text-slate-500 mb-1">목표 응답 시간</span>
+                        <div class="text-3xl font-extrabold text-slate-800">&lt; 3초</div>
+                        <div class="text-xs text-slate-400 mt-1">이벤트 감지 → 재계획 완료</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 3 -->
+            <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div class="absolute -top-3.5 left-8 bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    해결 3. Model Composition Layer — Model Silo 해소
+                </div>
+                <div class="flex flex-col sm:flex-row items-stretch gap-4 mt-4">
+                    <div class="flex-1 flex flex-col gap-2">
+                        <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl flex items-center gap-3">
+                            <i data-lucide="flame" class="w-4 h-4 text-orange-500 shrink-0"></i>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-slate-700">화재 확산 모델</div>
+                                <div class="text-[11px] text-slate-500">NFPA 72 · 플래시오버 ETA</div>
+                            </div>
+                            <span class="text-[10px] font-mono text-orange-600 bg-white px-1.5 py-0.5 rounded border border-orange-200">fire_spread.py</span>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl flex items-center gap-3">
+                            <i data-lucide="cloud-sun" class="w-4 h-4 text-blue-500 shrink-0"></i>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-slate-700">기상 예측 모델</div>
+                                <div class="text-[11px] text-slate-500">Open-Meteo · NFDRS 지수</div>
+                            </div>
+                            <span class="text-[10px] font-mono text-blue-600 bg-white px-1.5 py-0.5 rounded border border-blue-200">weather.py</span>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl flex items-center gap-3">
+                            <i data-lucide="users" class="w-4 h-4 text-purple-500 shrink-0"></i>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-slate-700">사회적 취약성 모델</div>
+                                <div class="text-[11px] text-slate-500">TypeDB 온톨로지 · 우선순위 점수</div>
+                            </div>
+                            <span class="text-[10px] font-mono text-purple-600 bg-white px-1.5 py-0.5 rounded border border-purple-200">typedb_client.py</span>
+                        </div>
+                    </div>
+                    <div class="flex sm:flex-col justify-center items-center gap-1 px-1">
+                        <div class="flex-1 w-full h-px sm:w-px sm:h-full bg-slate-300"></div>
+                        <i data-lucide="merge" class="w-5 h-5 text-blue-600 shrink-0"></i>
+                        <div class="flex-1 w-full h-px sm:w-px sm:h-full bg-slate-300"></div>
+                    </div>
+                    <div class="flex-1 bg-blue-600 text-white p-5 rounded-xl flex flex-col justify-center">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                            <span class="font-bold text-sm">Unified Inference Engine</span>
+                        </div>
+                        <p class="text-xs text-blue-100 leading-relaxed mb-4">세 모델의 출력을 단일 컨텍스트로 합산해 LLM에 전달. 통합된 확률 기반 판단 생성.</p>
+                        <div class="bg-blue-700 rounded-lg p-3 font-mono text-[11px] text-blue-200 leading-relaxed">
+                            P(rescue) =<br>f(fire_eta, weather_idx,<br>&nbsp;&nbsp;vulnerability_score)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- v4 vs v5 comparison -->
+            <div class="w-full bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <h3 class="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                    <i data-lucide="git-compare" class="w-5 h-5 text-slate-400"></i> v4.4 vs v5 핵심 비교
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-slate-200">
+                                <th class="text-left pb-3 pr-4 text-xs font-bold text-slate-400 uppercase tracking-wider">항목</th>
+                                <th class="text-left pb-3 pr-4 text-xs font-bold text-slate-400 uppercase tracking-wider">v4.4 현재</th>
+                                <th class="text-left pb-3 text-xs font-bold text-violet-500 uppercase tracking-wider">v5 목표</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">시나리오 생성</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">수동 조건 코딩</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">매뉴얼 → LLM 자동 추출</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">대응 계획</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">1회 실행 후 고정</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">이벤트마다 자동 재계획</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">모델 연동</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">독립 실행 후 수동 합산</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">통합 추론 레이어 경유</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">새 변수 처리</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">불가 (재시작 필요)</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">&lt; 3초 내 자동 반영</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">규칙 업데이트</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">코드 수정 후 재배포</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">매뉴얼 파일 교체만으로 반영</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

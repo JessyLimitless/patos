@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATOS v4.4 Data Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; color: #334155; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col items-center">
+
+    <!-- Navbar -->
+    <nav class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-slate-700 hover:text-red-600 transition-colors">
+                <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+                <span class="font-bold text-sm tracking-tight">PATOS v4.4</span>
+            </a>
+            <div class="flex items-center gap-1">
+                <a href="tech1.html" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">
+                    시스템 아키텍처
+                </a>
+                <a href="tech2.html" class="px-4 py-1.5 rounded-full text-sm font-semibold bg-slate-800 text-white">
+                    데이터 아키텍처
+                </a>
+                <a href="tech3.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">v5 로드맵</a>
+                <a href="tech4.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
+                <a href="tech5.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full py-12 px-4 sm:px-8 flex flex-col items-center">
+
+    <!-- Header -->
+    <div class="text-center mb-10 max-w-3xl">
+        <div class="inline-flex items-center justify-center p-3 bg-emerald-50 text-emerald-600 rounded-2xl mb-4">
+            <i data-lucide="database-zap" class="w-8 h-8"></i>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3">
+            PATOS v4.4 데이터 아키텍처
+        </h1>
+        <p class="text-slate-500 text-lg">데이터 수집부터 온톨로지 추론, 최종 시나리오 생성까지의 파이프라인</p>
+    </div>
+
+    <!-- Architecture Container -->
+    <div class="w-full max-w-4xl flex flex-col items-center gap-2">
+        
+        <!-- Tier 1: Data Sources -->
+        <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4 hover:shadow-md transition-shadow">
+            <div class="absolute -top-3.5 left-8 bg-slate-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                1. 데이터 소스 계층 (Data Source Tier)
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
+                <!-- Source 1 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <i data-lucide="building-2" class="w-5 h-5 text-slate-600"></i>
+                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">신뢰도 99.2%</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800 mb-1">고흥군 건물 대장</h3>
+                    <p class="text-[11px] text-slate-500 mt-auto">건축 자재, 도로폭 (행정망 연 1회 갱신)</p>
+                </div>
+                <!-- Source 2 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <i data-lucide="users" class="w-5 h-5 text-slate-600"></i>
+                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">신뢰도 97.5%</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800 mb-1">주민 등록 DB</h3>
+                    <p class="text-[11px] text-slate-500 mt-auto">나이, 장애 여부 (행정망 월 1회 갱신)</p>
+                </div>
+                <!-- Source 3 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <i data-lucide="cloud-sun" class="w-5 h-5 text-blue-500"></i>
+                        <span class="text-[10px] font-bold text-blue-600 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded">실시간 수집</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800 mb-1">기상청 API</h3>
+                    <p class="text-[11px] text-slate-500 mt-auto">Open-Meteo 연동, NFDRS 지수 계산용</p>
+                </div>
+                <!-- Source 4 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-red-500"></i>
+                        <span class="text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">보안/동의</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800 mb-1">주민 GPS 위치</h3>
+                    <p class="text-[11px] text-slate-500 mt-auto">사전 동의서 작성자에 한해 실시간 수신</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex flex-col items-center justify-center h-10 w-full relative">
+            <div class="w-px h-full bg-slate-300"></div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 -mt-2 bg-slate-50 rounded-full z-10"></i>
+            <div class="absolute top-1/2 -translate-y-1/2 ml-36 text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+                데이터 정제 및 스키마 매핑
+            </div>
+        </div>
+
+        <!-- Tier 2 & 3: Normalization & Inference -->
+        <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-2 hover:shadow-md transition-shadow">
+            <div class="absolute -top-3.5 left-8 bg-indigo-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                2. 정규화 및 결합 추론 계층 (Normalization & Inference)
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 mt-2">
+                
+                <!-- Left: Static Data & Ontology -->
+                <div class="flex-1 flex flex-col gap-4">
+                    <!-- Static JSON -->
+                    <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i data-lucide="file-json" class="w-4 h-4 text-blue-600"></i> 원본 데이터셋
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">건물과 주민 DB를 병합한 정적 파일</p>
+                        </div>
+                        <span class="text-xs font-mono text-blue-600 bg-white px-2 py-1 rounded border border-blue-200">goheung_dataset.json</span>
+                    </div>
+
+                    <!-- TypeDB Ontology -->
+                    <div class="bg-indigo-50/30 p-5 rounded-xl border border-indigo-200 flex-grow">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-4">
+                            <i data-lucide="network" class="w-5 h-5 text-indigo-600"></i> TypeDB 온톨로지 스키마
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-white p-3 rounded border border-slate-200">
+                                <div class="text-[10px] font-bold text-indigo-500 mb-1.5 uppercase tracking-wider">Entities (개체)</div>
+                                <ul class="text-xs text-slate-600 space-y-1.5">
+                                    <li><span class="font-mono font-medium text-slate-700 bg-slate-100 px-1 rounded">person</span> (나이, 장애여부)</li>
+                                    <li><span class="font-mono font-medium text-slate-700 bg-slate-100 px-1 rounded">building</span> (자재, 폭)</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-slate-200">
+                                <div class="text-[10px] font-bold text-indigo-500 mb-1.5 uppercase tracking-wider">Relations (관계)</div>
+                                <ul class="text-xs text-slate-600 space-y-1.5">
+                                    <li><span class="font-mono font-medium text-slate-700 bg-slate-100 px-1 rounded">residence</span> (거주)</li>
+                                    <li><span class="font-mono font-medium text-slate-700 bg-slate-100 px-1 rounded">rescue-target</span> (구조)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 text-slate-200 p-3.5 rounded-lg border border-slate-700 shadow-inner">
+                            <div class="text-[10px] font-bold text-indigo-300 mb-2 uppercase tracking-wider">Inference Rules (추론 규칙)</div>
+                            <div class="font-mono text-[11px] leading-relaxed text-slate-300">
+                                <span class="text-pink-400">rule</span> cognitive-vulnerability:<br>
+                                &nbsp;&nbsp;<span class="text-blue-300">when</span> { $p isa person, age >= 80; }<br>
+                                &nbsp;&nbsp;<span class="text-blue-300">then</span> { $p has cognitive-vuln true; }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Connection -->
+                <div class="hidden md:flex flex-col justify-center items-center px-1">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-400 font-bold text-lg">+</div>
+                </div>
+
+                <!-- Right: Dynamic Data & Physics -->
+                <div class="flex-1 flex flex-col gap-4">
+                    <!-- Dynamic Dict -->
+                    <div class="bg-orange-50/50 p-4 rounded-xl border border-orange-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-orange-600"></i> 동적 상태 데이터
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">실시간으로 갱신되는 휘발성 메모리 변수</p>
+                        </div>
+                        <span class="text-xs font-mono text-orange-600 bg-white px-2 py-1 rounded border border-orange-200">live_weather{}</span>
+                    </div>
+
+                    <!-- Fire Spread Physics -->
+                    <div class="bg-orange-50/30 p-5 rounded-xl border border-orange-200 flex-grow flex flex-col">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-4">
+                            <i data-lucide="flame" class="w-5 h-5 text-orange-600"></i> 화재 전파 물리 모델 연산
+                        </h3>
+                        
+                        <div class="space-y-3 flex-grow">
+                            <div class="bg-white p-3 rounded border border-slate-200 flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-700">건축 자재 계수 (Base Rate)</span>
+                                <span class="text-[11px] text-slate-500">비닐하우스(2m) ~ 조적조(12m)</span>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-slate-200 flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-700">기상 보정치 (NFDRS 지수)</span>
+                                <span class="text-[11px] text-slate-500">풍속, 습도, 기온에 따른 가중치 곱</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-orange-100 p-3 rounded border border-orange-200 text-center">
+                            <span class="text-xs font-bold text-orange-800 flex items-center justify-center gap-2">
+                                <i data-lucide="arrow-down-to-line" class="w-4 h-4"></i> 최종 도출: 플래시오버 ETA (전소 시간)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex flex-col items-center justify-center h-10 relative w-full">
+            <div class="w-px h-full bg-slate-300"></div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 -mt-2 bg-slate-50 rounded-full z-10"></i>
+            <div class="absolute top-1/2 -translate-y-1/2 ml-36 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                run_all_scenarios(db, weather)
+            </div>
+        </div>
+
+        <!-- Tier 4: Output & Lifecycle -->
+        <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-2 hover:shadow-md transition-shadow">
+            <div class="absolute -top-3.5 left-8 bg-emerald-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                3. 출력 및 데이터 생애주기 (Output & Lifecycle)
+            </div>
+            
+            <div class="mb-8 pb-8 border-b border-slate-100">
+                <div class="flex items-center gap-3 mb-4 mt-2">
+                    <div class="p-2 bg-emerald-50 rounded-lg"><i data-lucide="braces" class="w-6 h-6 text-emerald-600"></i></div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">최종 시뮬레이션 결과물</h3>
+                        <p class="text-sm font-mono text-slate-500 mt-0.5">simulation_result.json (UTF-8)</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-center shadow-sm">
+                        <div class="text-xs font-bold text-slate-700 mb-1">지식 계보</div>
+                        <div class="text-[10px] text-slate-500 font-mono">knowledge_lineage</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-center shadow-sm">
+                        <div class="text-xs font-bold text-slate-700 mb-1">추론 근거</div>
+                        <div class="text-[10px] text-slate-500 font-mono">reasoning_chain</div>
+                    </div>
+                    <div class="bg-slate-50 border border-emerald-200 bg-emerald-50/30 p-3 rounded-lg text-center shadow-sm">
+                        <div class="text-xs font-bold text-emerald-700 mb-1">우선순위 타겟</div>
+                        <div class="text-[10px] text-emerald-600 font-mono">priority_targets</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-center shadow-sm">
+                        <div class="text-xs font-bold text-slate-700 mb-1">전파 타임라인</div>
+                        <div class="text-[10px] text-slate-500 font-mono">fire_spread_eta</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lifecycle Flow -->
+            <div>
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> 데이터 라이프사이클 (Data Lifecycle)
+                </h4>
+                <div class="flex flex-col sm:flex-row items-center justify-between bg-slate-50 p-5 rounded-xl border border-slate-200 gap-4 sm:gap-2">
+                    
+                    <div class="text-center w-full sm:flex-1 relative">
+                        <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2 font-bold text-sm">1</div>
+                        <div class="text-sm font-bold text-slate-800 mb-1">생성 [Create]</div>
+                        <div class="text-[11px] text-slate-500 font-mono">data_generator.py</div>
+                    </div>
+                    
+                    <i data-lucide="arrow-right" class="hidden sm:block w-5 h-5 text-slate-300"></i>
+                    <i data-lucide="arrow-down" class="sm:hidden w-5 h-5 text-slate-300"></i>
+                    
+                    <div class="text-center w-full sm:flex-1 relative">
+                        <div class="w-8 h-8 mx-auto bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-2 font-bold text-sm">2</div>
+                        <div class="text-sm font-bold text-slate-800 mb-1">연산 [Process]</div>
+                        <div class="text-[11px] text-slate-500 font-mono">app.py 엔진 구동</div>
+                    </div>
+                    
+                    <i data-lucide="arrow-right" class="hidden sm:block w-5 h-5 text-slate-300"></i>
+                    <i data-lucide="arrow-down" class="sm:hidden w-5 h-5 text-slate-300"></i>
+
+                    <div class="text-center w-full sm:flex-1 relative">
+                        <div class="w-8 h-8 mx-auto bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-2 font-bold text-sm">3</div>
+                        <div class="text-sm font-bold text-slate-800 mb-1">소비 [Consume]</div>
+                        <div class="text-[11px] text-slate-500 font-mono">index.html 렌더링</div>
+                    </div>
+                    
+                    <i data-lucide="arrow-right" class="hidden sm:block w-5 h-5 text-slate-300"></i>
+                    <i data-lucide="arrow-down" class="sm:hidden w-5 h-5 text-slate-300"></i>
+
+                    <div class="text-center w-full sm:flex-1 relative">
+                        <div class="w-8 h-8 mx-auto bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-2 font-bold text-sm">4</div>
+                        <div class="text-sm font-bold text-slate-800 mb-1">폐기 [Dispose]</div>
+                        <div class="text-[11px] text-red-500 font-medium">서버 재기동 시 자동 재생성</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex flex-col items-center justify-center h-10 relative w-full">
+            <div class="w-px h-full bg-amber-300/50"></div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-amber-400 -mt-2 bg-slate-50 rounded-full z-10"></i>
+            <div class="absolute top-1/2 -translate-y-1/2 ml-40 text-[10px] font-bold text-amber-700 bg-amber-50 px-3 py-0.5 rounded-full border border-amber-200">
+                v5 목표 레이어
+            </div>
+        </div>
+
+        <!-- Layer 4: Audit Trail (미구현) -->
+        <div class="w-full relative bg-white rounded-2xl border border-amber-200 shadow-sm p-6 sm:p-8 mt-2 opacity-70">
+            <div class="absolute -top-3.5 left-8 bg-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide flex items-center gap-1.5">
+                4. 감사 추적 (Decision Audit Trail)
+                <span class="text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded">미구현</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-start gap-6 mt-2">
+                <div class="p-4 bg-amber-50 text-amber-500 rounded-xl shrink-0">
+                    <i data-lucide="clipboard-list" class="w-10 h-10"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">결정 로그 DB</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                        모든 AI 판단에 <strong>"왜 이 결정을 내렸나"</strong>를 함께 저장합니다. 잘못된 결정을 역추적하여 추론 규칙을 개선하는 원료입니다. 팔란티어 FDE 모델의 핵심 원칙.
+                    </p>
+                    <div class="grid sm:grid-cols-3 gap-3">
+                        <div class="bg-amber-50/50 border border-amber-200 p-3 rounded-lg text-center">
+                            <div class="text-xs font-bold text-amber-800 mb-1">결정 타임스탬프</div>
+                            <div class="text-[10px] text-amber-600 font-mono">decided_at</div>
+                        </div>
+                        <div class="bg-amber-50/50 border border-amber-200 p-3 rounded-lg text-center">
+                            <div class="text-xs font-bold text-amber-800 mb-1">적용된 규칙 ID</div>
+                            <div class="text-[10px] text-amber-600 font-mono">rule_triggered</div>
+                        </div>
+                        <div class="bg-amber-50/50 border border-amber-200 p-3 rounded-lg text-center">
+                            <div class="text-xs font-bold text-amber-800 mb-1">인간 최종 승인</div>
+                            <div class="text-[10px] text-amber-600 font-mono">human_approved</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex flex-col items-center justify-center h-10 relative w-full">
+            <div class="w-px h-full bg-amber-300/50"></div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-amber-400 -mt-2 bg-slate-50 rounded-full z-10"></i>
+        </div>
+
+        <!-- Layer 5: Feedback Loop (미구현) -->
+        <div class="w-full relative bg-white rounded-2xl border border-amber-200 shadow-sm p-6 sm:p-8 mt-2 opacity-70">
+            <div class="absolute -top-3.5 left-8 bg-amber-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide flex items-center gap-1.5">
+                5. 피드백 루프 (Outcome Feedback Loop)
+                <span class="text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded">미구현</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-start gap-6 mt-2">
+                <div class="p-4 bg-amber-50 text-amber-600 rounded-xl shrink-0">
+                    <i data-lucide="refresh-cw" class="w-10 h-10"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">암묵지 자동 업데이트 루프</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                        실제 화재 결과(생존율, 대피 성공/실패)가 레이어 3의 추론 규칙으로 역류합니다. 이 루프가 완성되어야 <strong>암묵지가 데이터로 스스로 진화</strong>하는 시스템이 됩니다.
+                    </p>
+                    <div class="flex items-center bg-slate-50 border border-slate-200 p-4 rounded-xl gap-4 flex-wrap">
+                        <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
+                            <i data-lucide="activity" class="w-4 h-4 text-red-500"></i> 실화재 결과 데이터
+                        </div>
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-slate-300"></i>
+                        <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
+                            <i data-lucide="brain-circuit" class="w-4 h-4 text-indigo-500"></i> 규칙 가중치 보정
+                        </div>
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-slate-300"></i>
+                        <div class="flex items-center gap-2 text-sm font-bold text-emerald-700">
+                            <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i> 레이어 3 자동 갱신
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div> <!-- end inner wrapper -->
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

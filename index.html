@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATOS — 소록마을 심야 화재 대응</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family:'Inter',sans-serif; background:#FDFDFB; -webkit-font-smoothing:antialiased; }
+        .scrollbar::-webkit-scrollbar { width:3px; }
+        .scrollbar::-webkit-scrollbar-track { background:transparent; }
+        .scrollbar::-webkit-scrollbar-thumb { background:#E7E5E4; border-radius:10px; }
+        @keyframes fade-up  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fire-pulse{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.7;transform:scale(1.15)} }
+        @keyframes spread-ring { 0%{r:10;opacity:.8} 100%{r:28;opacity:0} }
+        .fade-up { animation:fade-up .5s ease-out forwards; }
+        .logic-node { transition:all .8s cubic-bezier(.4,0,.2,1); }
+        .glass { background:rgba(255,255,255,.85); backdrop-filter:blur(20px); border:1px solid rgba(231,229,228,.5); }
+        .pill { white-space:nowrap; cursor:pointer; transition:all .25s; }
+        .sdot { display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle; }
+        .sdot-C { background:#ef4444; box-shadow:0 0 5px #ef4444aa; }
+        .sdot-H { background:#f97316; box-shadow:0 0 5px #f97316aa; }
+        .sdot-M { background:#84cc16; }
+
+        /* ── Modal ── */
+        #modal-bg {
+            position:fixed;inset:0;z-index:60;
+            background:rgba(0,0,0,.45);backdrop-filter:blur(6px);
+            display:flex;align-items:center;justify-content:center;
+            opacity:0;pointer-events:none;transition:opacity .25s;
+        }
+        #modal-bg.open { opacity:1;pointer-events:all; }
+        #modal-box {
+            background:#fff;border-radius:2.5rem;padding:2.75rem 3rem;
+            max-width:520px;width:92%;max-height:82vh;overflow-y:auto;
+            box-shadow:0 40px 100px rgba(0,0,0,.18);
+            transform:translateY(20px) scale(.97);
+            transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+        }
+        #modal-bg.open #modal-box { transform:none; }
+        /* countdown strip */
+        #m-countdown-wrap { height:3px;background:#f1f0ef;border-radius:99px;overflow:hidden;margin-bottom:1.25rem; }
+        #m-countdown-bar  { height:100%;border-radius:99px;background:var(--acc,#1a1a1a);width:100%;transition:width linear; }
+
+        /* ── Accent tokens (set via JS on :root) ── */
+        .acc-chip {
+            display:inline-flex;align-items:center;gap:4px;
+            padding:3px 10px;border-radius:99px;font-size:9px;font-weight:900;
+            letter-spacing:.15em;text-transform:uppercase;
+            background:var(--acc-bg,#f5f5f5);border:1px solid var(--acc-bd,#e5e5e5);
+            color:var(--acc,#1a1a1a);
+        }
+        .acc-bar { height:3px;background:var(--acc,#1a1a1a);border-radius:99px; }
+        .acc-icon { width:48px;height:48px;border-radius:1.25rem;display:flex;align-items:center;justify-content:center;background:var(--acc,#1a1a1a);color:#fff; }
+
+        /* ── Map ── */
+        #village-map { background:#f8f7f5;border-radius:2rem;overflow:hidden;border:1px solid #e7e5e4; }
+        .bldg-dot { cursor:pointer;transition:all .3s; }
+        .bldg-dot:hover { filter:brightness(1.2); }
+        .fire-ring { animation:spread-ring 1.8s ease-out infinite; }
+
+        /* ── Spread timeline ── */
+        .tl-bar { background:linear-gradient(90deg,var(--acc,#ef4444),transparent);height:4px;border-radius:99px; }
+        .tl-event { position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;border:2px solid #fff;transform:translateX(-50%); }
+    </style>
+</head>
+<body class="p-6 text-[#1D1D1B]">
+
+<!-- ── Modal ─────────────────────────────────────────────────────────── -->
+<div id="modal-bg" onclick="closeModal()">
+  <div id="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <div id="m-chip" class="acc-chip mb-2">—</div>
+        <h2 id="m-title" class="text-[20px] font-black tracking-tight text-stone-900 leading-tight"></h2>
+      </div>
+      <div id="m-icon" class="acc-icon shrink-0 ml-5"><i data-lucide="zap" class="w-5 h-5"></i></div>
+    </div>
+    <div id="m-bar" class="acc-bar mb-5"></div>
+    <div id="m-body" class="text-[13px] text-stone-600 leading-relaxed space-y-3"></div>
+    <!-- countdown bar: visible only when auto-closing -->
+    <div id="m-countdown-wrap" style="display:none">
+      <div id="m-countdown-bar"></div>
+    </div>
+    <button id="m-skip-btn" onclick="closeModal()"
+      class="mt-5 w-full py-2.5 text-[9px] font-black tracking-[.3em] uppercase rounded-2xl border border-stone-100 text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-all">
+      Skip →
+    </button>
+  </div>
+</div>
+
+<!-- ── Layout ─────────────────────────────────────────────────────────── -->
+<div class="max-w-[1680px] mx-auto flex flex-col gap-4" style="height:97vh">
+
+  <!-- Header -->
+  <header class="flex items-center justify-between bg-white px-8 py-4 rounded-[2rem] border border-stone-200/60 shadow-sm shrink-0 gap-6">
+
+    <!-- ① 브랜드 -->
+    <div class="flex items-center gap-3 shrink-0">
+      <div id="logo" class="w-10 h-10 flex items-center justify-center rounded-[.85rem] shadow-md transition-all duration-500" style="background:#1a1a1a">
+        <i data-lucide="shield-check" class="text-white w-4.5 h-4.5"></i>
+      </div>
+      <div>
+        <div class="text-[15px] font-black tracking-tighter leading-none flex items-baseline gap-1.5">
+          PATOS
+          <span class="text-stone-300 font-light text-[11px]">/</span>
+          <span class="text-stone-400 font-semibold text-[8px] tracking-[.35em] uppercase">Agentic Triage OS</span>
+        </div>
+        <div class="text-[8px] text-stone-300 tracking-widest uppercase mt-0.5">전남 고흥군 소록마을 · 심야 화재 대응</div>
+      </div>
+    </div>
+
+    <!-- ② 네브 메뉴 -->
+    <nav class="flex items-center gap-1 bg-stone-50 rounded-2xl p-1 border border-stone-100">
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white shadow-sm text-[9px] font-black tracking-[.18em] uppercase text-stone-900 border border-stone-100">
+        <i data-lucide="activity" class="w-3 h-3"></i> 실시간 대응
+      </div>
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 cursor-pointer transition-all">
+        <i data-lucide="database" class="w-3 h-3"></i> 지식 그래프
+      </div>
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 cursor-pointer transition-all">
+        <i data-lucide="truck" class="w-3 h-3"></i> 자원 현황
+      </div>
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 cursor-pointer transition-all">
+        <i data-lucide="file-text" class="w-3 h-3"></i> 대응 정책
+      </div>
+    </nav>
+
+    <!-- ③ 기술 문서 링크 -->
+    <div class="hidden sm:flex items-center gap-1 bg-stone-50 rounded-2xl p-1 border border-stone-100 shrink-0">
+      <a href="tech1.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 hover:bg-white transition-all">
+        <i data-lucide="layers" class="w-3 h-3"></i> 시스템
+      </a>
+      <a href="tech2.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 hover:bg-white transition-all">
+        <i data-lucide="database" class="w-3 h-3"></i> 데이터
+      </a>
+      <a href="tech3.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 hover:bg-white transition-all">
+        <i data-lucide="brain-circuit" class="w-3 h-3"></i> v5
+      </a>
+      <a href="tech4.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 hover:bg-white transition-all">
+        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Re-plan
+      </a>
+      <a href="tech5.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-bold tracking-[.18em] uppercase text-stone-400 hover:text-stone-700 hover:bg-white transition-all">
+        <i data-lucide="message-circle-question" class="w-3 h-3"></i> 핵심질문
+      </a>
+    </div>
+
+    <!-- ④ 운영 상태 표시 -->
+    <div class="flex items-center gap-5 flex-1 justify-end">
+
+      <!-- 실시간 기상 -->
+      <div id="weather-badge" class="hidden items-center gap-3 px-4 py-2.5 bg-stone-50 rounded-2xl border border-stone-100">
+        <i data-lucide="cloud" class="w-3.5 h-3.5 text-stone-300 shrink-0"></i>
+        <div>
+          <div class="text-[8px] text-stone-300 font-black tracking-widest uppercase leading-none mb-0.5">Live Weather</div>
+          <div id="weather-val" class="text-[11px] font-bold text-stone-800 leading-none"></div>
+        </div>
+        <div id="weather-risk" class="text-[9px] font-black uppercase tracking-wide pl-3 border-l border-stone-200"></div>
+      </div>
+
+      <!-- 사고 시각 -->
+      <div class="flex items-center gap-2.5 px-4 py-2.5 bg-stone-50 rounded-2xl border border-stone-100">
+        <i data-lucide="clock" class="w-3.5 h-3.5 text-stone-300 shrink-0"></i>
+        <div>
+          <div class="text-[8px] text-stone-300 font-black tracking-widest uppercase leading-none mb-0.5">Incident Time</div>
+          <div id="clock" class="text-[13px] font-light text-stone-900 tabular-nums leading-none tracking-tight">
+            02:15:34
+          </div>
+        </div>
+      </div>
+
+      <!-- 추론 신뢰도 (시뮬레이션 중에만 표시) -->
+      <div id="conf-wrap" class="flex items-center gap-2 px-4 py-2.5 bg-stone-50 rounded-2xl border border-stone-100 opacity-0 transition-opacity duration-500">
+        <i data-lucide="cpu" class="w-3.5 h-3.5 text-stone-300 shrink-0"></i>
+        <div>
+          <div class="text-[8px] text-stone-300 font-black tracking-widest uppercase leading-none mb-0.5">Confidence</div>
+          <span id="conf-val" class="text-[13px] font-black text-stone-900 tabular-nums leading-none">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ 액션 버튼 -->
+    <div class="flex items-center gap-2 shrink-0 pl-5 border-l border-stone-100">
+      <button id="export-btn" onclick="exportReport()" style="display:none"
+        class="px-4 py-2.5 text-[9px] font-black tracking-[.18em] uppercase rounded-2xl border border-stone-200 text-stone-500 hover:border-stone-400 hover:text-stone-800 transition-all flex items-center gap-1.5">
+        <i data-lucide="download" class="w-3 h-3"></i> Export
+      </button>
+      <button id="main-btn" onclick="toggleSim()"
+        class="px-7 py-3 text-[9px] font-black tracking-[.2em] uppercase transition-all duration-500 rounded-2xl bg-stone-900 text-white hover:bg-stone-700 hover:shadow-lg flex items-center gap-2">
+        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+        Initialize Sequence
+      </button>
+    </div>
+
+  </header>
+
+  <!-- Scenario selector + Village map row -->
+  <div class="flex gap-4 shrink-0">
+    <!-- Scenario pills -->
+    <div class="flex items-center gap-5 bg-white rounded-[2rem] px-8 py-4 border border-stone-200/60 shadow-sm">
+      <span class="text-[9px] text-stone-300 font-black tracking-[.3em] uppercase shrink-0 flex items-center gap-1.5">
+        <i data-lucide="flame" class="w-3 h-3 text-stone-200"></i> Active Incident
+      </span>
+      <div id="tabs" class="flex gap-2.5 overflow-x-auto"></div>
+      <div id="sev-badge" class="ml-2 shrink-0"></div>
+    </div>
+
+    <!-- Village map -->
+    <div id="village-map" class="flex-1 relative" style="height:110px">
+      <svg id="map-svg" viewBox="0 0 520 110" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background -->
+        <rect width="520" height="110" fill="#f8f7f5"/>
+        <!-- Village road -->
+        <path d="M 20 90 Q 80 75 130 65 Q 200 50 270 55 Q 340 60 400 45 Q 450 35 500 20"
+              fill="none" stroke="#e7e5e4" stroke-width="8" stroke-linecap="round"/>
+        <path d="M 20 90 Q 80 75 130 65 Q 200 50 270 55 Q 340 60 400 45 Q 450 35 500 20"
+              fill="none" stroke="#f0efed" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 4"/>
+        <!-- Buildings (12 dots, positioned along road) -->
+        <!-- BLDG-001: 조적조 3.5m -->
+        <g class="bldg-dot" data-bid="BLDG-001" onclick="mapClick('BLDG-001')">
+          <circle cx="45" cy="82" r="7" fill="#16a34a" opacity=".8"/>
+          <text x="45" y="86" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">01</text>
+        </g>
+        <!-- BLDG-002: 샌드위치패널 2.0m -->
+        <g class="bldg-dot" data-bid="BLDG-002" onclick="mapClick('BLDG-002')">
+          <circle cx="85" cy="72" r="7" fill="#dc2626" opacity=".8"/>
+          <text x="85" y="76" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">02</text>
+        </g>
+        <!-- BLDG-003: 경량목구조 2.5m -->
+        <g class="bldg-dot" data-bid="BLDG-003" onclick="mapClick('BLDG-003')">
+          <circle cx="128" cy="63" r="7" fill="#ea580c" opacity=".8"/>
+          <text x="128" y="67" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">03</text>
+        </g>
+        <!-- BLDG-004: 조적조 4.0m -->
+        <g class="bldg-dot" data-bid="BLDG-004" onclick="mapClick('BLDG-004')">
+          <circle cx="175" cy="58" r="7" fill="#16a34a" opacity=".8"/>
+          <text x="175" y="62" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">04</text>
+        </g>
+        <!-- BLDG-005: RC 4.0m -->
+        <g class="bldg-dot" data-bid="BLDG-005" onclick="mapClick('BLDG-005')">
+          <circle cx="215" cy="52" r="7" fill="#16a34a" opacity=".8"/>
+          <text x="215" y="56" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">05</text>
+        </g>
+        <!-- BLDG-006: 슬레이트+조적 2.0m -->
+        <g class="bldg-dot" data-bid="BLDG-006" onclick="mapClick('BLDG-006')">
+          <circle cx="108" cy="87" r="7" fill="#dc2626" opacity=".8"/>
+          <text x="108" y="91" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">06</text>
+        </g>
+        <!-- BLDG-007: 샌드위치패널 1.8m — SCENARIO 1 -->
+        <g class="bldg-dot" data-bid="BLDG-007" onclick="mapClick('BLDG-007')">
+          <circle cx="258" cy="68" r="8" fill="#dc2626" opacity=".9"/>
+          <text x="258" y="73" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">07</text>
+        </g>
+        <!-- BLDG-008: 비닐하우스 1.5m — SCENARIO 4 -->
+        <g class="bldg-dot" data-bid="BLDG-008" onclick="mapClick('BLDG-008')">
+          <circle cx="298" cy="82" r="8" fill="#7f1d1d" opacity=".9"/>
+          <text x="298" y="87" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">08</text>
+        </g>
+        <!-- BLDG-009: 경량목구조 3.0m -->
+        <g class="bldg-dot" data-bid="BLDG-009" onclick="mapClick('BLDG-009')">
+          <circle cx="340" cy="58" r="7" fill="#ea580c" opacity=".8"/>
+          <text x="340" y="62" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">09</text>
+        </g>
+        <!-- BLDG-010: 조적조 3.5m — SCENARIO 3 -->
+        <g class="bldg-dot" data-bid="BLDG-010" onclick="mapClick('BLDG-010')">
+          <circle cx="382" cy="50" r="7" fill="#16a34a" opacity=".8"/>
+          <text x="382" y="54" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">10</text>
+        </g>
+        <!-- BLDG-011: RC 5.0m -->
+        <g class="bldg-dot" data-bid="BLDG-011" onclick="mapClick('BLDG-011')">
+          <circle cx="428" cy="42" r="7" fill="#16a34a" opacity=".8"/>
+          <text x="428" y="46" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">11</text>
+        </g>
+        <!-- BLDG-012: 샌드위치패널 2.2m -->
+        <g class="bldg-dot" data-bid="BLDG-012" onclick="mapClick('BLDG-012')">
+          <circle cx="470" cy="32" r="7" fill="#dc2626" opacity=".8"/>
+          <text x="470" y="36" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">12</text>
+        </g>
+
+        <!-- Fire indicator (hidden initially) -->
+        <g id="fire-indicator" style="display:none">
+          <circle id="fire-ring1" r="10" fill="none" stroke="#ef4444" stroke-width="2" class="fire-ring"/>
+          <circle id="fire-ring2" r="10" fill="none" stroke="#ef4444" stroke-width="1.5" class="fire-ring" style="animation-delay:.6s"/>
+          <circle id="fire-dot" r="9" fill="#ef4444" style="animation:fire-pulse 1s ease-in-out infinite"/>
+        </g>
+
+        <!-- Legend -->
+        <g transform="translate(10,5)">
+          <circle cx="6" cy="6" r="5" fill="#dc2626" opacity=".8"/>
+          <text x="14" y="10" font-size="7" fill="#9ca3af">고위험 자재</text>
+          <circle cx="70" cy="6" r="5" fill="#16a34a" opacity=".8"/>
+          <text x="78" y="10" font-size="7" fill="#9ca3af">내화 구조</text>
+          <circle cx="130" cy="6" r="5" fill="#7f1d1d" opacity=".9"/>
+          <text x="138" y="10" font-size="7" fill="#9ca3af">극위험</text>
+        </g>
+      </svg>
+
+      <!-- Map tooltip -->
+      <div id="map-tooltip" class="hidden absolute bg-stone-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl pointer-events-none z-10"></div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="px-14 relative shrink-0 -mt-1">
+    <div class="w-full h-[1px] bg-stone-100"></div>
+    <div id="prog-bar" class="absolute top-0 left-14 h-[3px] transition-all duration-1000 rounded-full" style="width:0%;background:var(--acc,#1a1a1a)"></div>
+  </div>
+
+  <!-- Fire spread timeline (appears after step 3) -->
+  <div id="spread-row" class="hidden px-14 shrink-0">
+    <div class="bg-white rounded-[1.5rem] border border-stone-100 px-8 py-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full animate-ping" style="background:var(--acc,#ef4444)"></div>
+          <span class="text-[9px] font-black text-stone-400 uppercase tracking-widest">Fire Spread Timeline</span>
+          <span id="spread-material" class="acc-chip ml-1"></span>
+        </div>
+        <div id="spread-rescue" class="text-[10px] font-black uppercase tracking-widest"></div>
+      </div>
+      <!-- Timeline bar -->
+      <div id="tl-wrap" class="relative h-4 mt-2"></div>
+      <div id="tl-legend" class="flex gap-4 mt-3 flex-wrap"></div>
+    </div>
+  </div>
+
+  <!-- Content grid -->
+  <div class="flex-1 grid grid-cols-12 gap-5 min-h-0">
+
+    <!-- Left: Signal + Lineage -->
+    <aside class="col-span-3 flex flex-col gap-5">
+      <div id="card-signal" class="glass rounded-[3rem] p-8 flex flex-col opacity-40 transition-all duration-1000">
+        <div class="flex items-center justify-between mb-7">
+          <h2 class="text-[9px] font-black text-stone-400 tracking-[.3em] uppercase flex items-center gap-2">
+            <i data-lucide="mic" class="w-3.5 h-3.5 text-stone-300"></i> Signal Ingestion
+          </h2>
+          <div id="sig-pulse" class="w-2 h-2 rounded-full bg-stone-100"></div>
+        </div>
+        <div class="flex-1 flex flex-col justify-center">
+          <div class="text-[8px] font-mono text-stone-300 mb-3 tracking-widest uppercase">STT_PACKET_RX</div>
+          <p id="stt" class="text-[15px] leading-[1.7] font-light text-stone-800 tracking-tight italic">
+            Awaiting auditory stream...
+          </p>
+        </div>
+      </div>
+
+      <div id="card-lineage" class="glass rounded-[3rem] p-8 flex flex-col opacity-40 transition-all duration-1000 flex-1">
+        <h2 class="text-[9px] font-black text-stone-400 tracking-[.3em] uppercase flex items-center gap-2 mb-7">
+          <i data-lucide="database" class="w-3.5 h-3.5 text-stone-300"></i> Knowledge Lineage
+        </h2>
+        <div id="lineage" class="space-y-3">
+          <div class="h-12 bg-stone-50 rounded-[1.5rem] border border-stone-100 opacity-20"></div>
+          <div class="h-12 bg-stone-50 rounded-[1.5rem] border border-stone-100 opacity-20"></div>
+          <div class="h-12 bg-stone-50 rounded-[1.5rem] border border-stone-100 opacity-10"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center: Reasoning -->
+    <main class="col-span-6 flex flex-col">
+      <div id="card-reason" class="bg-white rounded-[4rem] p-14 border border-stone-200/60 shadow-sm flex flex-col relative opacity-30 transition-all duration-1000 h-full">
+        <div class="flex items-center justify-between mb-12">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-stone-50 rounded-xl"><i id="cpu-icon" data-lucide="cpu" class="w-4.5 h-4.5 text-stone-900"></i></div>
+            <h2 class="text-[9px] font-black text-stone-400 tracking-[.4em] uppercase">Cognitive Inference Engine</h2>
+          </div>
+          <div id="logic-dots" class="flex gap-2">
+            <div class="w-2 h-2 rounded-full bg-stone-100"></div>
+            <div class="w-2 h-2 rounded-full bg-stone-100"></div>
+            <div class="w-2 h-2 rounded-full bg-stone-100"></div>
+          </div>
+        </div>
+        <div class="flex-1 flex flex-col justify-center max-w-[540px] mx-auto w-full gap-14">
+          <div id="logic-1" class="logic-node opacity-0 translate-y-4 pl-12 border-l border-stone-100 relative">
+            <div class="absolute top-0 -left-[10px] w-5 h-5 bg-white border-2 border-stone-900 rounded-full flex items-center justify-center shadow-lg">
+              <i data-lucide="search" class="w-2.5 h-2.5 text-stone-900"></i>
+            </div>
+            <p id="l1-lbl" class="text-[10px] font-black text-stone-300 uppercase tracking-widest mb-2">Logic 01 / Physical Hazard</p>
+            <p id="l1-txt" class="text-[17px] font-light leading-relaxed text-stone-800 tracking-tight"></p>
+          </div>
+          <div id="logic-2" class="logic-node opacity-0 translate-y-4 pl-12 border-l border-stone-100 relative">
+            <div class="absolute top-0 -left-[10px] w-5 h-5 bg-white border-2 border-stone-900 rounded-full flex items-center justify-center shadow-lg">
+              <i data-lucide="target" class="w-2.5 h-2.5 text-stone-900"></i>
+            </div>
+            <p id="l2-lbl" class="text-[10px] font-black text-stone-300 uppercase tracking-widest mb-2">Logic 02 / Cognitive Reliability</p>
+            <p id="l2-txt" class="text-[17px] font-light leading-relaxed text-stone-800 tracking-tight"></p>
+          </div>
+          <div id="final" class="opacity-0 translate-y-10 pt-12 flex flex-col items-center border-t border-stone-50 transition-all duration-1000">
+            <div id="final-icon" class="w-18 h-18 rounded-[2rem] flex items-center justify-center text-white mb-5 shadow-2xl p-4" style="background:var(--acc,#1a1a1a)">
+              <i data-lucide="alert-triangle" class="w-9 h-9"></i>
+            </div>
+            <h4 class="text-xl font-black tracking-tighter text-stone-900 uppercase italic">Anomaly Confirmed</h4>
+            <p class="text-[10px] text-stone-400 font-black tracking-[.5em] mt-2 uppercase">Activating Agentic Intervention Protocol</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right: Targets + Dispatch + Log -->
+    <aside class="col-span-3 flex flex-col gap-5 min-h-0">
+
+      <!-- Priority Rescue -->
+      <div id="card-targets" class="glass rounded-[3rem] p-8 flex flex-col transition-all duration-1000" style="opacity:0">
+        <h2 class="text-[9px] font-black text-stone-400 tracking-[.3em] uppercase flex items-center gap-2 mb-6">
+          <i data-lucide="users" class="w-3.5 h-3.5 text-stone-300"></i> Priority Rescue
+        </h2>
+        <div id="targets-list" class="space-y-2.5"></div>
+      </div>
+
+      <!-- Action Protocol -->
+      <div id="card-dispatch" class="rounded-[3rem] p-10 flex flex-col shadow-2xl relative opacity-0 translate-y-10 transition-all duration-1000" style="background:#1A1A1A">
+        <div class="absolute top-0 right-0 p-8">
+          <div id="dispatch-ping" class="w-3 h-3 rounded-full animate-ping" style="background:var(--acc,#ef4444)"></div>
+        </div>
+        <h2 class="text-[10px] font-black text-stone-400 tracking-[.4em] uppercase mb-8 flex items-center gap-2">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i> Action Protocol
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <div class="flex items-center gap-2 text-white text-[10px] font-bold tracking-widest uppercase opacity-60 mb-1.5">
+              <div class="p-1.5 bg-white/10 rounded-lg"><i data-lucide="phone-call" class="w-3 h-3"></i></div> Direct ARS
+            </div>
+            <p id="ars-txt" class="text-[12px] font-light text-stone-300 leading-relaxed"></p>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 text-white text-[10px] font-bold tracking-widest uppercase opacity-60 mb-1.5">
+              <div class="p-1.5 bg-white/10 rounded-lg"><i data-lucide="wifi" class="w-3 h-3"></i></div> Tactical MDT
+            </div>
+            <p id="mdt-txt" class="text-[12px] font-light text-stone-300 leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Operational Log -->
+      <div class="bg-white rounded-[3rem] border border-stone-200 flex-1 flex flex-col overflow-hidden shadow-sm min-h-0">
+        <div class="p-6 border-b border-stone-50 flex justify-between items-center bg-stone-50/20 shrink-0">
+          <h2 class="text-[9px] font-bold text-stone-400 tracking-[.2em] uppercase flex items-center gap-2">
+            <i data-lucide="clock" class="w-3 h-3"></i> Operational Log
+          </h2>
+          <i id="radio-icon" data-lucide="radio" class="w-3.5 h-3.5 text-stone-100"></i>
+        </div>
+        <div id="log" class="flex-1 overflow-y-auto p-6 space-y-4 scrollbar">
+          <p class="text-[11px] text-stone-200 font-bold uppercase tracking-[.3em] text-center mt-10 italic">Archive stream offline</p>
+        </div>
+      </div>
+    </aside>
+  </div><!-- /grid -->
+</div><!-- /layout -->
+
+<!-- Building positions for fire indicator -->
+<script>
+const BLDG_POS = {
+  "BLDG-001":{x:45,y:82},"BLDG-002":{x:85,y:72},"BLDG-003":{x:128,y:63},
+  "BLDG-004":{x:175,y:58},"BLDG-005":{x:215,y:52},"BLDG-006":{x:108,y:87},
+  "BLDG-007":{x:258,y:68},"BLDG-008":{x:298,y:82},"BLDG-009":{x:340,y:58},
+  "BLDG-010":{x:382,y:50},"BLDG-011":{x:428,y:42},"BLDG-012":{x:470,y:32},
+};
+const BLDG_INFO = {
+  "BLDG-001":{name:"소록마을 1-2",material:"조적조",width:3.5},
+  "BLDG-002":{name:"소록마을 3-5",material:"샌드위치 패널",width:2.0},
+  "BLDG-003":{name:"소록마을 12-3",material:"경량 목구조",width:2.5},
+  "BLDG-004":{name:"소록마을 15-8",material:"조적조",width:4.0},
+  "BLDG-005":{name:"소록마을 18-4",material:"철근콘크리트",width:4.0},
+  "BLDG-006":{name:"소록마을 7-1",material:"슬레이트+조적",width:2.0},
+  "BLDG-007":{name:"소록마을 23-7",material:"샌드위치 패널",width:1.8},
+  "BLDG-008":{name:"소록마을 27-2",material:"비닐하우스",width:1.5},
+  "BLDG-009":{name:"소록마을 31-6",material:"경량 목구조",width:3.0},
+  "BLDG-010":{name:"소록마을 35-9",material:"조적조",width:3.5},
+  "BLDG-011":{name:"소록마을 41-1",material:"철근콘크리트",width:5.0},
+  "BLDG-012":{name:"소록마을 44-3",material:"샌드위치 패널",width:2.2},
+};
+
+// ── Fallback embedded data ──────────────────────────────────────────────
+const FALLBACK = {scenarios:[{
+  scenario_id:"FIRE-2026-001",label:"시나리오 A — 초임계 / CRITICAL",severity:"CRITICAL",
+  incident:{timestamp:"2026-04-24T02:15:34",call_content:"불이야! 소록마을 안쪽 마 노인네 집에 불이 났어요! 빨리요!",
+    location:"전남 고흥군 도양읍 소록마을 23-7",building_id:"BLDG-007",weather:{wind_speed_ms:7.2,humidity_pct:22}},
+  knowledge_lineage:[
+    {label:"Building Code",val:"샌드위치 패널 / 1.8m 접근로",trust:99.2,icon:"home"},
+    {label:"Demography",val:"84세 / 난청 / 거동불편 / 당뇨",trust:97.5,icon:"user-x"},
+    {label:"Dynamics",val:"풍속 7.2m/s / 습도 22%",trust:94.8,icon:"wind"}],
+  reasoning_chain:[
+    {step:1,label:"Physical Hazard",content:"샌드위치 패널 및 1.8m 접근로 — 소방력 접근 지연 임계치 초과 판정.",score:90},
+    {step:2,label:"Cognitive Reliability",content:"거주자 난청 특성 — 표준 대피 가이드 도달률 미달 확인.",score:100}],
+  priority_targets:[{rank:1,name:"마순례",age:84,conditions:["난청","거동불편","당뇨"],
+    lives_alone:true,cognitive_vulnerability_score:100,physical_isolation_score:90,total_priority_score:96.0,
+    location:{lat:34.6112,lon:127.2901,consented:true},
+    rescue_actions:["이장단 ARS 즉시 발송","들것·이동 보조 장비 지참","독거 확인 후 즉시 구조","도보 진입 특화 분대 배정"]}],
+  action_protocol:{ars_message:"[긴급] 마순례(84세) 어르신 댁 화재. 난청으로 인지 불가. 즉시 방문 구조.",
+    mdt_message:"접근로 1.8m 협로 경보. 도보 진입 특화 분대 배정. 샌드위치 패널 유독가스 주의."},
+  fire_spread:{time_flashover_min:2.5,time_engulf_min:4.5,time_structural_min:3.2,
+    neighbor_risk_min:6.0,rescue_window_min:2.0,produces_toxic_gas:true,
+    risk_label:"극위험 — 소방차 도착 전 플래시오버",risk_color:"#dc2626",fire_service_eta_min:12,
+    material:"샌드위치 패널",effective_rate_m2_min:14.0,rescue_before_eta:false,heat_release_kw:6000,
+    timeline:[
+      {t_min:0,label:"신고 접수",icon:"phone",color:"#6b7280",desc:"119 신고 수신"},
+      {t_min:0.8,label:"유독가스 발생",icon:"wind",color:"#7c3aed",desc:"HCN·CO 발생"},
+      {t_min:2.5,label:"플래시오버",icon:"flame",color:"#dc2626",desc:"생존 불가 환경"},
+      {t_min:6.0,label:"인접 건물 위험",icon:"alert-triangle",color:"#f97316",desc:"비화 위험"},
+      {t_min:12,label:"소방차 도착",icon:"truck",color:"#2563eb",desc:"ETA 12분"},
+    ]},
+  weather_live:{source:"KMA",wind_speed_ms:7.2,humidity_pct:22,conditions:"건조",
+    fire_risk:{level:"매우 위험",color:"#dc2626",index:78.4}},
+  confidence:99.4,rescue_critical_min:2.0
+}]};
+
+// ── Severity config ─────────────────────────────────────────────────────
+const SEV = {
+  CRITICAL:{acc:"#ef4444",bg:"#fef2f2",bd:"#fecaca",lbl:"초임계",dot:"sdot-C"},
+  HIGH:    {acc:"#f97316",bg:"#fff7ed",bd:"#fed7aa",lbl:"고위험",  dot:"sdot-H"},
+  MODERATE:{acc:"#84cc16",bg:"#f7fee7",bd:"#d9f99d",lbl:"보통",    dot:"sdot-M"},
+};
+function sev(s) { return SEV[s] || SEV.MODERATE; }
+function setAcc(s) {
+  const c = sev(s);
+  const r = document.documentElement;
+  r.style.setProperty("--acc",    c.acc);
+  r.style.setProperty("--acc-bg", c.bg);
+  r.style.setProperty("--acc-bd", c.bd);
+}
+
+// ── State ───────────────────────────────────────────────────────────────
+let data = null, active = null, step = 0, conf = 0, logLines = [], timers = [], _modalTimer = null;
+
+async function loadData() {
+  try {
+    const r = await fetch("simulation_result.json");
+    if(!r.ok) throw 0;
+    data = await r.json();
+  } catch { data = FALLBACK; }
+
+  // Show live weather in header
+  const lw = data.live_weather || data.scenarios[0]?.weather_live;
+  if(lw) {
+    const risk = lw.fire_risk || {};
+    document.getElementById("weather-val").textContent =
+      `${lw.wind_speed_ms}m/s · ${lw.humidity_pct}% · ${lw.conditions||""}`;
+    const rEl = document.getElementById("weather-risk");
+    rEl.textContent = risk.level || "";
+    rEl.style.color = risk.color || "#6b7280";
+    document.getElementById("weather-badge").classList.replace("hidden","flex");
+  }
+
+  initTabs();
+}
+
+function initTabs() {
+  const el = document.getElementById("tabs");
+  el.innerHTML = data.scenarios.map((s,i) => {
+    const c = sev(s.severity);
+    return `<button class="pill" data-id="${s.scenario_id}" onclick="pickScenario('${s.scenario_id}')">
+      <span class="sdot ${c.dot}"></span>${String.fromCharCode(65+i)} / ${s.severity}
+    </button>`;
+  }).join("");
+  pickScenario(data.scenarios[0].scenario_id, false);
+}
+
+function pickScenario(id, doReset=true) {
+  if(doReset && step > 0 && step < 4) return;
+  active = data.scenarios.find(s => s.scenario_id === id);
+  if(!active) return;
+
+  const c = sev(active.severity);
+  setAcc(active.severity);
+  document.getElementById("logo").style.background = c.acc;
+  document.getElementById("sev-badge").innerHTML =
+    `<span class="acc-chip"><span class="sdot ${c.dot}"></span>${c.lbl}</span>`;
+
+  document.querySelectorAll(".pill").forEach(b => {
+    const on = b.dataset.id === id;
+    b.style.cssText = on
+      ? `background:${c.acc};color:#fff;border:2px solid ${c.acc};padding:5px 14px;border-radius:99px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;`
+      : `background:transparent;color:#a8a29e;border:2px solid #e7e5e4;padding:5px 14px;border-radius:99px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;`;
+  });
+
+  // Clock
+  const ts = new Date(active.incident.timestamp);
+  const hh = String(ts.getHours()).padStart(2,"0");
+  const mm = String(ts.getMinutes()).padStart(2,"0");
+  const ss = String(ts.getSeconds()).padStart(2,"0");
+  document.getElementById("clock").innerHTML = `${hh}:${mm}:${ss} <span class="text-stone-300 text-sm">${ts.getHours()<12?"AM":"AM"}</span>`;
+
+  // Map fire indicator
+  highlightFireBuilding(active.incident.building_id);
+
+  if(doReset) resetUI();
+}
+
+// ── Village map ─────────────────────────────────────────────────────────
+function highlightFireBuilding(bid) {
+  const pos = BLDG_POS[bid];
+  if(!pos) return;
+  const g = document.getElementById("fire-indicator");
+  const dot = document.getElementById("fire-dot");
+  const r1 = document.getElementById("fire-ring1");
+  const r2 = document.getElementById("fire-ring2");
+  [r1,r2].forEach(r => { r.setAttribute("cx",pos.x); r.setAttribute("cy",pos.y); });
+  dot.setAttribute("cx",pos.x); dot.setAttribute("cy",pos.y);
+  g.style.display = "";
+}
+
+function mapClick(bid) {
+  const info = BLDG_INFO[bid];
+  if(!info) return;
+  const tt = document.getElementById("map-tooltip");
+  tt.textContent = `${info.name} · ${info.material} · ${info.width}m`;
+  tt.classList.remove("hidden");
+  setTimeout(() => tt.classList.add("hidden"), 2500);
+}
+
+// ── Fire spread timeline ─────────────────────────────────────────────────
+function renderSpreadTimeline(spread) {
+  const row = document.getElementById("spread-row");
+  row.classList.remove("hidden");
+
+  document.getElementById("spread-material").textContent = spread.material;
+  const rescueEl = document.getElementById("spread-rescue");
+  rescueEl.textContent = spread.risk_label;
+  rescueEl.style.color = spread.risk_color;
+
+  const maxT = Math.max(spread.time_engulf_min, spread.fire_service_eta_min + 2);
+  const wrap = document.getElementById("tl-wrap");
+  const legend = document.getElementById("tl-legend");
+
+  const c = sev(active.severity);
+
+  wrap.innerHTML = `
+    <div class="absolute inset-x-0 top-1.5 h-1 bg-stone-100 rounded-full"></div>
+    <div class="absolute left-0 top-1.5 h-1 rounded-full transition-all duration-1000" style="width:${(spread.fire_service_eta_min/maxT)*100}%;background:${c.acc}"></div>
+    ${spread.timeline.map(ev => `
+      <div class="tl-event" title="${ev.label}: ${ev.t_min}분"
+        style="left:${(ev.t_min/maxT)*100}%;background:${ev.color};"
+        onclick="showTimelineEvent(${JSON.stringify(ev).replace(/"/g,'&quot;')})">
+      </div>`).join("")}
+    <div class="absolute -bottom-1 text-[8px] text-stone-400 font-mono" style="left:0">0분</div>
+    <div class="absolute -bottom-1 text-[8px] text-stone-400 font-mono" style="left:${(spread.fire_service_eta_min/maxT)*100}%;transform:translateX(-50%)">
+      소방차 ${spread.fire_service_eta_min}분
+    </div>
+    <div class="absolute -bottom-1 text-[8px] text-stone-400 font-mono" style="right:0">${maxT.toFixed(0)}분</div>`;
+
+  legend.innerHTML = spread.timeline.slice(0,5).map(ev =>
+    `<div class="flex items-center gap-1.5">
+      <div class="w-2 h-2 rounded-full shrink-0" style="background:${ev.color}"></div>
+      <span class="text-[9px] text-stone-500">${ev.label} <span class="text-stone-300">${ev.t_min}분</span></span>
+    </div>`
+  ).join("");
+}
+
+function showTimelineEvent(ev) {
+  showModal({chip:`T+${ev.t_min}분`,title:ev.label,icon:ev.icon,
+    bodyHtml:`<div class="p-4 rounded-2xl text-[13px] text-stone-800" style="background:var(--acc-bg);border:1px solid var(--acc-bd)">${ev.desc}</div>`});
+}
+
+// ── Modal ───────────────────────────────────────────────────────────────
+function showModal({chip,title,icon,bodyHtml,autoClose=0}) {
+  document.getElementById("m-chip").textContent  = chip;
+  document.getElementById("m-title").textContent = title;
+  document.getElementById("m-body").innerHTML    = bodyHtml;
+  const iEl = document.getElementById("m-icon");
+  iEl.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5"></i>`;
+  safeIcons([iEl]);
+
+  // countdown bar
+  const cWrap = document.getElementById("m-countdown-wrap");
+  const cBar  = document.getElementById("m-countdown-bar");
+  if(_modalTimer) clearTimeout(_modalTimer);
+  if(autoClose > 0) {
+    cWrap.style.display = "";
+    cBar.style.transition = "none";
+    cBar.style.width = "100%";
+    // start shrink on next frame so transition fires
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        cBar.style.transition = "width " + (autoClose/1000).toFixed(1) + "s linear";
+        cBar.style.width = "0%";
+      });
+    });
+    _modalTimer = setTimeout(closeModal, autoClose);
+  } else {
+    cWrap.style.display = "none";
+  }
+
+  document.getElementById("modal-bg").classList.add("open");
+}
+function closeModal() {
+  if(_modalTimer) { clearTimeout(_modalTimer); _modalTimer = null; }
+  document.getElementById("modal-bg").classList.remove("open");
+}
+
+// ── Reset ───────────────────────────────────────────────────────────────
+function resetUI() {
+  timers.forEach(t=>clearTimeout(t)); timers=[]; step=0; conf=0; logLines=[];
+  document.getElementById("conf-val").textContent = "0%";
+  document.getElementById("conf-wrap").style.opacity = "0";
+  document.getElementById("prog-bar").style.width = "0%";
+  document.getElementById("spread-row").classList.add("hidden");
+  document.getElementById("export-btn").style.display = "none";
+
+  ["card-signal","card-lineage"].forEach(id => {
+    document.getElementById(id).classList.remove("opacity-100");
+    document.getElementById(id).classList.add("opacity-40");
+  });
+  document.getElementById("sig-pulse").className = "w-2 h-2 rounded-full bg-stone-100";
+  document.getElementById("stt").innerHTML = "Awaiting auditory stream...";
+  document.getElementById("lineage").innerHTML =
+    `<div class="h-12 bg-stone-50 rounded-[1.5rem] border border-stone-100 opacity-20"></div>
+     <div class="h-12 bg-stone-50 rounded-[1.5rem] border border-stone-100 opacity-20"></div>
+     <div class="h-12 bg-stone-50 rounded-[1.5rem] border border-stone-100 opacity-10"></div>`;
+
+  const rc = document.getElementById("card-reason");
+  rc.classList.remove("opacity-100"); if(!rc.classList.contains("opacity-30")) rc.classList.add("opacity-30");
+  document.getElementById("cpu-icon").classList.remove("animate-spin");
+  document.getElementById("radio-icon").className = "w-3.5 h-3.5 text-stone-100";
+  Array.from(document.getElementById("logic-dots").children).forEach(d=>{ d.className="w-2 h-2 rounded-full bg-stone-100"; d.style.background=""; });
+
+  ["logic-1","logic-2"].forEach(id=>{
+    document.getElementById(id).className = "logic-node opacity-0 translate-y-4 pl-12 border-l border-stone-100 relative";
+  });
+  ["l1-txt","l2-txt"].forEach(id=>{ document.getElementById(id).innerHTML=""; });
+  document.getElementById("final").className = "opacity-0 translate-y-10 pt-12 flex flex-col items-center border-t border-stone-50 transition-all duration-1000";
+
+  document.getElementById("card-targets").style.opacity = "0";
+  document.getElementById("targets-list").innerHTML = "";
+  const dc = document.getElementById("card-dispatch");
+  dc.classList.remove("opacity-100","translate-y-0"); dc.classList.add("opacity-0","translate-y-10");
+
+  document.getElementById("log").innerHTML =
+    '<p class="text-[11px] text-stone-200 font-bold uppercase tracking-[.3em] text-center mt-10 italic">Archive stream offline</p>';
+
+  const btn = document.getElementById("main-btn");
+  btn.disabled=false; btn.textContent="Initialize Sequence";
+  btn.className = "px-8 py-3.5 text-[10px] font-black tracking-[.2em] uppercase transition-all duration-500 rounded-3xl border-2 bg-stone-900 text-white border-stone-900 hover:bg-stone-700 hover:shadow-lg";
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────────
+function tick(d,fn) { timers.push(setTimeout(fn,d)); }
+
+function addLog(tag,msg) {
+  const time = new Date().toLocaleTimeString("ko-KR",{hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  const dark = tag==="CRITICAL"||tag==="DECISION";
+  const isReplan = tag==="REPLAN";
+  const el = document.getElementById("log");
+  if(!logLines.length) el.innerHTML="";
+  logLines.push(1);
+  const tagStyle = dark ? "background:var(--acc,#1a1a1a)" : isReplan ? "background:#f97316" : "";
+  const tagCls = (dark||isReplan) ? "text-white" : "text-stone-400 bg-stone-50 border border-stone-100";
+  el.insertAdjacentHTML("beforeend",`
+    <div class="flex gap-4 group fade-up">
+      <div class="text-[9px] font-mono text-stone-200 tabular-nums shrink-0 mt-0.5 group-hover:text-stone-400">${time}</div>
+      <div class="space-y-1">
+        <span class="text-[8px] font-black uppercase tracking-[.2em] px-2 py-0.5 rounded-lg ${tagCls}" style="${tagStyle}">[${tag}]</span>
+        <p class="text-[11px] text-stone-600 leading-relaxed group-hover:text-stone-900 transition-colors">${msg}</p>
+      </div>
+    </div>`);
+  el.scrollTop = el.scrollHeight;
+}
+
+function animConf(target) {
+  const el = document.getElementById("conf-val");
+  const iv = setInterval(()=>{
+    if(conf>=target){conf=target;clearInterval(iv);}
+    else conf=Math.min(conf+.5,target);
+    el.textContent = conf.toFixed(1)+"%";
+  },18);
+}
+
+function hl(t) {
+  ["난청","치매","거동불편","협로","유독가스","독거","임계치","샌드위치 패널","비닐하우스","미달","자력"]
+    .forEach(k=>{ t=t.replace(new RegExp(k,"g"),`<span class="font-bold text-stone-950 border-b-4 border-stone-100">${k}</span>`); });
+  return t;
+}
+function hlD(t) {
+  ["난청","치매","거동불편","협로","유독가스","도보 진입","독거","인지 불가","자력"]
+    .forEach(k=>{ t=t.replace(new RegExp(k,"g"),`<span class="font-bold text-white border-b-2 border-white/25">${k}</span>`); });
+  return t;
+}
+
+function renderTargets(targets) {
+  const c = sev(active.severity);
+  document.getElementById("targets-list").innerHTML = targets.map(t=>{
+    const hasGPS = t.location?.consented;
+    const gpsTag = hasGPS
+      ? `<span class="text-[8px] px-1.5 py-0.5 rounded-full font-black tracking-wide" style="background:${c.bg};color:${c.acc};border:1px solid ${c.bd}">GPS</span>`
+      : "";
+    return `<div class="group flex items-center gap-3 p-4 bg-[#FAFAF8] rounded-[1.75rem] border border-stone-100 hover:bg-stone-900 hover:border-stone-900 transition-all cursor-default fade-up">
+      <div class="w-8 h-8 shrink-0 text-white text-[10px] font-black rounded-[.6rem] flex items-center justify-center transition-all group-hover:bg-white" style="background:${c.acc}">
+        <span class="group-hover:hidden">${String(t.rank).padStart(2,"0")}</span>
+        <span class="hidden group-hover:block" style="color:${c.acc}">${String(t.rank).padStart(2,"0")}</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="text-[13px] font-bold text-stone-900 group-hover:text-white">${t.name}</span>
+          <span class="text-stone-400 font-light text-[10px]">${t.age}세</span>
+          ${t.lives_alone?`<span class="text-[8px] bg-stone-100 text-stone-400 px-1.5 py-0.5 rounded-full font-black">독거</span>`:""}
+          ${gpsTag}
+        </div>
+        <div class="text-[10px] text-stone-400 group-hover:text-stone-400 truncate mt-0.5">${t.conditions.join(" · ")}</div>
+      </div>
+      <div class="shrink-0 text-right">
+        <div class="text-[12px] font-black tabular-nums" style="color:${c.acc}">${t.total_priority_score.toFixed(0)}</div>
+        <div class="text-[8px] text-stone-300 uppercase tracking-widest">Score</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ── Export ──────────────────────────────────────────────────────────────
+function exportReport() {
+  if(!active) return;
+  const report = {
+    software:"PATOS v4.4",
+    exported_at: new Date().toISOString(),
+    scenario_id: active.scenario_id,
+    severity: active.severity,
+    location: active.incident.location,
+    incident_time: active.incident.timestamp,
+    call_content: active.incident.call_content,
+    weather: active.weather_live,
+    fire_spread_analysis: active.fire_spread,
+    priority_targets: active.priority_targets,
+    action_protocol: active.action_protocol,
+    reasoning_chain: active.reasoning_chain,
+    confidence: active.confidence,
+  };
+  const blob = new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `PATOS_${active.scenario_id}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  addLog("EXPORT","대응 보고서 JSON 다운로드 완료");
+}
+
+// ── 돌발변수 시나리오 정의 ────────────────────────────────────────────────
+const UNEXPECTED_EVENTS = [
+  {
+    delay: 21000,
+    chip: "⚠ Alert — 돌발변수 01",
+    title: "화재 인접 건물 확산 감지",
+    icon: "flame",
+    logMsg: "house_B (비닐하우스) 화재 확산 감지 — Re-planning 즉시 실행",
+    accentAlt: {acc:"#ea580c", bg:"#fff7ed", bd:"#fed7aa"},
+    body: () => `
+      <div class="p-4 rounded-2xl border border-orange-200 text-[13px] font-bold leading-relaxed" style="background:#fff7ed">
+        🔥 신규 발화점: <b>house_B (비닐하우스, 접근로 2.5m)</b> — 기존 플랜 무효화
+      </div>
+      <div class="space-y-2">
+        <div class="p-3 bg-stone-50 rounded-2xl">
+          <div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-1">Re-planning 결과 (plan_version: 2)</div>
+          <div class="text-[12px] text-stone-800">이복순 어르신 <span class="font-black text-orange-600">↑ 우선순위 상향</span> — house_B 인접 + 도로 2.5m 협로 반영</div>
+        </div>
+        <div class="p-3 bg-stone-900 rounded-2xl text-white">
+          <div class="text-[8px] font-black uppercase tracking-widest mb-1 text-stone-400">신규 대응 지시</div>
+          <div class="text-[12px]">도보 진입 특화 분대 house_B 방향 즉시 재배치. 기존 구조팀 유지.</div>
+        </div>
+      </div>
+      <div class="text-[10px] text-stone-300 text-center font-mono">elapsed: 1.2 ms</div>`
+  },
+  {
+    delay: 27000,
+    chip: "⚠ Alert — 돌발변수 02",
+    title: "거주자 자력 탈출 확인",
+    icon: "user-check",
+    logMsg: "박정수 어르신 자력 탈출 GPS 확인 → 구조 목록 제외, 잔여 자원 재배분",
+    accentAlt: {acc:"#2563eb", bg:"#eff6ff", bd:"#bfdbfe"},
+    body: () => `
+      <div class="p-4 rounded-2xl border border-blue-200 text-[13px] font-bold leading-relaxed" style="background:#eff6ff">
+        ✅ 박정수 어르신 자력 탈출 — GPS 이동 신호 수신 확인
+      </div>
+      <div class="space-y-2">
+        <div class="p-3 bg-stone-50 rounded-2xl">
+          <div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-1">Re-planning 결과 (plan_version: 3)</div>
+          <div class="text-[12px] text-stone-800">박정수 → 구조 대상 <span class="font-black text-blue-600">제외</span> — 잔여 2명에 전체 자원 집중 재배분</div>
+        </div>
+        <div class="p-3 bg-stone-900 rounded-2xl text-white">
+          <div class="text-[8px] font-black uppercase tracking-widest mb-1 text-stone-400">신규 대응 지시</div>
+          <div class="text-[12px]">확보된 인력 김순자·이복순 어르신에게 집중 재할당 완료.</div>
+        </div>
+      </div>
+      <div class="text-[10px] text-stone-300 text-center font-mono">elapsed: 0.8 ms</div>`
+  },
+  {
+    delay: 33000,
+    chip: "⚠ Alert — 돌발변수 03",
+    title: "진입로 차단 발생",
+    icon: "construction",
+    logMsg: "소록5길 차단 — house_C 접근 불가, 우회 경로 탐색 완료",
+    accentAlt: {acc:"#dc2626", bg:"#fef2f2", bd:"#fecaca"},
+    body: () => `
+      <div class="p-4 rounded-2xl border border-red-200 text-[13px] font-bold leading-relaxed" style="background:#fef2f2">
+        🚧 소록5길 차단 — house_C (이복순 어르신) 차량 진입 완전 차단
+      </div>
+      <div class="space-y-2">
+        <div class="p-3 bg-stone-50 rounded-2xl">
+          <div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-1">Re-planning 결과 (plan_version: 4)</div>
+          <div class="text-[12px] text-stone-800">이복순 어르신 <span class="font-black text-red-600">↑ 최고 긴급</span> — 물리 고립 점수 +30 추가 반영</div>
+        </div>
+        <div class="p-3 bg-stone-900 rounded-2xl text-white">
+          <div class="text-[8px] font-black uppercase tracking-widest mb-1 text-stone-400">신규 대응 지시</div>
+          <div class="text-[12px]">우회 경로(소록3길) 탐색 완료. 도보 진입팀 즉시 출발 지시.</div>
+        </div>
+      </div>
+      <div class="text-[10px] text-stone-300 text-center font-mono">elapsed: 1.5 ms</div>`
+  }
+];
+
+function runUnexpectedEvents(sc) {
+  const r = document.documentElement;
+  UNEXPECTED_EVENTS.forEach(ev => {
+    tick(ev.delay, () => {
+      r.style.setProperty("--acc",    ev.accentAlt.acc);
+      r.style.setProperty("--acc-bg", ev.accentAlt.bg);
+      r.style.setProperty("--acc-bd", ev.accentAlt.bd);
+      addLog("REPLAN", ev.logMsg);
+      showModal({chip: ev.chip, title: ev.title, icon: ev.icon, autoClose: 5500, bodyHtml: ev.body()});
+    });
+    tick(ev.delay + 5700, () => setAcc(sc.severity));
+  });
+}
+
+// ── Modal content builders ───────────────────────────────────────────────
+function modal1(sc) {
+  const w = sc.weather_live || sc.incident.weather || {};
+  const risk = w.fire_risk || {};
+  showModal({chip:"⚡ Step 01 — Signal",title:"119 신고 수신 완료",icon:"mic",autoClose:2500,bodyHtml:`
+    <div class="p-4 rounded-2xl text-[13px] italic text-stone-700 leading-relaxed" style="background:var(--acc-bg);border:1px solid var(--acc-bd)">"${sc.incident.call_content}"</div>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="p-3 bg-stone-50 rounded-2xl"><div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-0.5">위치</div><div class="text-[11px] font-bold text-stone-800">${sc.incident.location}</div></div>
+      <div class="p-3 bg-stone-50 rounded-2xl"><div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-0.5">기상 · 화재위험</div>
+        <div class="text-[11px] font-bold text-stone-800">풍속 ${w.wind_speed_ms||"?"}m/s · ${w.humidity_pct||"?"}%</div>
+        <div class="text-[10px] font-black mt-0.5" style="color:${risk.color||"#6b7280"}">${risk.level||""}</div>
+      </div>
+    </div>
+    <p class="text-[11px] text-stone-500">STT 변환 완료. 위치·기상 데이터를 지식 그래프에 매핑합니다.</p>`});
+}
+
+function modal2(sc) {
+  showModal({chip:"🗂 Step 02 — Knowledge",title:"지식 그래프 매핑 완료",icon:"database",autoClose:2200,bodyHtml:`
+    <div class="space-y-2">${sc.knowledge_lineage.map(l=>`
+      <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl">
+        <div><div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-0.5">${l.label}</div>
+        <div class="text-[12px] font-bold text-stone-900">${l.val}</div></div>
+        <div class="text-[9px] font-mono text-stone-300">Verified ${l.trust}%</div>
+      </div>`).join("")}
+    </div>
+    <p class="text-[11px] text-stone-500">고흥군 인프라 DB · 주민 DB(동의자) · 기상청 API 연동 완료.</p>`});
+}
+
+function modal3(sc) {
+  const top = sc.priority_targets[0];
+  const sp = sc.fire_spread;
+  showModal({chip:"🧠 Step 03 — Inference",title:"온톨로지 추론 시작",icon:"cpu",autoClose:2800,bodyHtml:`
+    <div class="space-y-2">${sc.reasoning_chain.map((c,i)=>`
+      <div class="p-3 rounded-2xl" style="background:var(--acc-bg);border:1px solid var(--acc-bd)">
+        <div class="text-[8px] font-black uppercase tracking-widest mb-0.5" style="color:var(--acc)">Logic ${String(i+1).padStart(2,"0")} / ${c.label}</div>
+        <div class="text-[12px] text-stone-800 leading-relaxed">${c.content}</div>
+      </div>`).join("")}
+    </div>
+    ${sp?`<div class="p-3 bg-stone-50 rounded-2xl grid grid-cols-3 gap-2 text-center">
+      <div><div class="text-[8px] text-stone-400 font-black uppercase tracking-wide">플래시오버</div><div class="text-[14px] font-black" style="color:${sp.risk_color}">${sp.time_flashover_min}분</div></div>
+      <div><div class="text-[8px] text-stone-400 font-black uppercase tracking-wide">전소</div><div class="text-[14px] font-black text-stone-700">${sp.time_engulf_min}분</div></div>
+      <div><div class="text-[8px] text-stone-400 font-black uppercase tracking-wide">소방차 ETA</div><div class="text-[14px] font-black text-blue-600">${sp.fire_service_eta_min}분</div></div>
+    </div>`:""}
+    ${top?`<div class="p-3 bg-stone-900 text-white rounded-2xl">
+      <div class="text-[8px] font-black uppercase tracking-widest mb-0.5 text-stone-400">최우선 구조 대상</div>
+      <div class="text-[14px] font-bold">${top.name} <span class="text-stone-400 font-light text-[11px]">${top.age}세</span></div>
+      <div class="text-[11px] text-stone-400 mt-0.5">${top.conditions.join(" · ")}</div>
+      ${top.location?.consented?`<div class="text-[9px] text-green-400 mt-1">GPS 위치 확인됨 (주민 동의)</div>`:""}
+    </div>`:""}` });
+}
+
+function modal4(sc) {
+  const ap = sc.action_protocol;
+  const sp = sc.fire_spread;
+  const rescueOk = sp?.rescue_before_eta;
+  showModal({chip:"🚨 Step 04 — Dispatch",title:"자율 대응 프로토콜 발령",icon:"zap",autoClose:4000,bodyHtml:`
+    <div class="space-y-2">
+      <div class="p-3 rounded-2xl" style="background:var(--acc-bg);border:1px solid var(--acc-bd)">
+        <div class="text-[8px] font-black uppercase tracking-widest mb-1" style="color:var(--acc)">Direct ARS</div>
+        <div class="text-[12px] text-stone-800 leading-relaxed">${ap.ars_message}</div>
+      </div>
+      <div class="p-3 bg-stone-50 rounded-2xl">
+        <div class="text-[8px] font-black text-stone-400 uppercase tracking-widest mb-1">Tactical MDT</div>
+        <div class="text-[12px] text-stone-800 leading-relaxed">${ap.mdt_message}</div>
+      </div>
+      ${sp?`<div class="p-3 rounded-2xl flex items-center gap-3" style="background:${rescueOk?"#f0fdf4":"#fef2f2"};border:1px solid ${rescueOk?"#bbf7d0":"#fecaca"}">
+        <i data-lucide="${rescueOk?"check-circle":"alert-triangle"}" class="w-4 h-4 shrink-0" style="color:${rescueOk?"#16a34a":"#dc2626"}"></i>
+        <div class="text-[11px] font-bold" style="color:${rescueOk?"#15803d":"#b91c1c"}">${sp.risk_label}</div>
+      </div>`:""}
+    </div>
+    <div class="flex items-center gap-2 p-3 rounded-2xl text-white" style="background:var(--acc)">
+      <i data-lucide="check-circle" class="w-4 h-4 shrink-0"></i>
+      <div class="text-[11px] font-bold">신뢰도 ${sc.confidence}% — 마을방송 · ARS · 소방서 동시 발령</div>
+    </div>`});
+  safeIcons();
+}
+
+// ── Main simulation ──────────────────────────────────────────────────────
+function toggleSim() { step===0 ? runSim() : (step===4 && location.reload()); }
+
+function runSim() {
+  if(!active) return;
+  const sc = active, c = sev(sc.severity);
+  const btn = document.getElementById("main-btn");
+  btn.textContent="Analyzing..."; btn.disabled=true;
+  btn.className = "px-8 py-3.5 text-[10px] font-black tracking-[.2em] uppercase transition-all duration-500 rounded-3xl border-2 bg-stone-50 text-stone-300 border-stone-200";
+
+  // ── Step 1 : 신호 수신 ─────────────────────────────────────────────────
+  step=1;
+  document.getElementById("prog-bar").style.width="25%";
+  document.getElementById("conf-wrap").style.opacity="1";
+  document.getElementById("card-signal").classList.replace("opacity-40","opacity-100");
+  const sp = document.getElementById("sig-pulse");
+  sp.className="w-2 h-2 rounded-full animate-ping"; sp.style.background=c.acc;
+  animConf(sc.confidence*.75);
+  addLog("SYSTEM",`PATOS v4.4 커널 가동 — ${sc.label}`);
+  addLog("INPUT", `119 신고 수신 · ${sc.incident.location}`);
+
+  // 팝업: 무슨 일이 일어나는지 설명 (즉시)
+  tick(400, ()=>modal1(sc));   // autoClose=2500 → 2.9초 후 닫힘
+
+  // STT 타이핑 애니메이션 (팝업이 닫히는 타이밍에 맞춰 보여줌)
+  tick(3000,()=>{
+    const call=sc.incident.call_content, idx=call.indexOf("!");
+    const head=idx>0?call.slice(0,idx+1):call.slice(0,6), rest=idx>0?call.slice(idx+1):call.slice(6);
+    document.getElementById("stt").innerHTML = `"<span class="font-bold text-stone-950 border-b-4 border-stone-100">${head}</span>${rest}"`;
+  });
+
+  // ── Step 2 : 지식 그래프 ─────────────────────────────────────────────────
+  tick(4000,()=>{
+    step=2;
+    document.getElementById("prog-bar").style.width="50%";
+    document.getElementById("card-lineage").classList.replace("opacity-40","opacity-100");
+    animConf(sc.confidence*.88);
+    addLog("ALIGN","지식 그래프 + 인프라 DB + 기상 API 매핑 완료");
+    document.getElementById("lineage").innerHTML = sc.knowledge_lineage.map(item=>`
+      <div class="p-4 bg-[#FAFAF8] rounded-[1.75rem] border border-stone-100 hover:text-white transition-all cursor-default fade-up"
+        onmouseenter="this.style.background='${c.acc}'" onmouseleave="this.style.background=''">
+        <div class="flex justify-between items-center mb-1.5">
+          <div class="flex items-center gap-2 text-stone-400">
+            <i data-lucide="${item.icon}" class="w-3.5 h-3.5"></i>
+            <span class="text-[9px] font-black uppercase tracking-widest">${item.label}</span>
+          </div>
+          <span class="text-[8px] font-mono text-stone-300">Verified ${item.trust}%</span>
+        </div>
+        <div class="text-[13px] font-bold tracking-tight">${item.val}</div>
+      </div>`).join("");
+    safeIcons();
+
+    // 카드가 채워지고 나서 팝업 (1초 후)
+    tick(1000,()=>modal2(sc));  // autoClose=2200 → 7.2초 후 닫힘
+  });
+
+  // ── Step 3 : 추론 엔진 ────────────────────────────────────────────────────
+  tick(7500,()=>{
+    step=3;
+    document.getElementById("prog-bar").style.width="75%";
+    document.getElementById("card-reason").classList.replace("opacity-30","opacity-100");
+    document.getElementById("cpu-icon").classList.add("animate-spin");
+    const ri = document.getElementById("radio-icon");
+    ri.className="w-3.5 h-3.5 animate-pulse"; ri.style.color=c.acc;
+    Array.from(document.getElementById("logic-dots").children).forEach((d,i)=>{
+      tick(i*280,()=>{ d.className="w-2 h-2 rounded-full animate-pulse"; d.style.background=c.acc; });
+    });
+
+    const chain=sc.reasoning_chain;
+    // 팝업 먼저 — "추론 시작합니다" 맥락 제공
+    tick(300, ()=>modal3(sc));  // autoClose=2800 → 10.6초에 닫힘
+
+    // 팝업이 닫히는 타이밍에 맞춰 로직 노드 순차 등장
+    tick(3200,()=>{
+      if(chain[0]){ document.getElementById("l1-lbl").textContent=`Logic 01 / ${chain[0].label}`; document.getElementById("l1-txt").innerHTML=hl(chain[0].content); }
+      document.getElementById("logic-1").classList.replace("opacity-0","opacity-100");
+      document.getElementById("logic-1").classList.remove("translate-y-4");
+    });
+    tick(4600,()=>{
+      if(chain[1]){ document.getElementById("l2-lbl").textContent=`Logic 02 / ${chain[1].label}`; document.getElementById("l2-txt").innerHTML=hl(chain[1].content); }
+      document.getElementById("logic-2").classList.replace("opacity-0","opacity-100");
+      document.getElementById("logic-2").classList.remove("translate-y-4");
+    });
+    tick(6000,()=>{
+      animConf(sc.confidence);
+      const fin=document.getElementById("final");
+      fin.classList.replace("opacity-0","opacity-100"); fin.classList.remove("translate-y-10");
+      document.getElementById("final-icon").style.background=c.acc;
+
+      renderTargets(sc.priority_targets);
+      tick(150,()=>{ document.getElementById("card-targets").style.opacity="1"; });
+      if(sc.fire_spread) renderSpreadTimeline(sc.fire_spread);
+
+      addLog("REASON",`추론 완료 — 구조 대상 ${sc.priority_targets.length}명 우선순위 확정`);
+      if(sc.fire_spread?.produces_toxic_gas) addLog("CRITICAL","유독가스 발생 감지 — 방호복 착용 필수");
+    });
+  });
+
+  // ── Step 4 : 자율 대응 발령 ───────────────────────────────────────────────
+  tick(15000,()=>{
+    step=4;
+    document.getElementById("prog-bar").style.width="100%";
+    const ap=sc.action_protocol;
+    document.getElementById("ars-txt").innerHTML=`"${hlD(ap.ars_message)}"`;
+    document.getElementById("mdt-txt").innerHTML=`"${hlD(ap.mdt_message)}"`;
+    const dc=document.getElementById("card-dispatch");
+    dc.classList.remove("opacity-0","translate-y-10"); dc.classList.add("opacity-100","translate-y-0");
+    const top=sc.priority_targets[0];
+    addLog("DECISION",`자율 대응 발령 — ${top?top.name+" 어르신":"대상"} 1순위 구조 개시`);
+    addLog("CRITICAL",`[${sc.severity}] 마을방송 · ARS · 소방서 동시 송출 완료`);
+
+    btn.disabled=false; btn.textContent="Archive & Reset";
+    btn.className="px-8 py-3.5 text-[10px] font-black tracking-[.2em] uppercase transition-all duration-500 rounded-3xl border-2 bg-white text-stone-900 border-stone-200 hover:border-stone-400 shadow-md";
+    document.getElementById("export-btn").style.display="";
+
+    // 카드 올라온 뒤 팝업
+    tick(800,()=>modal4(sc));   // autoClose=4000 → 최종 단계라 여유있게
+  });
+
+  // ── 돌발변수 시퀀스 (Step 4 완료 후 자동 실행) ──────────────────────────
+  runUnexpectedEvents(sc);
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────
+function safeIcons(nodes) {
+  try { lucide.createIcons(nodes ? {nodes} : undefined); } catch(e) {}
+}
+window.addEventListener("DOMContentLoaded",()=>{ safeIcons(); loadData(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATOS — 핵심 질문</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; color: #334155; }
+        .q-number { font-variant-numeric: tabular-nums; }
+        .gradient-q { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .card-hover { transition: box-shadow 0.2s, transform 0.2s; }
+        .card-hover:hover { box-shadow: 0 8px 32px rgba(99,102,241,0.10); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col items-center">
+
+    <!-- Navbar -->
+    <nav class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-slate-700 hover:text-red-600 transition-colors">
+                <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+                <span class="font-bold text-sm tracking-tight">PATOS v4.4</span>
+            </a>
+            <div class="flex items-center gap-1 flex-wrap">
+                <a href="tech1.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">시스템 아키텍처</a>
+                <a href="tech2.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 아키텍처</a>
+                <a href="tech3.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">v5 로드맵</a>
+                <a href="tech4.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
+                <a href="tech5.html" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-violet-700 text-white">핵심 질문</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full py-12 px-4 sm:px-8 flex flex-col items-center">
+
+        <!-- Header -->
+        <div class="text-center mb-14 max-w-3xl">
+            <div class="inline-flex items-center justify-center p-3 bg-violet-50 text-violet-600 rounded-2xl mb-4">
+                <i data-lucide="message-circle-question" class="w-8 h-8"></i>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3">
+                파토스가 답해야 할 핵심 질문
+            </h1>
+            <p class="text-slate-500 text-lg leading-relaxed">
+                서비스를 실제로 만들고, 쓰고, 신뢰받기 위해<br>반드시 해결해야 하는 질문들의 지도
+            </p>
+        </div>
+
+        <div class="w-full max-w-5xl flex flex-col gap-8">
+
+            <!-- Q1: POC 평가 -->
+            <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 card-hover">
+                <div class="absolute -top-3.5 left-8 bg-emerald-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    Q1 — 현재 위치
+                </div>
+                <div class="mt-2 flex flex-col sm:flex-row gap-6">
+                    <div class="flex-1">
+                        <p class="text-xl font-bold text-slate-800 mb-3">"이게 POC 수준 맞아?"</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            핵심 아이디어 증명은 됐다. 온톨로지 추론으로 구조 우선순위를 자동 산출하고,
+                            돌발상황 팝업과 이벤트 재계획까지 시각화했다.<br><br>
+                            그러나 POC의 한계도 명확하다. 실제 소방관이 써본 적 없고,
+                            하드코딩 데이터로만 돌아간다.
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0 flex flex-col gap-2 sm:w-56">
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 text-center">
+                            <div class="text-2xl font-extrabold text-emerald-600">TRL 4</div>
+                            <div class="text-xs text-emerald-700 mt-0.5">기술성숙도 / 9단계</div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl px-4 py-3 text-xs text-slate-500 leading-relaxed">
+                            아이디어 증명 완료<br>운영 검증은 아직
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2: 5가지 근본 문제 -->
+            <div class="w-full relative bg-white rounded-2xl border border-red-200 shadow-sm p-6 sm:p-8 card-hover">
+                <div class="absolute -top-3.5 left-8 bg-red-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    Q2 — 근본 문제
+                </div>
+                <div class="mt-2 mb-5">
+                    <p class="text-xl font-bold text-slate-800 mb-2">"서비스가 되려면 뭘 풀어야 해?"</p>
+                    <p class="text-slate-500 text-sm">두 가지로 시작했지만 다섯 가지로 확장됐다.</p>
+                </div>
+                <div class="grid sm:grid-cols-5 gap-3">
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                        <div class="text-xs font-bold text-red-600 mb-1.5">① 암묵지 코딩</div>
+                        <p class="text-xs text-slate-600 leading-relaxed">소방관 경험을 규칙으로 변환하는 방법이 없다</p>
+                        <div class="mt-2 text-xs font-semibold text-red-500">난이도 최상</div>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                        <div class="text-xs font-bold text-red-600 mb-1.5">② 돌발상황 재구성</div>
+                        <p class="text-xs text-slate-600 leading-relaxed">기존 규칙과 충돌하는 상황을 어떻게 처리하나</p>
+                        <div class="mt-2 text-xs font-semibold text-red-500">난이도 상</div>
+                    </div>
+                    <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+                        <div class="text-xs font-bold text-orange-600 mb-1.5">③ 책임 소재</div>
+                        <p class="text-xs text-slate-600 leading-relaxed">AI가 틀렸을 때 누가 책임지는가 — 법제도 미비</p>
+                        <div class="mt-2 text-xs font-semibold text-orange-500">난이도 최상</div>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                        <div class="text-xs font-bold text-amber-600 mb-1.5">④ 데이터 신선도</div>
+                        <p class="text-xs text-slate-600 leading-relaxed">주민 이사·사망 등 실시간 반영 파이프라인 없음</p>
+                        <div class="mt-2 text-xs font-semibold text-amber-500">난이도 중</div>
+                    </div>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                        <div class="text-xs font-bold text-yellow-600 mb-1.5">⑤ 학습 루프</div>
+                        <p class="text-xs text-slate-600 leading-relaxed">화재 종료 후 결과를 시스템에 반영하는 구조 없음</p>
+                        <div class="mt-2 text-xs font-semibold text-yellow-600">난이도 상</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q3: 팔란티어 벤치마킹 -->
+            <div class="w-full relative bg-white rounded-2xl border border-blue-200 shadow-sm p-6 sm:p-8 card-hover">
+                <div class="absolute -top-3.5 left-8 bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    Q3 — 벤치마킹
+                </div>
+                <div class="mt-2 mb-5">
+                    <p class="text-xl font-bold text-slate-800 mb-2">"팔란티어는 이 문제를 어떻게 풀어?"</p>
+                    <p class="text-slate-500 text-sm">알고리즘이 아니라 <strong>운영 모델</strong>로 푼다.</p>
+                </div>
+                <div class="grid sm:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="users" class="w-4 h-4 text-blue-600"></i>
+                            <span class="text-sm font-bold text-blue-700">FDE 현장 파견</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">엔지니어가 수개월간 소방관 옆에서 일하며 암묵지를 직접 추출한다</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="file-search" class="w-4 h-4 text-blue-600"></i>
+                            <span class="text-sm font-bold text-blue-700">감사 추적</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">모든 추천의 근거를 기록. "AI가 추천, 사람이 승인"이라는 책임 체계 구축</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="hand" class="w-4 h-4 text-blue-600"></i>
+                            <span class="text-sm font-bold text-blue-700">인간이 최종 결정</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">AI는 옵션을 좁혀줄 뿐. 지휘관이 최종 승인. 완전 자동화를 의도적으로 안 한다</p>
+                    </div>
+                </div>
+                <div class="mt-4 bg-slate-50 rounded-xl p-4 flex items-start gap-3">
+                    <i data-lucide="lightbulb" class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong>핵심 인사이트:</strong> 팔란티어가 비싼 이유는 소프트웨어가 아니라 <strong>소프트웨어 + FDE + 운영체계</strong>를 같이 파는 것이기 때문이다.
+                        PATOS가 실제 서비스가 되려면 기술 완성도보다 <em>"누가 소방서에 들어가서 같이 일할 것인가"</em>가 더 중요한 질문이다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Q4: 사용자 수용성 -->
+            <div class="w-full relative bg-white rounded-2xl border border-teal-200 shadow-sm p-6 sm:p-8 card-hover">
+                <div class="absolute -top-3.5 left-8 bg-teal-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    Q4 — 사용자
+                </div>
+                <div class="mt-2 flex flex-col sm:flex-row gap-6 items-start">
+                    <div class="flex-1">
+                        <p class="text-xl font-bold text-slate-800 mb-3">"실제 소방관은 이걸 쓰고 싶어할까?"</p>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            오늘 대화의 모든 질문이 <strong>만드는 사람 시점</strong>이었다.
+                            기술적으로 얼마나 정교한지와 별개로, 현장에서
+                            <em>"이 화면 보면서 판단 내릴 수 있겠다"</em>는 피드백이 없으면 다음 단계로 갈 수 없다.
+                        </p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            화재 현장의 소방관은 스트레스 극한 상황에서 판단한다.
+                            UI/UX, 정보 밀도, 응답 속도 — 모두 현장에서 검증돼야 한다.
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0 bg-teal-50 border border-teal-200 rounded-xl p-5 sm:w-52 text-center">
+                        <i data-lucide="user-check" class="w-8 h-8 text-teal-600 mx-auto mb-2"></i>
+                        <div class="text-sm font-bold text-teal-700 mb-1">검증 안 된 것</div>
+                        <p class="text-xs text-slate-500 leading-relaxed">실제 소방관이 한 번도 써본 적 없음</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q5: 아키텍처 논쟁 -->
+            <div class="w-full relative bg-white rounded-2xl border border-violet-200 shadow-sm p-6 sm:p-8 card-hover">
+                <div class="absolute -top-3.5 left-8 bg-violet-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    Q5 — 아키텍처
+                </div>
+                <div class="mt-2 mb-5">
+                    <p class="text-xl font-bold text-slate-800 mb-2">"에이전트 군집으로 바꾸면 더 강력하지 않아?"</p>
+                    <p class="text-slate-500 text-sm">TypeDB 중심 구조 vs. LLM Agent 군집 구조 — 근본적인 아키텍처 질문</p>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-5 mb-5">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="database" class="w-4 h-4 text-slate-600"></i>
+                            <span class="text-sm font-bold text-slate-700">현재: TypeDB 중심</span>
+                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-600">
+                            <div class="flex items-center gap-2"><span class="text-emerald-500 font-bold">+</span> 결정론적, 감사 추적 가능</div>
+                            <div class="flex items-center gap-2"><span class="text-emerald-500 font-bold">+</span> 일관된 결과 보장</div>
+                            <div class="flex items-center gap-2"><span class="text-red-400 font-bold">−</span> 규칙 밖 상황에 취약</div>
+                            <div class="flex items-center gap-2"><span class="text-red-400 font-bold">−</span> 규칙 추가마다 사람이 개입</div>
+                        </div>
+                    </div>
+                    <div class="bg-violet-50 border border-violet-200 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="network" class="w-4 h-4 text-violet-600"></i>
+                            <span class="text-sm font-bold text-violet-700">대안: Agent 군집</span>
+                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-600">
+                            <div class="flex items-center gap-2"><span class="text-emerald-500 font-bold">+</span> 돌발상황 유연 대응</div>
+                            <div class="flex items-center gap-2"><span class="text-emerald-500 font-bold">+</span> 비정형 데이터도 처리</div>
+                            <div class="flex items-center gap-2"><span class="text-red-400 font-bold">−</span> 자신감 있게 틀릴 수 있음</div>
+                            <div class="flex items-center gap-2"><span class="text-red-400 font-bold">−</span> 감사 추적 어려움</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 flex items-start gap-3">
+                    <i data-lucide="scale" class="w-4 h-4 text-violet-500 flex-shrink-0 mt-0.5"></i>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        <strong>PATOS의 답:</strong> 화재 대응은 생명이 걸린 시스템이다.
+                        TypeDB 규칙이 <em>안전핀</em>이고, Agent가 <em>유연성</em>을 더한다.
+                        <br>정상 상황 → TypeDB, 규칙 밖 돌발상황 → Agent 옵션 제시 → 지휘관 최종 결정.
+                        항공기 자동조종 구조와 같다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Q6: 근본 한계 -->
+            <div class="w-full relative bg-slate-800 rounded-2xl shadow-sm p-6 sm:p-8 card-hover">
+                <div class="absolute -top-3.5 left-8 bg-slate-900 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide border border-slate-600">
+                    Q6 — 근본 한계
+                </div>
+                <div class="mt-2 mb-6">
+                    <p class="text-xl font-bold text-white mb-2">"프롬프트도 규칙도 결국 사람이 설계하면 수렴하는 거 아냐?"</p>
+                    <p class="text-slate-400 text-sm">TypeDB 규칙이든 Agent 시스템 프롬프트든 — 설계자의 지식 수준이 천장이다.</p>
+                </div>
+                <div class="grid sm:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-700 rounded-xl p-4">
+                        <div class="text-xs font-bold text-slate-300 mb-2">TypeDB 방식</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">사람이 TQL 규칙을 수동 작성<br>→ 명시한 것만 처리</p>
+                    </div>
+                    <div class="bg-slate-700 rounded-xl p-4">
+                        <div class="text-xs font-bold text-slate-300 mb-2">Agent 방식</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">사람이 시스템 프롬프트 설계<br>→ 기준 밖은 LLM이 일반화</p>
+                    </div>
+                    <div class="bg-violet-900 border border-violet-700 rounded-xl p-4">
+                        <div class="text-xs font-bold text-violet-300 mb-2">공통 천장</div>
+                        <p class="text-xs text-violet-200 leading-relaxed">형식만 다를 뿐<br>설계자 지식이 한계</p>
+                    </div>
+                </div>
+                <div class="bg-slate-700 rounded-xl p-5">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-lucide="arrow-right-circle" class="w-4 h-4 text-violet-400"></i>
+                        <span class="text-sm font-bold text-white">진짜 탈출구 — 학습 기반</span>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        수동 설계의 한계를 넘으려면 <strong>실제 출동 데이터 + 결과 피드백</strong>으로 시스템이 스스로 가중치를 학습해야 한다.
+                        그러나 PATOS는 화재 데이터가 희소하고 결과 측정이 어렵다.
+                        <br><br>
+                        <span class="text-violet-300">→ 학습 루프 구현이 v5의 가장 어려운 과제이자, 상용화의 진짜 열쇠다.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Summary: 질문의 지도 -->
+            <div class="w-full relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div class="absolute -top-3.5 left-8 bg-violet-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    질문의 흐름
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm font-semibold text-slate-700 mb-5">여섯 개의 질문이 하나의 결론으로 수렴한다</p>
+                    <div class="flex flex-col sm:flex-row items-center gap-2 flex-wrap justify-center">
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5 text-center">
+                            <div class="text-xs font-bold text-emerald-700">Q1</div>
+                            <div class="text-xs text-slate-600 mt-0.5">POC 확인</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
+                        <div class="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 text-center">
+                            <div class="text-xs font-bold text-red-600">Q2</div>
+                            <div class="text-xs text-slate-600 mt-0.5">5가지 문제</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-center">
+                            <div class="text-xs font-bold text-blue-600">Q3</div>
+                            <div class="text-xs text-slate-600 mt-0.5">팔란티어 방식</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
+                        <div class="bg-teal-50 border border-teal-200 rounded-xl px-4 py-2.5 text-center">
+                            <div class="text-xs font-bold text-teal-600">Q4</div>
+                            <div class="text-xs text-slate-600 mt-0.5">사용자 검증</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
+                        <div class="bg-violet-50 border border-violet-200 rounded-xl px-4 py-2.5 text-center">
+                            <div class="text-xs font-bold text-violet-600">Q5</div>
+                            <div class="text-xs text-slate-600 mt-0.5">아키텍처 전환</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
+                        <div class="bg-slate-800 rounded-xl px-4 py-2.5 text-center">
+                            <div class="text-xs font-bold text-white">Q6</div>
+                            <div class="text-xs text-slate-300 mt-0.5">근본 한계</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-gradient-to-r from-violet-50 to-slate-50 border border-violet-100 rounded-xl p-5 text-center">
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed">
+                            "사람이 설계하는 한계를 어떻게 넘는가"<br>
+                            <span class="text-violet-600 font-bold">→ 학습 루프가 답이고, 그게 상용화의 마지막 관문이다.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="mt-10 text-xs text-slate-400">PATOS v4.4 — Predictive Agentic Triage OS · 소록마을 화재 대응</p>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
