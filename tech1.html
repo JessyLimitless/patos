@@ -141,6 +141,185 @@
         </div>
     </div>
 
+    <!-- Ontology 3-Stage Comparison -->
+    <div class="w-full max-w-4xl mb-10">
+
+        <!-- Section header -->
+        <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+                <i data-lucide="git-compare" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">온톨로지 3단계 발전 비교</h2>
+                <p class="text-slate-500 text-xs mt-0.5">FIRE-2026-001 기준 · 베테랑 소방관의 판단이 목표 기준선</p>
+            </div>
+        </div>
+
+        <!-- Stage summary cards -->
+        <div class="grid grid-cols-3 gap-3 mb-5">
+            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                        <span class="text-slate-600 font-bold text-xs">1</span>
+                    </div>
+                    <span class="text-sm font-bold text-slate-800">현재 POC</span>
+                </div>
+                <div class="text-xs text-slate-500 leading-relaxed mb-3">if-else 규칙. 숫자를 비교하고 플래그를 세운다.</div>
+                <div class="space-y-1.5">
+                    <div class="flex items-start gap-1.5">
+                        <span class="text-emerald-500 text-[11px] font-bold mt-0.5">✓</span>
+                        <span class="text-[11px] text-slate-600">접근로 1.8m &lt; 3m → 도보 진입 플래그</span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                        <span class="text-red-400 text-[11px] font-bold mt-0.5">✗</span>
+                        <span class="text-[11px] text-slate-500">서울 자녀 연락이 의미없다는 판단 불가</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl border border-indigo-200 p-4 shadow-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
+                        <span class="text-indigo-600 font-bold text-xs">2</span>
+                    </div>
+                    <span class="text-sm font-bold text-slate-800">TypeDB 온톨로지</span>
+                </div>
+                <div class="text-xs text-slate-500 leading-relaxed mb-3">관계 그래프. 마순례 → 건물 → 이웃 → 자원을 연결한다.</div>
+                <div class="space-y-1.5">
+                    <div class="flex items-start gap-1.5">
+                        <span class="text-emerald-500 text-[11px] font-bold mt-0.5">✓</span>
+                        <span class="text-[11px] text-slate-600">인접 건물과의 관계 자동 탐색</span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                        <span class="text-orange-400 text-[11px] font-bold mt-0.5">△</span>
+                        <span class="text-[11px] text-slate-500">판단의 무게 결정은 여전히 규칙 의존</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl border border-violet-200 p-4 shadow-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center shrink-0">
+                        <span class="text-violet-600 font-bold text-xs">3</span>
+                    </div>
+                    <span class="text-sm font-bold text-slate-800">온톨로지 + LLM</span>
+                </div>
+                <div class="text-xs text-slate-500 leading-relaxed mb-3">TypeDB 팩트 + Claude 추론. 맥락과 우선순위를 스스로 판단.</div>
+                <div class="space-y-1.5">
+                    <div class="flex items-start gap-1.5">
+                        <span class="text-emerald-500 text-[11px] font-bold mt-0.5">✓</span>
+                        <span class="text-[11px] text-slate-600">"서울 자녀 연락 의미없음" 자동 판단</span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                        <span class="text-orange-400 text-[11px] font-bold mt-0.5">△</span>
+                        <span class="text-[11px] text-slate-500">현장 감각(풍향·불 번짐)은 소방관 담당</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed comparison table -->
+        <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl">
+            <div class="px-5 py-3 bg-slate-800 border-b border-white/10 flex items-center justify-between">
+                <span class="text-xs font-bold text-white tracking-widest uppercase">시간대별 판단 비교 — FIRE-2026-001</span>
+                <span class="text-[10px] text-slate-500">← 가로 스크롤</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-[11px] text-left border-collapse" style="min-width:860px">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="px-3 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-16">시간</th>
+                            <th class="px-3 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-28">상황</th>
+                            <th class="px-3 py-2.5 text-[10px] font-bold text-amber-500 uppercase tracking-wider">베테랑 소방관</th>
+                            <th class="px-3 py-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">1단계 POC</th>
+                            <th class="px-3 py-2.5 text-[10px] font-bold text-indigo-400 uppercase tracking-wider">2단계 TypeDB</th>
+                            <th class="px-3 py-2.5 text-[10px] font-bold text-violet-400 uppercase tracking-wider">3단계 LLM</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+0</td>
+                            <td class="px-3 py-3 text-slate-300">신고 접수</td>
+                            <td class="px-3 py-3 text-amber-200/80">"마 씨 집이면 23-7번지. 샌드위치 패널이고 골목이 좁아."</td>
+                            <td class="px-3 py-3 text-slate-400">'마 노인네' 텍스트 매칭 시도. 주소 인식 실패 가능</td>
+                            <td class="px-3 py-3 text-indigo-300">'마 노인네' → 주민 DB 그래프 검색 → 자동 매핑</td>
+                            <td class="px-3 py-3 text-violet-300">"귀가 어두우셔서"가 난청 플래그임을 문맥으로 인식</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+7초</td>
+                            <td class="px-3 py-3 text-slate-300">건물 조회</td>
+                            <td class="px-3 py-3 text-amber-200/80">"접근로 1.8m. 소방차 절대 못 들어가. 도보로 들어가야 해."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-emerald-400">✓</span> 1.8m &lt; 3m → 도보선발대 플래그</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-emerald-400">✓</span> 소방차 진입 불가 관계 자동 생성</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> "1.8m이면 들것도 힘들다" 추가 판단</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+10초</td>
+                            <td class="px-3 py-3 text-slate-300">거주자 확인</td>
+                            <td class="px-3 py-3 text-amber-200/80">"84세 귀 어두우시고 혼자. 서울 자녀 연락은 소용없어."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-red-400">✗</span> 서울 비상연락처에도 자동 발송</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-orange-400">△</span> 서울(150km) 관계 인식, 판단은 불가</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> "이장 직접 연락으로 대체" 자동 판단</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+13초</td>
+                            <td class="px-3 py-3 text-slate-300">화재 계산</td>
+                            <td class="px-3 py-3 text-amber-200/80">"바람 세고 건조. 샌드위치 패널이면 2~3분이면 끝나."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-emerald-400">✓</span> 플래시오버 2.5분 계산</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-emerald-400">✓</span> 인접 건물 거리 관계 포함</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> "지금 바로 발령 안 하면 늦는다" 긴박성 표현</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+15초</td>
+                            <td class="px-3 py-3 text-slate-300">인접 위험</td>
+                            <td class="px-3 py-3 text-amber-200/80">"바람이 BLDG-006 방향. 조만수 씨도 귀 어두우신데."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-red-400">✗</span> 인접 건물 위험 계산 없음</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-orange-400">△</span> 이웃 관계 존재, 풍향 없으면 방향 판단 불가</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> 조만수(81세, 난청) 동시 경보 발령</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+2분</td>
+                            <td class="px-3 py-3 text-slate-300">이장 위치</td>
+                            <td class="px-3 py-3 text-amber-200/80">"이장이 마을 안에 있나? 없으면 자율방재단 먼저."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-orange-400">△</span> 위치 모름. 항상 이장 ARS 발송</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-orange-400">△</span> 실시간 위치 연동 없으면 판단 불가</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> "응답 없으면 3분 후 자율방재단으로 전환"</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+2분30초</td>
+                            <td class="px-3 py-3 text-slate-300">플래시오버</td>
+                            <td class="px-3 py-3 text-amber-200/80">"이 시간이면 비닐 다 탔어. 진입 강행하면 선발대 위험."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-orange-400">△</span> 경고 메시지만 출력</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-orange-400">△</span> 이벤트 → 노드 상태 업데이트</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> "진입 전 구조물 안전 확인 필요" 경고</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+5분</td>
+                            <td class="px-3 py-3 text-slate-300">이장 도착</td>
+                            <td class="px-3 py-3 text-amber-200/80">"어두워서 손전등 없으면 못 들어가."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-red-400">✗</span> 현장 이후 추적 없음</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-orange-400">△</span> GPS 연동 시 도착 확인 가능</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> 손전등 지참 여부, 진입 동선 안내</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-3 py-3 font-mono text-slate-400 font-bold whitespace-nowrap">T+12분</td>
+                            <td class="px-3 py-3 text-slate-300">소방차 도착</td>
+                            <td class="px-3 py-3 text-amber-200/80">"이미 이장이 할머니 데리고 나왔으면 진압만 하면 돼."</td>
+                            <td class="px-3 py-3 text-slate-400"><span class="text-orange-400">△</span> 도착 시각 계산만 함</td>
+                            <td class="px-3 py-3 text-indigo-300"><span class="text-orange-400">△</span> 자원 노드 → 도착 이벤트 업데이트</td>
+                            <td class="px-3 py-3 text-violet-300"><span class="text-emerald-400">✓</span> 구조 성공 시 진압 모드, 실패 시 구조 우선</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-5 py-4 bg-slate-800/50 border-t border-white/10">
+                <div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-2">결론</div>
+                <div class="text-xs text-slate-300 leading-relaxed">
+                    베테랑 소방관의 판단은 <span class="text-amber-300 font-semibold">기억 · 관계 · 경험</span> 3가지로 구성된다. 이 3가지는 <span class="text-violet-300 font-semibold">온톨로지 + LLM</span>으로 대체 가능하다.
+                    현장 기반 판단(바람 방향, 불 번짐)은 실시간 센서 연동 시 추가된다. <span class="font-semibold text-white">PATOS의 목표는 이 판단을 15초 안에 자동화하는 것이다.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Tacit Knowledge Container Framework -->
     <div class="w-full max-w-4xl mb-8">
         <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
