@@ -22,6 +22,14 @@
         tr:hover td { background-color: #f8fafc; }
         .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        @media (max-width: 639px) {
+            /* 정형 테이블: 출처(4번째) 컬럼 숨기기 */
+            .table-jeong td:nth-child(4), .table-jeong th:nth-child(4) { display: none; }
+            /* 비정형 테이블: 현재 상태(7번째) 컬럼 숨기기 */
+            .table-bijeong td:nth-child(7), .table-bijeong th:nth-child(7) { display: none; }
+            /* 테이블 셀 패딩 축소 */
+            .compact-table td, .compact-table th { padding: 7px 10px; }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 flex flex-col items-center">
@@ -54,7 +62,7 @@
         <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3">
             데이터 조사 및 수집 계획
         </h1>
-        <p class="text-slate-500 text-base leading-relaxed">
+        <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
             PATOS 시스템 구동을 위한 전체 데이터 항목 목록 및 비정형 데이터 전처리 파이프라인
         </p>
     </div>
@@ -81,19 +89,19 @@
 
     <!-- ── 정형 데이터 ──────────────────────────────────────────────────── -->
     <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
-        <div class="flex items-center gap-3 mb-5">
+        <div class="flex items-center gap-3 mb-3 sm:mb-5">
             <div class="w-8 h-8 rounded-xl bg-sky-100 flex items-center justify-center">
                 <i data-lucide="table-2" class="w-4 h-4 text-sky-600"></i>
             </div>
             <div>
-                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">정형 데이터 (Structured) — 31개</h2>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight">정형 데이터 (Structured) — 31개</h2>
                 <p class="text-xs text-slate-400">DB 테이블로 저장 가능한 수치·범주형 데이터</p>
             </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-sm table-jeong compact-table">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200">
                         <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider w-8">#</th>
@@ -425,19 +433,19 @@
 
     <!-- ── 비정형 데이터 ────────────────────────────────────────────────── -->
     <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
-        <div class="flex items-center gap-3 mb-5">
+        <div class="flex items-center gap-3 mb-3 sm:mb-5">
             <div class="w-8 h-8 rounded-xl bg-violet-100 flex items-center justify-center">
                 <i data-lucide="file-text" class="w-4 h-4 text-violet-600"></i>
             </div>
             <div>
-                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">비정형 데이터 (Unstructured) — 12개</h2>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight">비정형 데이터 (Unstructured) — 12개</h2>
                 <p class="text-xs text-slate-400">음성·텍스트·이미지·문서 — 전처리 후 TypeDB에 통합</p>
             </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-sm table-bijeong compact-table">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200">
                         <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider w-8">#</th>
@@ -566,12 +574,12 @@
 
     <!-- ── 비정형 데이터 전처리 파이프라인 ──────────────────────────────── -->
     <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
-        <div class="flex items-center gap-3 mb-5">
+        <div class="flex items-center gap-3 mb-3 sm:mb-5">
             <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center">
                 <i data-lucide="git-branch" class="w-4 h-4 text-white"></i>
             </div>
             <div>
-                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">비정형 데이터 전처리 파이프라인</h2>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight">비정형 데이터 전처리 파이프라인</h2>
                 <p class="text-xs text-slate-400">음성·문서·이미지가 TypeDB 규칙으로 변환되는 흐름</p>
             </div>
         </div>
@@ -627,7 +635,7 @@
 
         <!-- 4가지 추출 카테고리 -->
         <div class="grid sm:grid-cols-2 gap-4 mb-6">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 card-hover">
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
                         <i data-lucide="list-ordered" class="w-3.5 h-3.5 text-blue-600"></i>
@@ -641,7 +649,7 @@
                 </div>
                 <div class="mt-2 text-[10px] text-slate-400">→ <code class="bg-slate-100 px-1 rounded">response_protocol.json</code></div>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 card-hover">
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
                         <i data-lucide="timer" class="w-3.5 h-3.5 text-amber-600"></i>
@@ -655,7 +663,7 @@
                 </div>
                 <div class="mt-2 text-[10px] text-slate-400">→ 시뮬레이션 타이밍 파라미터 갱신</div>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 card-hover">
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-600"></i>
@@ -669,7 +677,7 @@
                 </div>
                 <div class="mt-2 text-[10px] text-slate-400">→ PATOS가 사전 제공해야 할 항목 목록</div>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 card-hover">
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
                         <i data-lucide="git-merge" class="w-3.5 h-3.5 text-violet-600"></i>
@@ -686,7 +694,7 @@
         </div>
 
         <!-- JSON이 TypeDB와 연계되는 구조 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6">
             <h3 class="text-sm font-extrabold text-slate-700 mb-4 flex items-center gap-2">
                 <i data-lucide="arrow-right-left" class="w-4 h-4 text-slate-500"></i>
                 JSON은 운반책, TypeDB는 두뇌
@@ -725,12 +733,12 @@
 
     <!-- ── 유관기관 협조 네트워크 ─────────────────────────────────────── -->
     <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
-        <div class="flex items-center gap-3 mb-5">
+        <div class="flex items-center gap-3 mb-3 sm:mb-5">
             <div class="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center">
                 <i data-lucide="network" class="w-4 h-4 text-indigo-600"></i>
             </div>
             <div>
-                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">유관기관 협조 네트워크</h2>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight">유관기관 협조 네트워크</h2>
                 <p class="text-xs text-slate-400">독자 구축이 아닌 기존 시스템과의 연계 — 온톨로지·데이터·사례를 공유</p>
             </div>
         </div>
@@ -739,7 +747,7 @@
         <div class="grid sm:grid-cols-2 gap-5 mb-6">
 
             <!-- 행안부 재난안전연구원 -->
-            <div class="bg-white rounded-2xl border-2 border-indigo-200 shadow-sm p-6 card-hover relative overflow-hidden">
+            <div class="bg-white rounded-2xl border-2 border-indigo-200 shadow-sm p-4 sm:p-6 card-hover relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full opacity-60"></div>
                 <div class="relative">
                     <div class="flex items-center gap-2 mb-1">
@@ -778,7 +786,7 @@
             </div>
 
             <!-- 화성시 지능형 재난안전시스템 -->
-            <div class="bg-white rounded-2xl border-2 border-teal-200 shadow-sm p-6 card-hover relative overflow-hidden">
+            <div class="bg-white rounded-2xl border-2 border-teal-200 shadow-sm p-4 sm:p-6 card-hover relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-teal-50 rounded-bl-full opacity-60"></div>
                 <div class="relative">
                     <div class="flex items-center gap-2 mb-1">
@@ -921,7 +929,7 @@
         </div>
 
         <!-- 온톨로지 연계 전략 -->
-        <div class="mt-5 bg-slate-900 rounded-2xl p-6 text-white">
+        <div class="mt-5 bg-slate-900 rounded-2xl p-4 sm:p-6 text-white">
             <div class="flex items-center gap-2 mb-4">
                 <i data-lucide="lightbulb" class="w-4 h-4 text-yellow-400"></i>
                 <span class="text-sm font-bold">재난안전연구원 온톨로지 × PATOS TypeDB 연계 전략</span>
@@ -954,7 +962,7 @@
         <div class="mt-5 grid sm:grid-cols-2 gap-5">
 
             <!-- 접근 순서 -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
                         <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-amber-600"></i>
@@ -1000,7 +1008,7 @@
             </div>
 
             <!-- 4가지 실무 가치 -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="w-7 h-7 rounded-lg bg-rose-100 flex items-center justify-center">
                         <i data-lucide="star" class="w-3.5 h-3.5 text-rose-500"></i>
@@ -1049,7 +1057,7 @@
         </div>
 
         <!-- 연락 방법 가이드 -->
-        <div class="mt-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="mt-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6">
             <div class="flex items-center gap-2 mb-4">
                 <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center">
                     <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-600"></i>
