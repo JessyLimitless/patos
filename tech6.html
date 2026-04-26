@@ -20,6 +20,8 @@
         @keyframes fade-up { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
         .fade-up { animation: fade-up .4s ease-out forwards; }
         tr:hover td { background-color: #f8fafc; }
+        .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 flex flex-col items-center">
@@ -31,21 +33,21 @@
             <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
             <span class="font-bold text-sm tracking-tight">PATOS v4.4</span>
         </a>
-        <div class="flex items-center gap-1 flex-wrap">
-            <a href="tech1.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">시스템 아키텍처</a>
-            <a href="tech2.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 아키텍처</a>
-            <a href="tech3.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">v5 로드맵</a>
-            <a href="tech4.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
-            <a href="tech5.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
-            <a href="tech6.html" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-700 text-white">데이터 수집</a>
+        <div class="flex items-center gap-1 overflow-x-auto flex-nowrap scrollbar-hide -mr-4 pr-4 sm:mr-0 sm:pr-0 sm:flex-wrap">
+            <a href="tech1.html" class="px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors whitespace-nowrap">시스템 아키텍처</a>
+            <a href="tech2.html" class="px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors whitespace-nowrap">데이터 아키텍처</a>
+            <a href="tech3.html" class="px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors whitespace-nowrap">v5 로드맵</a>
+            <a href="tech4.html" class="px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors whitespace-nowrap">Re-planning</a>
+            <a href="tech5.html" class="px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors whitespace-nowrap">핵심 질문</a>
+            <a href="tech6.html" class="px-3 py-2 sm:py-1.5 rounded-full text-xs font-semibold bg-emerald-700 text-white whitespace-nowrap">데이터 수집</a>
         </div>
     </div>
 </nav>
 
-<div class="w-full py-12 px-4 sm:px-8 flex flex-col items-center">
+<div class="w-full py-8 sm:py-12 px-4 sm:px-8 flex flex-col items-center">
 
     <!-- Header -->
-    <div class="text-center mb-10 max-w-3xl fade-up">
+    <div class="text-center mb-8 sm:mb-10 max-w-3xl fade-up">
         <div class="inline-flex items-center justify-center p-3 bg-emerald-50 text-emerald-600 rounded-2xl mb-4">
             <i data-lucide="database" class="w-8 h-8"></i>
         </div>
@@ -58,27 +60,27 @@
     </div>
 
     <!-- Stats bar -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-5xl mb-10 fade-up">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
-            <div class="text-3xl font-black text-slate-800">43</div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-5xl mb-8 sm:mb-10 fade-up">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 text-center">
+            <div class="text-2xl sm:text-3xl font-black text-slate-800">43</div>
             <div class="text-xs text-slate-500 mt-1 font-medium">총 데이터 항목</div>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
-            <div class="text-3xl font-black text-sky-600">31</div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 text-center">
+            <div class="text-2xl sm:text-3xl font-black text-sky-600">31</div>
             <div class="text-xs text-slate-500 mt-1 font-medium">정형 데이터</div>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
-            <div class="text-3xl font-black text-violet-600">12</div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 text-center">
+            <div class="text-2xl sm:text-3xl font-black text-violet-600">12</div>
             <div class="text-xs text-slate-500 mt-1 font-medium">비정형 데이터</div>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
-            <div class="text-3xl font-black text-red-500">8</div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 text-center">
+            <div class="text-2xl sm:text-3xl font-black text-red-500">8</div>
             <div class="text-xs text-slate-500 mt-1 font-medium">현재 확보 (수동)</div>
         </div>
     </div>
 
     <!-- ── 정형 데이터 ──────────────────────────────────────────────────── -->
-    <div class="w-full max-w-5xl mb-12 fade-up">
+    <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
         <div class="flex items-center gap-3 mb-5">
             <div class="w-8 h-8 rounded-xl bg-sky-100 flex items-center justify-center">
                 <i data-lucide="table-2" class="w-4 h-4 text-sky-600"></i>
@@ -422,7 +424,7 @@
     </div>
 
     <!-- ── 비정형 데이터 ────────────────────────────────────────────────── -->
-    <div class="w-full max-w-5xl mb-12 fade-up">
+    <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
         <div class="flex items-center gap-3 mb-5">
             <div class="w-8 h-8 rounded-xl bg-violet-100 flex items-center justify-center">
                 <i data-lucide="file-text" class="w-4 h-4 text-violet-600"></i>
@@ -563,7 +565,7 @@
     </div>
 
     <!-- ── 비정형 데이터 전처리 파이프라인 ──────────────────────────────── -->
-    <div class="w-full max-w-5xl mb-12 fade-up">
+    <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
         <div class="flex items-center gap-3 mb-5">
             <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center">
                 <i data-lucide="git-branch" class="w-4 h-4 text-white"></i>
@@ -633,7 +635,7 @@
                     <span class="text-sm font-bold text-slate-700">절차 단계 추출</span>
                 </div>
                 <p class="text-xs text-slate-500 mb-3">인터뷰에서 대응 순서와 행위자를 추출합니다.</p>
-                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed overflow-x-auto">
                     "신고 접수하면 → 위치 확인하고<br>→ 출동 지령을 내려요"<br>
                     <span class="text-blue-600">↓ step[1]: actor=상황실, action=위치확인</span>
                 </div>
@@ -647,7 +649,7 @@
                     <span class="text-sm font-bold text-slate-700">시간 정보 추출</span>
                 </div>
                 <p class="text-xs text-slate-500 mb-3">각 단계의 실제 소요 시간을 추출합니다.</p>
-                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed overflow-x-auto">
                     "보통 90초~2분 안에 출동해요"<br>
                     <span class="text-amber-600">↓ duration_sec: {min:90, max:120}</span>
                 </div>
@@ -661,7 +663,7 @@
                     <span class="text-sm font-bold text-slate-700">정보 갭 추출</span>
                 </div>
                 <p class="text-xs text-slate-500 mb-3">현재 대응에서 없어서 불편한 정보를 파악합니다.</p>
-                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed overflow-x-auto">
                     "협로 정보는 현장 가봐야 알아요"<br>
                     <span class="text-red-600">↓ info_gap: 접근로 폭 (출동 전 미확보)</span>
                 </div>
@@ -675,7 +677,7 @@
                     <span class="text-sm font-bold text-slate-700">의사결정 규칙 추출</span>
                 </div>
                 <p class="text-xs text-slate-500 mb-3">인터뷰의 판단 기준이 TypeDB 추론 규칙이 됩니다.</p>
-                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed overflow-x-auto">
                     "골목 좁으면 사람이 먼저 뛰어야 해"<br>
                     <span class="text-violet-600">↓ rule: road &lt; 3m → dispatch_foot_patrol</span>
                 </div>
@@ -689,12 +691,13 @@
                 <i data-lucide="arrow-right-left" class="w-4 h-4 text-slate-500"></i>
                 JSON은 운반책, TypeDB는 두뇌
             </h3>
-            <div class="grid sm:grid-cols-3 gap-4">
+            <div class="flex flex-col sm:grid sm:grid-cols-3 gap-4">
                 <div class="bg-slate-50 rounded-xl p-4 text-center">
                     <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">입력</div>
                     <div class="text-sm font-black text-slate-700 mb-1">goheung_dataset.json<br>response_protocol.json</div>
                     <div class="text-[10px] text-slate-400">정형 + 비정형 전처리 결과</div>
                 </div>
+                <div class="flex items-center justify-center text-slate-400 text-xl sm:hidden py-1">↓</div>
                 <div class="flex flex-col items-center justify-center gap-2">
                     <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center">
                         <i data-lucide="cpu" class="w-4 h-4 text-white"></i>
@@ -702,6 +705,7 @@
                     <div class="text-xs font-bold text-slate-700">TypeDB</div>
                     <div class="text-[10px] text-slate-400 text-center">엔티티·관계·규칙<br>자동 추론 실행</div>
                 </div>
+                <div class="flex items-center justify-center text-slate-400 text-xl sm:hidden py-1">↓</div>
                 <div class="bg-slate-50 rounded-xl p-4 text-center">
                     <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">출력</div>
                     <div class="text-sm font-black text-slate-700 mb-1">simulation_result.json</div>
@@ -720,7 +724,7 @@
     </div>
 
     <!-- ── 유관기관 협조 네트워크 ─────────────────────────────────────── -->
-    <div class="w-full max-w-5xl mb-12 fade-up">
+    <div class="w-full max-w-5xl mb-8 sm:mb-12 fade-up">
         <div class="flex items-center gap-3 mb-5">
             <div class="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center">
                 <i data-lucide="network" class="w-4 h-4 text-indigo-600"></i>
@@ -922,13 +926,14 @@
                 <i data-lucide="lightbulb" class="w-4 h-4 text-yellow-400"></i>
                 <span class="text-sm font-bold">재난안전연구원 온톨로지 × PATOS TypeDB 연계 전략</span>
             </div>
-            <div class="grid sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex flex-col sm:grid sm:grid-cols-3 gap-4 mb-4">
                 <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                     <div class="text-xs font-bold text-indigo-300 mb-2">현재 (POC)</div>
                     <div class="text-xs text-slate-300 leading-relaxed">자체 설계한 TypeDB 스키마<br><span class="text-slate-500">(person, building, fire-event)</span></div>
                     <div class="mt-2 text-[10px] text-slate-500">국가 표준과 호환 미검증</div>
                 </div>
-                <div class="flex items-center justify-center text-slate-600 text-xl">→</div>
+                <div class="flex items-center justify-center text-slate-600 text-xl sm:hidden py-1">↓</div>
+                <div class="hidden sm:flex items-center justify-center text-slate-600 text-xl">→</div>
                 <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                     <div class="text-xs font-bold text-teal-300 mb-2">연계 후</div>
                     <div class="text-xs text-slate-300 leading-relaxed">재난안전연구원 온톨로지<br>기반으로 스키마 재정렬</div>
