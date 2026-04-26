@@ -90,6 +90,7 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200">
@@ -416,6 +417,7 @@
 
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 
@@ -432,6 +434,7 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200">
@@ -555,6 +558,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 
@@ -574,7 +578,7 @@
         <div class="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white mb-6">
 
             <!-- Step labels -->
-            <div class="grid grid-cols-5 gap-2 mb-4 text-center">
+            <div class="hidden sm:grid grid-cols-5 gap-2 mb-4 text-center">
                 <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 1</div>
                 <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 2</div>
                 <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 3</div>
@@ -583,27 +587,29 @@
             </div>
 
             <!-- Step boxes -->
-            <div class="grid grid-cols-5 gap-2 items-center mb-6">
-                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+            <div class="flex flex-col sm:grid sm:grid-cols-5 gap-2 items-center mb-6">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center w-full">
                     <i data-lucide="inbox" class="w-5 h-5 mx-auto mb-2 text-slate-300"></i>
                     <div class="text-xs font-bold text-white">원본 수집</div>
                     <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">음성·텍스트<br>사진·문서</div>
                 </div>
-                <div class="flex items-center justify-center text-slate-600 text-xl">→</div>
-                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                <div class="flex items-center justify-center text-slate-600 text-xl sm:hidden">↓</div>
+                <div class="hidden sm:flex items-center justify-center text-slate-600 text-xl">→</div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center w-full">
                     <i data-lucide="wand-2" class="w-5 h-5 mx-auto mb-2 text-blue-400"></i>
                     <div class="text-xs font-bold text-white">1차 처리</div>
                     <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">STT / OCR<br>이미지 분석</div>
                 </div>
-                <div class="flex items-center justify-center text-slate-600 text-xl">→</div>
-                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                <div class="flex items-center justify-center text-slate-600 text-xl sm:hidden">↓</div>
+                <div class="hidden sm:flex items-center justify-center text-slate-600 text-xl">→</div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center w-full">
                     <i data-lucide="brain" class="w-5 h-5 mx-auto mb-2 text-violet-400"></i>
                     <div class="text-xs font-bold text-white">LLM 추출</div>
                     <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">절차·시간<br>갭·규칙</div>
                 </div>
             </div>
             <div class="flex justify-center mb-4 text-slate-600 text-xl">↓</div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
                     <i data-lucide="file-json" class="w-5 h-5 mx-auto mb-2 text-emerald-400"></i>
                     <div class="text-xs font-bold text-white">JSON 구조화 + 수동 검증</div>
@@ -813,6 +819,7 @@
                 <h3 class="text-sm font-bold text-slate-700">전체 유관기관 협조 목록</h3>
                 <p class="text-xs text-slate-400 mt-0.5">데이터 수집 이상의 전략적 협력이 필요한 기관</p>
             </div>
+            <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-slate-100">
@@ -906,6 +913,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- 온톨로지 연계 전략 -->
