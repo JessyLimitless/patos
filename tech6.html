@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATOS — 데이터 조사 및 수집</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; color: #334155; }
+        .card-hover { transition: box-shadow 0.2s, transform 0.2s; }
+        .card-hover:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .pipe-arrow { position:relative; }
+        .pipe-arrow::after {
+            content:''; position:absolute; right:-20px; top:50%;
+            transform:translateY(-50%);
+            border:8px solid transparent; border-left-color:#cbd5e1;
+        }
+        @keyframes fade-up { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation: fade-up .4s ease-out forwards; }
+        tr:hover td { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col items-center">
+
+<!-- Navbar -->
+<nav class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2 text-slate-700 hover:text-red-600 transition-colors">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+            <span class="font-bold text-sm tracking-tight">PATOS v4.4</span>
+        </a>
+        <div class="flex items-center gap-1 flex-wrap">
+            <a href="tech1.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">시스템 아키텍처</a>
+            <a href="tech2.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 아키텍처</a>
+            <a href="tech3.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">v5 로드맵</a>
+            <a href="tech4.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
+            <a href="tech5.html" class="px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
+            <a href="tech6.html" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-700 text-white">데이터 수집</a>
+        </div>
+    </div>
+</nav>
+
+<div class="w-full py-12 px-4 sm:px-8 flex flex-col items-center">
+
+    <!-- Header -->
+    <div class="text-center mb-10 max-w-3xl fade-up">
+        <div class="inline-flex items-center justify-center p-3 bg-emerald-50 text-emerald-600 rounded-2xl mb-4">
+            <i data-lucide="database" class="w-8 h-8"></i>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3">
+            데이터 조사 및 수집 계획
+        </h1>
+        <p class="text-slate-500 text-base leading-relaxed">
+            PATOS 시스템 구동을 위한 전체 데이터 항목 목록 및 비정형 데이터 전처리 파이프라인
+        </p>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-5xl mb-10 fade-up">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
+            <div class="text-3xl font-black text-slate-800">43</div>
+            <div class="text-xs text-slate-500 mt-1 font-medium">총 데이터 항목</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
+            <div class="text-3xl font-black text-sky-600">31</div>
+            <div class="text-xs text-slate-500 mt-1 font-medium">정형 데이터</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
+            <div class="text-3xl font-black text-violet-600">12</div>
+            <div class="text-xs text-slate-500 mt-1 font-medium">비정형 데이터</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 text-center">
+            <div class="text-3xl font-black text-red-500">8</div>
+            <div class="text-xs text-slate-500 mt-1 font-medium">현재 확보 (수동)</div>
+        </div>
+    </div>
+
+    <!-- ── 정형 데이터 ──────────────────────────────────────────────────── -->
+    <div class="w-full max-w-5xl mb-12 fade-up">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-xl bg-sky-100 flex items-center justify-center">
+                <i data-lucide="table-2" class="w-4 h-4 text-sky-600"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">정형 데이터 (Structured) — 31개</h2>
+                <p class="text-xs text-slate-400">DB 테이블로 저장 가능한 수치·범주형 데이터</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200">
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider w-8">#</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">항목</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell">내용</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">출처</th>
+                        <th class="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">우선순위</th>
+                        <th class="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">현재 상태</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+
+                    <!-- 건물 그룹 -->
+                    <tr class="bg-sky-50/60">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-sky-600 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="home" class="w-3 h-3"></i> 건물 데이터
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">01</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">건물 좌표</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">각 건물 위도·경도 (lat/lon)</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-semibold">국토부</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">02</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">건물 자재</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">샌드위치 패널·조적조·비닐하우스 등</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-semibold">국토부 건축물대장</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">03</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">접근로 폭</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">각 건물 진입 골목 너비 (m)</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">군청 GIS / 현장</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">04</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">연면적·층수·건축연도</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">건물 규모 및 노후도</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-semibold">국토부 건축물대장</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">05</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">화재감지기·스프링클러 유무</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">자동 경보·진압 가능 여부</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">소방청 소방시설 DB</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동(부분)</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">06</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">건물 간 거리</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">화재 전파 위험도 계산 (인접 건물)</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">좌표 계산</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">07</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">소화전 위치</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">현장 급수 가능 지점 좌표</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">소방청</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">08</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">가로등 설치 여부</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">심야 접근로 가시성</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">고흥군청</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+
+                    <!-- 주민 그룹 -->
+                    <tr class="bg-violet-50/60">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-violet-600 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="users" class="w-3 h-3"></i> 주민 데이터
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">09</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">주민 나이·성별</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">기본 인구 정보</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">주민등록 DB</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">10</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">취약 조건</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">난청·치매·거동불편 등급</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">복지 DB</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">11</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">독거 여부</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">단독 거주 여부 (조력자 유무)</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">주민등록 DB</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">12</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">비상연락처</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">가족·보호자 연락처</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">행정 DB</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">13</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">GPS 동의 여부</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">위치 추적 동의 여부 및 실시간 좌표</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full font-semibold">동의서</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">구조만</span></td>
+                    </tr>
+
+                    <!-- 공간·인프라 그룹 -->
+                    <tr class="bg-slate-50/80">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i> 공간·인프라
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">14</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">마을 진입로·도보 경로</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">소방차·도보 접근 가능 동선</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">군청 / 현장</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">15</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">소방차 정차 가능 지점</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">협로 진입 불가 시 최근접 정차 좌표</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">현장 확인</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">16</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">이장·자율방재단 위치</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">1차 대응 인력 자택 좌표·연락처</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">이장 직접</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">수동(대략)</span></td>
+                    </tr>
+
+                    <!-- 고흥군청 그룹 -->
+                    <tr class="bg-emerald-50/60">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="landmark" class="w-3 h-3"></i> 고흥군청
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">17</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">독거노인 돌봄 대상자 목록</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">복지서비스 등록 취약자 명단</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">고흥군청 복지과</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">18</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">장애인 등록 현황</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">거동·인지 장애 등급 (1~6급)</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">고흥군청 복지과</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">19</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">마을 도로 현황</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">도로 폭·포장 여부·일방통행 GIS</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">고흥군청 GIS</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">20</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">야간 당직 연락 체계</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">비상 시 군청 야간 담당자 연락처</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">고흥군청 안전과</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">21</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">재난 취약 시설 목록</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">경로당·요양원·노인복지관 위치</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">고흥군청 안전과</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+
+                    <!-- 고흥경찰서 그룹 -->
+                    <tr class="bg-indigo-50/60">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="shield" class="w-3 h-3"></i> 고흥경찰서
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">22</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">순찰차 실시간 위치</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">심야 순찰 중인 차량 GPS 좌표</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">경찰청 API</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">23</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">야간 순찰 구역</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">소록마을 담당 구역 범위 (GIS polygon)</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">고흥경찰서</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">24</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">경찰서·지구대 위치·ETA</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">도양지구대 좌표·출동 소요 시간</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">경찰청 공개</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+
+                    <!-- 병원 그룹 -->
+                    <tr class="bg-teal-50/60">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-teal-600 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="cross" class="w-3 h-3"></i> 병원·응급의료
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">25</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">응급실 위치·ETA</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">고흥병원·순천 병원 이송 거리</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-semibold">응급의료포털 e-gen</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">26</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">구급차 보유·위치</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">119 구급대 차량 현황 및 위치</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">소방청</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">27</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">응급실 수용·처치 가능 여부</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">심야 운영·HCN·CO 흡입 처치 가능 병원</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-semibold">응급의료포털</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">28</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">헬기 이송 가능 여부</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">닥터헬기 착륙 가능 지점 좌표</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">소방청·병원</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-slate-400 font-black text-xs">★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+
+                    <!-- 중앙재난본부 그룹 -->
+                    <tr class="bg-orange-50/60">
+                        <td colspan="6" class="px-4 py-2">
+                            <span class="text-[10px] font-bold text-orange-600 uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="building-2" class="w-3 h-3"></i> 중앙재난본부·행안부
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">29</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">재난 취약 계층 DB</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">전국 단위 취약자 등록 현황</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">행안부</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">30</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">화재 통계 (과거 사례)</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">농촌 주택 화재 원인·피해·대응 시간 분포</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">소방청·행안부</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">31</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">기상 재난 경보 연계</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">건조주의보·강풍경보 발령 데이터</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">기상청·행안부</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">부분(기상만)</span></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── 비정형 데이터 ────────────────────────────────────────────────── -->
+    <div class="w-full max-w-5xl mb-12 fade-up">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-xl bg-violet-100 flex items-center justify-center">
+                <i data-lucide="file-text" class="w-4 h-4 text-violet-600"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">비정형 데이터 (Unstructured) — 12개</h2>
+                <p class="text-xs text-slate-400">음성·텍스트·이미지·문서 — 전처리 후 TypeDB에 통합</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200">
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider w-8">#</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">항목</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell">내용</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">유형</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell">전처리 방법</th>
+                        <th class="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">우선순위</th>
+                        <th class="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">현재 상태</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">32</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">119 신고 음성</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">화재 신고 원음 파일</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="mic" class="w-2.5 h-2.5"></i>음성</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">STT → 위치·키워드 추출</td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">33</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">119 신고 텍스트 (STT)</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">신고 음성 → 텍스트 변환 샘플</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="type" class="w-2.5 h-2.5"></i>텍스트</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">NLP → 주소·취약자 정보 추출</td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">샘플 7개</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">34</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">마을·건물 현장 사진</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">골목 폭·건물 외관·접근로 실측</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="image" class="w-2.5 h-2.5"></i>이미지</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">Vision AI → 폭 측정·자재 분류</td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">35</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">위성·항공 사진</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">마을 전체 배치·도로 구조 파악</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="image" class="w-2.5 h-2.5"></i>이미지</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">GIS 레이어 분석 → 좌표 추출</td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">36</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">소방관 인터뷰 녹취</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">신고 후 대응 절차·의사결정 흐름</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="mic" class="w-2.5 h-2.5"></i>음성</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">STT → LLM 구조화 → TypeDB 규칙</td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">37</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">경찰 인터뷰 녹취</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">112 신고 공조·야간 순찰 절차</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="mic" class="w-2.5 h-2.5"></i>음성</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">STT → LLM 구조화 → TypeDB 규칙</td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">38</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">과거 화재 사례 보고서</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">유사 사례 대응 패턴·교훈</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="file-text" class="w-2.5 h-2.5"></i>문서</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">LLM → 패턴 추출 → 통계 JSON</td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">39</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">소방 출동 현장 보고서</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">실제 출동 기록·현장 서술</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="file-text" class="w-2.5 h-2.5"></i>문서</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">LLM → 절차 단계·시간 추출</td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">40</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">재난 표준 대응 절차 (SOP)</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">화재 유형별 공식 대응 단계 매뉴얼</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="file-text" class="w-2.5 h-2.5"></i>문서</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">LLM → 절차 구조화 → response_protocol.json</td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">41</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">지자체 재난 대응 계획</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">고흥군 공식 재난 대응 계획서</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="file-text" class="w-2.5 h-2.5"></i>문서</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">LLM → 역할·책임 구조화</td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">42</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">주민 동의서 원문</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">GPS·개인정보 수집 동의 문서</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="file-text" class="w-2.5 h-2.5"></i>문서</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">OCR → 동의 여부 boolean 추출</td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">43</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">복지 사례관리 기록</td>
+                        <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell">취약 주민 생활 상황 서술 기록</td>
+                        <td class="px-4 py-3"><span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 w-fit"><i data-lucide="file-text" class="w-2.5 h-2.5"></i>문서</span></td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">LLM → 취약 조건 구조화</td>
+                        <td class="px-4 py-3 text-center"><span class="text-slate-400 font-black text-xs">★</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">없음</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── 비정형 데이터 전처리 파이프라인 ──────────────────────────────── -->
+    <div class="w-full max-w-5xl mb-12 fade-up">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center">
+                <i data-lucide="git-branch" class="w-4 h-4 text-white"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">비정형 데이터 전처리 파이프라인</h2>
+                <p class="text-xs text-slate-400">음성·문서·이미지가 TypeDB 규칙으로 변환되는 흐름</p>
+            </div>
+        </div>
+
+        <!-- Pipeline flow -->
+        <div class="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white mb-6">
+
+            <!-- Step labels -->
+            <div class="grid grid-cols-5 gap-2 mb-4 text-center">
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 1</div>
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 2</div>
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 3</div>
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 4</div>
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">STEP 5</div>
+            </div>
+
+            <!-- Step boxes -->
+            <div class="grid grid-cols-5 gap-2 items-center mb-6">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                    <i data-lucide="inbox" class="w-5 h-5 mx-auto mb-2 text-slate-300"></i>
+                    <div class="text-xs font-bold text-white">원본 수집</div>
+                    <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">음성·텍스트<br>사진·문서</div>
+                </div>
+                <div class="flex items-center justify-center text-slate-600 text-xl">→</div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                    <i data-lucide="wand-2" class="w-5 h-5 mx-auto mb-2 text-blue-400"></i>
+                    <div class="text-xs font-bold text-white">1차 처리</div>
+                    <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">STT / OCR<br>이미지 분석</div>
+                </div>
+                <div class="flex items-center justify-center text-slate-600 text-xl">→</div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                    <i data-lucide="brain" class="w-5 h-5 mx-auto mb-2 text-violet-400"></i>
+                    <div class="text-xs font-bold text-white">LLM 추출</div>
+                    <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">절차·시간<br>갭·규칙</div>
+                </div>
+            </div>
+            <div class="flex justify-center mb-4 text-slate-600 text-xl">↓</div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                    <i data-lucide="file-json" class="w-5 h-5 mx-auto mb-2 text-emerald-400"></i>
+                    <div class="text-xs font-bold text-white">JSON 구조화 + 수동 검증</div>
+                    <div class="text-[10px] text-slate-400 mt-1">response_protocol.json / info_gaps.json</div>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                    <i data-lucide="network" class="w-5 h-5 mx-auto mb-2 text-orange-400"></i>
+                    <div class="text-xs font-bold text-white">TypeDB 규칙화</div>
+                    <div class="text-[10px] text-slate-400 mt-1">온톨로지 추론 규칙 추가·갱신</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4가지 추출 카테고리 -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <i data-lucide="list-ordered" class="w-3.5 h-3.5 text-blue-600"></i>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">절차 단계 추출</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3">인터뷰에서 대응 순서와 행위자를 추출합니다.</p>
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                    "신고 접수하면 → 위치 확인하고<br>→ 출동 지령을 내려요"<br>
+                    <span class="text-blue-600">↓ step[1]: actor=상황실, action=위치확인</span>
+                </div>
+                <div class="mt-2 text-[10px] text-slate-400">→ <code class="bg-slate-100 px-1 rounded">response_protocol.json</code></div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
+                        <i data-lucide="timer" class="w-3.5 h-3.5 text-amber-600"></i>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">시간 정보 추출</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3">각 단계의 실제 소요 시간을 추출합니다.</p>
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                    "보통 90초~2분 안에 출동해요"<br>
+                    <span class="text-amber-600">↓ duration_sec: {min:90, max:120}</span>
+                </div>
+                <div class="mt-2 text-[10px] text-slate-400">→ 시뮬레이션 타이밍 파라미터 갱신</div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center">
+                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-600"></i>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">정보 갭 추출</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3">현재 대응에서 없어서 불편한 정보를 파악합니다.</p>
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                    "협로 정보는 현장 가봐야 알아요"<br>
+                    <span class="text-red-600">↓ info_gap: 접근로 폭 (출동 전 미확보)</span>
+                </div>
+                <div class="mt-2 text-[10px] text-slate-400">→ PATOS가 사전 제공해야 할 항목 목록</div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 card-hover">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
+                        <i data-lucide="git-merge" class="w-3.5 h-3.5 text-violet-600"></i>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">의사결정 규칙 추출</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3">인터뷰의 판단 기준이 TypeDB 추론 규칙이 됩니다.</p>
+                <div class="bg-slate-50 rounded-xl p-3 text-xs font-mono text-slate-600 leading-relaxed">
+                    "골목 좁으면 사람이 먼저 뛰어야 해"<br>
+                    <span class="text-violet-600">↓ rule: road &lt; 3m → dispatch_foot_patrol</span>
+                </div>
+                <div class="mt-2 text-[10px] text-slate-400">→ TypeDB 온톨로지 추론 규칙 추가</div>
+            </div>
+        </div>
+
+        <!-- JSON이 TypeDB와 연계되는 구조 -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 class="text-sm font-extrabold text-slate-700 mb-4 flex items-center gap-2">
+                <i data-lucide="arrow-right-left" class="w-4 h-4 text-slate-500"></i>
+                JSON은 운반책, TypeDB는 두뇌
+            </h3>
+            <div class="grid sm:grid-cols-3 gap-4">
+                <div class="bg-slate-50 rounded-xl p-4 text-center">
+                    <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">입력</div>
+                    <div class="text-sm font-black text-slate-700 mb-1">goheung_dataset.json<br>response_protocol.json</div>
+                    <div class="text-[10px] text-slate-400">정형 + 비정형 전처리 결과</div>
+                </div>
+                <div class="flex flex-col items-center justify-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center">
+                        <i data-lucide="cpu" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div class="text-xs font-bold text-slate-700">TypeDB</div>
+                    <div class="text-[10px] text-slate-400 text-center">엔티티·관계·규칙<br>자동 추론 실행</div>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-4 text-center">
+                    <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">출력</div>
+                    <div class="text-sm font-black text-slate-700 mb-1">simulation_result.json</div>
+                    <div class="text-[10px] text-slate-400">우선순위·대응 발령·화재 전파 결과</div>
+                </div>
+            </div>
+            <div class="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <div class="text-xs font-bold text-amber-700 mb-1">핵심 원칙</div>
+                <div class="text-xs text-amber-700 leading-relaxed">
+                    JSON에 하드코딩된 조건문은 새 시나리오마다 코드를 수정해야 합니다.<br>
+                    TypeDB 규칙은 한 번 선언하면 어떤 새 화재 시나리오에도 자동으로 적용됩니다.<br>
+                    <strong>인터뷰 데이터의 최종 목적지는 TypeDB 추론 규칙입니다.</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 유관기관 협조 네트워크 ─────────────────────────────────────── -->
+    <div class="w-full max-w-5xl mb-12 fade-up">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center">
+                <i data-lucide="network" class="w-4 h-4 text-indigo-600"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">유관기관 협조 네트워크</h2>
+                <p class="text-xs text-slate-400">독자 구축이 아닌 기존 시스템과의 연계 — 온톨로지·데이터·사례를 공유</p>
+            </div>
+        </div>
+
+        <!-- 핵심 2개 기관 강조 카드 -->
+        <div class="grid sm:grid-cols-2 gap-5 mb-6">
+
+            <!-- 행안부 재난안전연구원 -->
+            <div class="bg-white rounded-2xl border-2 border-indigo-200 shadow-sm p-6 card-hover relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full opacity-60"></div>
+                <div class="relative">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-[10px] font-bold bg-indigo-600 text-white px-2.5 py-0.5 rounded-full uppercase tracking-widest">온톨로지 연계 핵심</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800 mt-2 mb-1">행안부 국립재난안전연구원</h3>
+                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">재난안전 온톨로지를 자체 구축 중. PATOS TypeDB 스키마의 국가 표준 기반으로 활용 가능.</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-indigo-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">재난 유형별 표준 온톨로지 스키마 (TypeDB 적용 가능)</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-indigo-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">화재 대응 지식 그래프 규칙 — PATOS 추론 규칙 검증</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-indigo-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">농촌 취약 계층 재난 피해 연구 데이터</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-indigo-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">NDMS 시스템 연계 공식 채널</span>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-50 rounded-xl p-3">
+                        <div class="text-[10px] font-bold text-indigo-700 mb-1">협조 방법</div>
+                        <div class="text-xs text-indigo-600">연구 협력 MOU → 온톨로지 공동 활용 협약</div>
+                    </div>
+                    <div class="mt-3 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                        <div class="text-xs text-amber-700 leading-relaxed">
+                            <strong>핵심 이점:</strong> PATOS가 독자 온톨로지를 처음부터 만들 필요가 없어집니다. 국가 검증된 스키마를 TypeDB에 import하면 신뢰도와 개발 속도가 동시에 올라갑니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 화성시 지능형 재난안전시스템 -->
+            <div class="bg-white rounded-2xl border-2 border-teal-200 shadow-sm p-6 card-hover relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-teal-50 rounded-bl-full opacity-60"></div>
+                <div class="relative">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-[10px] font-bold bg-teal-600 text-white px-2.5 py-0.5 rounded-full uppercase tracking-widest">선행 구현 사례</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800 mt-2 mb-1">화성시 지능형 재난안전시스템</h3>
+                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">지자체 단위 지능형 재난 대응 시스템 구축 진행 중. PATOS와 유사한 구조의 선행 사례.</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-teal-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">지자체 재난 데이터 수집 방법론 및 구조</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-teal-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">행정 DB 연동 과정에서 발생한 장애물·해결책</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-teal-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">지능형 의사결정 시스템 기술 아키텍처 참고</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-teal-500 mt-0.5 shrink-0"></i>
+                            <span class="text-xs text-slate-600">유사 시스템의 현장 적용 결과·피드백</span>
+                        </div>
+                    </div>
+                    <div class="bg-teal-50 rounded-xl p-3">
+                        <div class="text-[10px] font-bold text-teal-700 mb-1">협조 방법</div>
+                        <div class="text-xs text-teal-600">담당부서 접촉 → 사례 연구·기술 벤치마킹 공유</div>
+                    </div>
+                    <div class="mt-3 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                        <div class="text-xs text-amber-700 leading-relaxed">
+                            <strong>핵심 이점:</strong> 화성시가 겪은 행정 DB 연동 문제, 데이터 수집 절차, 현장 반응을 미리 파악하면 PATOS의 시행착오를 줄일 수 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전체 유관기관 표 -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 bg-slate-50 border-b border-slate-200">
+                <h3 class="text-sm font-bold text-slate-700">전체 유관기관 협조 목록</h3>
+                <p class="text-xs text-slate-400 mt-0.5">데이터 수집 이상의 전략적 협력이 필요한 기관</p>
+            </div>
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-slate-100">
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">기관</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell">협조 목적</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden md:table-cell">얻는 것</th>
+                        <th class="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell">협조 방법</th>
+                        <th class="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">우선순위</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    <tr class="bg-indigo-50/40">
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">국립재난안전연구원</div>
+                            <div class="text-[10px] text-slate-400">행안부 산하</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">재난안전 온톨로지 공동 활용</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">TypeDB 스키마 기반, 추론 규칙 검증</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">연구 MOU</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                    </tr>
+                    <tr class="bg-teal-50/40">
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">화성시청</div>
+                            <div class="text-[10px] text-slate-400">스마트시티·안전과</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">지능형 재난안전시스템 벤치마킹</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">구현 경험, 행정 연동 장애물·해결책</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-semibold">사례 연구</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">소방청 119빅데이터센터</div>
+                            <div class="text-[10px] text-slate-400">소방청 산하</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">농촌 주택 화재 통계 확보</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">플래시오버 시간·사망 원인·출동 시간 분포</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">공공데이터포털</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">행안부 재난안전데이터과</div>
+                            <div class="text-[10px] text-slate-400">행정안전부</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">NDMS 연계·SOP 문서 확보</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">국가재난관리정보시스템 API, 표준 대응 절차</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">정보공개 청구</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">응급의료포털 (e-gen)</div>
+                            <div class="text-[10px] text-slate-400">보건복지부·국립중앙의료원</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">응급실 실시간 수용 가능 정보</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">병원 위치·ETA·심야 운영·처치 가능 여부</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-semibold">공개 API</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">고흥군청</div>
+                            <div class="text-[10px] text-slate-400">복지과·안전과·GIS팀</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">복지·도로 정형 데이터 일괄 확보</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">독거노인 목록, 장애 등록, 도로 GIS, 취약 시설</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">행정 협력</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-red-500 font-black text-xs">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">카카오모빌리티 / 네이버</div>
+                            <div class="text-[10px] text-slate-400">지도·GIS 플랫폼</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">도로 GIS·위성사진·경로 데이터</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">건물 좌표, 접근로 폭 추정, 도보 경로 계산</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">상업 API</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-orange-500 font-black text-xs">★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-slate-700 text-sm">ETRI / NIA</div>
+                            <div class="text-[10px] text-slate-400">한국전자통신연구원·지능정보사회진흥원</div>
+                        </td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">AI 거버넌스·데이터 표준 준수</td>
+                        <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">STT 모델, AI 윤리 가이드라인, 개인정보 처리 기준</td>
+                        <td class="px-4 py-3 hidden sm:table-cell"><span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">연구 협력</span></td>
+                        <td class="px-4 py-3 text-center"><span class="text-slate-400 font-black text-xs">★</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 온톨로지 연계 전략 -->
+        <div class="mt-5 bg-slate-900 rounded-2xl p-6 text-white">
+            <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="lightbulb" class="w-4 h-4 text-yellow-400"></i>
+                <span class="text-sm font-bold">재난안전연구원 온톨로지 × PATOS TypeDB 연계 전략</span>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-4 mb-4">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                    <div class="text-xs font-bold text-indigo-300 mb-2">현재 (POC)</div>
+                    <div class="text-xs text-slate-300 leading-relaxed">자체 설계한 TypeDB 스키마<br><span class="text-slate-500">(person, building, fire-event)</span></div>
+                    <div class="mt-2 text-[10px] text-slate-500">국가 표준과 호환 미검증</div>
+                </div>
+                <div class="flex items-center justify-center text-slate-600 text-xl">→</div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                    <div class="text-xs font-bold text-teal-300 mb-2">연계 후</div>
+                    <div class="text-xs text-slate-300 leading-relaxed">재난안전연구원 온톨로지<br>기반으로 스키마 재정렬</div>
+                    <div class="mt-2 text-[10px] text-slate-500">국가 표준 준수 → 확장성 확보</div>
+                </div>
+            </div>
+            <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-3">
+                <div class="text-xs text-yellow-300 leading-relaxed">
+                    재난안전연구원이 이미 구축한 온톨로지 클래스·관계·규칙을 TypeDB에 import하면,
+                    PATOS는 고흥 소록마을에 특화된 인스턴스 데이터와 규칙만 추가하면 됩니다.
+                    처음부터 쌓는 것보다 <strong>개발 기간이 대폭 단축</strong>되고,
+                    향후 고흥 외 다른 지자체 확장 시 <strong>표준 호환성</strong>이 보장됩니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- 실무 협조 접근 전략 -->
+        <div class="mt-5 grid sm:grid-cols-2 gap-5">
+
+            <!-- 접근 순서 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
+                        <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-amber-600"></i>
+                    </div>
+                    <span class="text-sm font-extrabold text-slate-700">접근 순서 — 신뢰가 위에서 아래로</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                    상위 기관과 협력 중이라는 사실만으로 하위 기관의 협조율이 달라집니다.
+                </p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 bg-indigo-50 rounded-xl px-4 py-3">
+                        <span class="text-xs font-black text-indigo-600 w-4">1</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">국립재난안전연구원</div>
+                            <div class="text-[10px] text-slate-400">온톨로지 협력 → 국가 표준 레퍼런스 확보</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center text-slate-300 text-sm">↓</div>
+                    <div class="flex items-center gap-3 bg-teal-50 rounded-xl px-4 py-3">
+                        <span class="text-xs font-black text-teal-600 w-4">2</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">화성시 + 소방청</div>
+                            <div class="text-[10px] text-slate-400">선행 사례 + 실제 화재 데이터 확보</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center text-slate-300 text-sm">↓</div>
+                    <div class="flex items-center gap-3 bg-emerald-50 rounded-xl px-4 py-3">
+                        <span class="text-xs font-black text-emerald-600 w-4">3</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">고흥군청 + 고흥소방서</div>
+                            <div class="text-[10px] text-slate-400">"연구원·화성시와 협력 중" → 신뢰 전이</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center text-slate-300 text-sm">↓</div>
+                    <div class="flex items-center gap-3 bg-slate-50 rounded-xl px-4 py-3">
+                        <span class="text-xs font-black text-slate-500 w-4">4</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">소록마을 주민 동의</div>
+                            <div class="text-[10px] text-slate-400">군청이 앞서면 주민 접근 훨씬 수월</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4가지 실무 가치 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-7 h-7 rounded-lg bg-rose-100 flex items-center justify-center">
+                        <i data-lucide="star" class="w-3.5 h-3.5 text-rose-500"></i>
+                    </div>
+                    <span class="text-sm font-extrabold text-slate-700">데이터 이상의 실무 가치</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                            <i data-lucide="zap" class="w-3 h-3 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">속도</div>
+                            <div class="text-xs text-slate-500 leading-relaxed">정보공개청구는 30일, 담당자 관계는 1주일. 화성시 실무자 한 명의 경험담이 3개월 개발보다 빠를 수 있습니다.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center shrink-0 mt-0.5">
+                            <i data-lucide="check-circle-2" class="w-3 h-3 text-green-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">현실 검증</div>
+                            <div class="text-xs text-slate-500 leading-relaxed">연구원이 "이 온톨로지 구조는 실제 소방 데이터에 안 맞아요"라고 미리 말해주면 TypeDB 스키마를 잘못 설계하는 걸 막습니다.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-lg bg-violet-100 flex items-center justify-center shrink-0 mt-0.5">
+                            <i data-lucide="share-2" class="w-3 h-3 text-violet-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">신뢰 전파</div>
+                            <div class="text-xs text-slate-500 leading-relaxed">화성시가 PATOS를 검토했다는 사실 자체가 고흥군청 설득의 레퍼런스가 됩니다. 기관 간 신뢰는 전파됩니다.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-lg bg-orange-100 flex items-center justify-center shrink-0 mt-0.5">
+                            <i data-lucide="trending-up" class="w-3 h-3 text-orange-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-700">파일럿 → 확산 경로</div>
+                            <div class="text-xs text-slate-500 leading-relaxed">소록마을 POC 성공 시, 이미 관계가 형성된 기관들이 타 지자체 확산의 자연스러운 채널이 됩니다.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 연락 방법 가이드 -->
+        <div class="mt-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center">
+                    <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-600"></i>
+                </div>
+                <span class="text-sm font-extrabold text-slate-700">기관별 연락 방법</span>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-3">
+                <div class="bg-slate-50 rounded-xl p-4">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">느리지만 공식</div>
+                    <div class="text-sm font-black text-slate-700 mb-2">공문·정보공개 청구</div>
+                    <div class="text-xs text-slate-500 leading-relaxed">
+                        소요: 2~4주<br>
+                        강점: 기록 남음, 거절 불가<br>
+                        적합: 통계·SOP 문서 수집
+                    </div>
+                </div>
+                <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
+                    <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">빠르고 실질적</div>
+                    <div class="text-sm font-black text-slate-700 mb-2">담당자 이메일·전화</div>
+                    <div class="text-xs text-slate-500 leading-relaxed">
+                        소요: 3~7일<br>
+                        강점: 현실 맥락 파악, 관계 형성<br>
+                        적합: 인터뷰, 비공개 자료
+                    </div>
+                </div>
+                <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                    <div class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-2">가장 효과적</div>
+                    <div class="text-sm font-black text-slate-700 mb-2">연구 협력 MOU</div>
+                    <div class="text-xs text-slate-500 leading-relaxed">
+                        소요: 1~3개월 (최초 1회)<br>
+                        강점: 데이터·인력·예산 접근 가능<br>
+                        적합: 재난안전연구원·화성시
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div><!-- end main container -->
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
