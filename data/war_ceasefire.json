@@ -1,0 +1,335 @@
+{
+  "meta": {
+    "version": "1.0",
+    "created": "2026-05-01",
+    "title": "전쟁·휴전 수혜주 이벤트 온톨로지",
+    "description": "지정학적 이벤트 단계별 수혜주 매핑 — DART Insight 시그널 확장 프로젝트"
+  },
+  "stages": [
+    {
+      "id": "tension",
+      "order": 1,
+      "label": "긴장 고조",
+      "label_en": "Tension Rising",
+      "color": "#f97316",
+      "bg": "#fff7ed",
+      "border": "#fed7aa",
+      "description": "외교 갈등 심화, 군사 훈련 확대, 국경 분쟁 발생",
+      "triggers": ["외교 단절", "군사 훈련 확대", "국경 분쟁", "제재 발동"],
+      "dominant": "war",
+      "signal": "방산 선취매 구간 — 본격 교전 전 저점 매수 기회. 에너지 공급망 리스크 주목.",
+      "action": "BUY 방산 / WATCH 에너지",
+      "risk": "지정학 해소 시 급락 주의"
+    },
+    {
+      "id": "outbreak",
+      "order": 2,
+      "label": "교전 발발",
+      "label_en": "Combat Outbreak",
+      "color": "#ef4444",
+      "bg": "#fef2f2",
+      "border": "#fecaca",
+      "description": "실제 군사 충돌 시작, 전면전 선포 또는 국지전 발생",
+      "triggers": ["군사 충돌", "전쟁 선포", "사이버 공격 급증", "에너지 루트 차단"],
+      "dominant": "war",
+      "signal": "방산 본격 상승 — 최대 수혜 구간. 사이버보안 동반 급등. 휴전주는 전량 관망.",
+      "action": "HOLD 방산 / BUY 사이버보안",
+      "risk": "단기 급등 후 차익실현 주의"
+    },
+    {
+      "id": "escalation",
+      "order": 3,
+      "label": "교전 확대",
+      "label_en": "Escalation",
+      "color": "#b91c1c",
+      "bg": "#fef2f2",
+      "border": "#fca5a5",
+      "description": "전선 확대, 동맹국 참전, 공급망 전면 붕괴",
+      "triggers": ["동맹국 참전", "핵 위협", "에너지 봉쇄", "식량 공급망 차단"],
+      "dominant": "war",
+      "signal": "에너지·식량주 추가 편입. 방산 고점 근접 — 추가 매수보다 보유 전략. 일부 자금 재건주 분산 검토.",
+      "action": "HOLD 방산 / ADD 에너지·식량",
+      "risk": "고점 신호 감지 시 분할 매도"
+    },
+    {
+      "id": "negotiation",
+      "order": 4,
+      "label": "협상 신호",
+      "label_en": "Negotiation",
+      "color": "#ca8a04",
+      "bg": "#fefce8",
+      "border": "#fde68a",
+      "description": "평화 협상 시작, 중재국 개입, 임시 교전 중단",
+      "triggers": ["평화 협상 개시", "중재국 개입", "교전 중단 합의", "포로 교환"],
+      "dominant": "mixed",
+      "signal": "방산 차익실현 구간. 건설·해운 선취매 시작 — 재건 기대감 선반영. 포트폴리오 전환 타이밍.",
+      "action": "SELL 방산 / BUY 건설·해운",
+      "risk": "협상 결렬 시 전쟁주 재반등"
+    },
+    {
+      "id": "ceasefire",
+      "order": 5,
+      "label": "휴전 선언",
+      "label_en": "Ceasefire",
+      "color": "#16a34a",
+      "bg": "#f0fdf4",
+      "border": "#86efac",
+      "description": "공식 휴전 선언, 병력 후퇴, 인도주의 지원 개시",
+      "triggers": ["휴전 협정 서명", "군 철수", "인도주의 회랑 개설", "재건 펀드 논의"],
+      "dominant": "ceasefire",
+      "signal": "휴전주 본격 상승 — 건설·관광·해운 동시 급등. 방산은 단기 낙폭 소화 후 바닥 탐색.",
+      "action": "BUY 건설·관광·해운 / WATCH 방산",
+      "risk": "휴전 파기 시 급락 리스크"
+    },
+    {
+      "id": "peace",
+      "order": 6,
+      "label": "평화협정",
+      "label_en": "Peace Deal",
+      "color": "#2563eb",
+      "bg": "#eff6ff",
+      "border": "#93c5fd",
+      "description": "항구적 평화협정 체결, 대규모 재건 사업 본격화",
+      "triggers": ["평화협정 서명", "제재 해제", "대규모 재건 계약", "관광 루트 복원"],
+      "dominant": "ceasefire",
+      "signal": "재건 수혜 최대 구간 — 철강·건설·해운 장기 상승. 관광 폭발적 회복. 중장기 포트폴리오 재편.",
+      "action": "HOLD 건설·철강·해운 / BUY 관광",
+      "risk": "재건 기대 과대 선반영 주의"
+    }
+  ],
+  "stocks": {
+    "war": [
+      {
+        "name": "한화에어로스페이스",
+        "ticker": "012450",
+        "sector": "방산",
+        "theme": ["항공기 엔진", "무기체계"],
+        "memo": "K9 자주포·천무 수출 주도, 글로벌 방산 수요 직결",
+        "active": {
+          "tension": "M",
+          "outbreak": "H",
+          "escalation": "H",
+          "negotiation": "L"
+        }
+      },
+      {
+        "name": "LIG넥스원",
+        "ticker": "079550",
+        "sector": "방산",
+        "theme": ["유도무기", "레이더"],
+        "memo": "천궁·비궁 미사일 체계 핵심, 수출 모멘텀 강",
+        "active": {
+          "tension": "M",
+          "outbreak": "H",
+          "escalation": "H"
+        }
+      },
+      {
+        "name": "현대로템",
+        "ticker": "064350",
+        "sector": "방산",
+        "theme": ["전차", "장갑차"],
+        "memo": "K2 전차 폴란드 수출, 지상 무기체계 대표주",
+        "active": {
+          "outbreak": "H",
+          "escalation": "H",
+          "negotiation": "L"
+        }
+      },
+      {
+        "name": "한국항공우주(KAI)",
+        "ticker": "047810",
+        "sector": "방산",
+        "theme": ["전투기", "항공"],
+        "memo": "FA-50 수출 확대, 항공 방산 국산화 선두",
+        "active": {
+          "tension": "M",
+          "outbreak": "H",
+          "escalation": "H"
+        }
+      },
+      {
+        "name": "풍산",
+        "ticker": "103140",
+        "sector": "방산",
+        "theme": ["탄약", "동"],
+        "memo": "탄약 생산 국내 독점, 전쟁 장기화 시 최대 수혜",
+        "active": {
+          "outbreak": "H",
+          "escalation": "H"
+        }
+      },
+      {
+        "name": "한국가스공사",
+        "ticker": "036460",
+        "sector": "에너지",
+        "theme": ["LNG", "가스"],
+        "memo": "공급망 차질 시 LNG 가격 급등 직결 수혜",
+        "active": {
+          "tension": "M",
+          "outbreak": "M",
+          "escalation": "M"
+        }
+      },
+      {
+        "name": "S-Oil",
+        "ticker": "010950",
+        "sector": "에너지",
+        "theme": ["정유", "석유"],
+        "memo": "중동 공급 차질 시 정제마진 확대 수혜",
+        "active": {
+          "tension": "L",
+          "escalation": "M"
+        }
+      },
+      {
+        "name": "안랩",
+        "ticker": "053800",
+        "sector": "사이버보안",
+        "theme": ["백신", "보안솔루션"],
+        "memo": "전쟁 초기 사이버 공격 급증 — 국내 보안 1위",
+        "active": {
+          "tension": "M",
+          "outbreak": "M",
+          "escalation": "M"
+        }
+      },
+      {
+        "name": "윈스",
+        "ticker": "136540",
+        "sector": "사이버보안",
+        "theme": ["침입탐지", "네트워크보안"],
+        "memo": "국방 네트워크 보안 공급사, 긴장 고조 시 수주 증가",
+        "active": {
+          "tension": "M",
+          "outbreak": "M"
+        }
+      },
+      {
+        "name": "팜한농",
+        "ticker": "002630",
+        "sector": "식량·원자재",
+        "theme": ["비료", "농업"],
+        "memo": "공급망 차단 시 식량 안보 테마 부각",
+        "active": {
+          "outbreak": "L",
+          "escalation": "L"
+        }
+      }
+    ],
+    "ceasefire": [
+      {
+        "name": "현대건설",
+        "ticker": "000720",
+        "sector": "건설·재건",
+        "theme": ["해외건설", "인프라"],
+        "memo": "중동·이라크 재건 경험 풍부, 수혜 규모 국내 최대",
+        "active": {
+          "negotiation": "M",
+          "ceasefire": "H",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "GS건설",
+        "ticker": "006360",
+        "sector": "건설·재건",
+        "theme": ["플랜트", "인프라"],
+        "memo": "플랜트 재건 전문성, 에너지 인프라 복구 수혜",
+        "active": {
+          "ceasefire": "H",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "대우건설",
+        "ticker": "047040",
+        "sector": "건설·재건",
+        "theme": ["주거", "인프라"],
+        "memo": "해외 주거·인프라 재건, 리비아·나이지리아 사업 경험",
+        "active": {
+          "ceasefire": "M",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "HMM",
+        "ticker": "011200",
+        "sector": "해운·물류",
+        "theme": ["컨테이너", "해운"],
+        "memo": "봉쇄 해제 후 교역 회복 — 운임 급반등 직결",
+        "active": {
+          "negotiation": "M",
+          "ceasefire": "H",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "팬오션",
+        "ticker": "028670",
+        "sector": "해운·물류",
+        "theme": ["벌크선", "물류"],
+        "memo": "원자재 해운 수요 — 재건 자재 운송 수혜",
+        "active": {
+          "negotiation": "M",
+          "ceasefire": "M",
+          "peace": "M"
+        }
+      },
+      {
+        "name": "하나투어",
+        "ticker": "039130",
+        "sector": "관광·항공",
+        "theme": ["여행", "패키지"],
+        "memo": "분쟁지역 관광 재개 — 억눌린 수요 폭발적 회복",
+        "active": {
+          "ceasefire": "H",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "모두투어",
+        "ticker": "080160",
+        "sector": "관광·항공",
+        "theme": ["여행", "패키지"],
+        "memo": "중소형 패키지 여행 수요 회복 수혜",
+        "active": {
+          "ceasefire": "M",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "제주항공",
+        "ticker": "089590",
+        "sector": "관광·항공",
+        "theme": ["LCC", "항공"],
+        "memo": "노선 복원 + 탑승률 회복 — LCC 대표 수혜주",
+        "active": {
+          "ceasefire": "M",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "POSCO홀딩스",
+        "ticker": "005490",
+        "sector": "철강·소재",
+        "theme": ["철강", "소재"],
+        "memo": "재건 인프라 핵심 소재 — 철강 수요 장기 증가",
+        "active": {
+          "ceasefire": "M",
+          "peace": "H"
+        }
+      },
+      {
+        "name": "현대제철",
+        "ticker": "004020",
+        "sector": "철강·소재",
+        "theme": ["철강", "H형강"],
+        "memo": "건설용 철강재 공급 — 평화협정 이후 최대 수혜",
+        "active": {
+          "peace": "H"
+        }
+      }
+    ]
+  }
+}

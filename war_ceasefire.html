@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전쟁·휴전 수혜주 이벤트 맵 — 파토스 프로젝트</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family:'Inter',sans-serif; background:#FDFDFB; -webkit-font-smoothing:antialiased; }
+
+    .stock-card {
+      transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+      border-radius: 1.25rem;
+      border: 1.5px solid #e7e5e4;
+      background: #fafaf9;
+      opacity: 0.32;
+      cursor: default;
+    }
+    .stock-card.active-war {
+      border-color: #fca5a5;
+      background: #fff5f5;
+      opacity: 1;
+    }
+    .stock-card.active-ceasefire {
+      border-color: #93c5fd;
+      background: #eff6ff;
+      opacity: 1;
+    }
+    .stock-card.active-war.strength-H  { box-shadow: 0 4px 20px rgba(220,38,38,0.14); }
+    .stock-card.active-war.strength-M  { box-shadow: 0 2px 10px rgba(220,38,38,0.08); }
+    .stock-card.active-ceasefire.strength-H { box-shadow: 0 4px 20px rgba(37,99,235,0.14); }
+    .stock-card.active-ceasefire.strength-M { box-shadow: 0 2px 10px rgba(37,99,235,0.08); }
+
+    .stage-btn { transition: all 0.25s; cursor: pointer; user-select: none; }
+
+    .stage-line { flex:1; height:2px; background:#e7e5e4; transition: background 0.4s; }
+    .stage-line.passed { background: var(--stage-color, #e7e5e4); }
+
+    .signal-box { transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
+
+    @keyframes fade-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fade-up 0.35s ease-out forwards; }
+
+    .intensity-dot {
+      display:inline-block; width:7px; height:7px;
+      border-radius:50%; flex-shrink:0;
+    }
+
+    .sector-label {
+      font-size:9px; font-weight:900; letter-spacing:.18em;
+      text-transform:uppercase; color:#a8a29e;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid #f5f5f4;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Stage dot */
+    .sdot {
+      width:32px; height:32px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; font-weight:900;
+      border:2px solid;
+      transition: all 0.25s;
+      flex-shrink:0;
+    }
+    .sdot.inactive { background:#fafaf9; border-color:#e7e5e4; color:#a8a29e; }
+    .sdot.active   { color:white; border-color:transparent; }
+  </style>
+</head>
+<body class="p-5 text-[#1D1D1B]">
+
+<!-- Header -->
+<header class="max-w-[1400px] mx-auto flex items-center justify-between mb-6 bg-white px-6 py-3.5 rounded-[1.75rem] border border-stone-200/60 shadow-sm gap-4">
+  <a href="index.html" class="flex items-center gap-3 shrink-0 group">
+    <div class="w-9 h-9 flex items-center justify-center rounded-[0.875rem] shadow-md" style="background:linear-gradient(135deg,#dc2626,#991b1b)">
+      <i data-lucide="flame" class="text-white w-4 h-4"></i>
+    </div>
+    <div>
+      <div class="text-[13px] font-black tracking-tight text-stone-900 leading-none">파토스 <span class="text-stone-300 font-light">·</span> <span class="font-bold text-stone-400 text-[11px]">PATOS</span></div>
+      <div class="text-[9px] font-semibold text-stone-400 tracking-wide mt-0.5 group-hover:text-stone-600 transition-colors">← 메인으로</div>
+    </div>
+  </a>
+
+  <div class="flex items-center gap-2">
+    <div class="px-2.5 py-1 rounded-full bg-stone-100 text-[8px] font-black tracking-widest uppercase text-stone-400">프로젝트</div>
+    <div class="text-[15px] font-black tracking-tight text-stone-900">전쟁·휴전 수혜주 이벤트 맵</div>
+  </div>
+
+  <div class="flex items-center gap-2 text-[9px] font-black tracking-[.15em] uppercase">
+    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 border border-red-100 text-red-500">
+      <div class="w-1.5 h-1.5 rounded-full bg-red-400"></div> 전쟁수혜주
+    </div>
+    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-500">
+      <div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div> 휴전수혜주
+    </div>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="max-w-[1400px] mx-auto flex flex-col gap-5">
+
+  <!-- Stage Timeline -->
+  <div class="bg-white rounded-[1.75rem] border border-stone-200/60 shadow-sm p-6">
+    <div class="text-[9px] font-black tracking-widest uppercase text-stone-400 mb-5">이벤트 단계 선택</div>
+
+    <!-- Stage selector -->
+    <div class="flex items-center gap-0">
+      <!-- Stage 1 -->
+      <div class="flex flex-col items-center gap-2 stage-btn" onclick="selectStage('tension')">
+        <div id="sdot-tension" class="sdot inactive">1</div>
+        <div class="text-center">
+          <div class="text-[10px] font-black text-stone-700 whitespace-nowrap">긴장 고조</div>
+          <div class="text-[8px] text-stone-400 whitespace-nowrap">Tension</div>
+        </div>
+      </div>
+      <div id="line-1" class="stage-line mb-4"></div>
+
+      <!-- Stage 2 -->
+      <div class="flex flex-col items-center gap-2 stage-btn" onclick="selectStage('outbreak')">
+        <div id="sdot-outbreak" class="sdot inactive">2</div>
+        <div class="text-center">
+          <div class="text-[10px] font-black text-stone-700 whitespace-nowrap">교전 발발</div>
+          <div class="text-[8px] text-stone-400 whitespace-nowrap">Outbreak</div>
+        </div>
+      </div>
+      <div id="line-2" class="stage-line mb-4"></div>
+
+      <!-- Stage 3 -->
+      <div class="flex flex-col items-center gap-2 stage-btn" onclick="selectStage('escalation')">
+        <div id="sdot-escalation" class="sdot inactive">3</div>
+        <div class="text-center">
+          <div class="text-[10px] font-black text-stone-700 whitespace-nowrap">교전 확대</div>
+          <div class="text-[8px] text-stone-400 whitespace-nowrap">Escalation</div>
+        </div>
+      </div>
+      <div id="line-3" class="stage-line mb-4"></div>
+
+      <!-- Stage 4 -->
+      <div class="flex flex-col items-center gap-2 stage-btn" onclick="selectStage('negotiation')">
+        <div id="sdot-negotiation" class="sdot inactive">4</div>
+        <div class="text-center">
+          <div class="text-[10px] font-black text-stone-700 whitespace-nowrap">협상 신호</div>
+          <div class="text-[8px] text-stone-400 whitespace-nowrap">Negotiation</div>
+        </div>
+      </div>
+      <div id="line-4" class="stage-line mb-4"></div>
+
+      <!-- Stage 5 -->
+      <div class="flex flex-col items-center gap-2 stage-btn" onclick="selectStage('ceasefire')">
+        <div id="sdot-ceasefire" class="sdot inactive">5</div>
+        <div class="text-center">
+          <div class="text-[10px] font-black text-stone-700 whitespace-nowrap">휴전 선언</div>
+          <div class="text-[8px] text-stone-400 whitespace-nowrap">Ceasefire</div>
+        </div>
+      </div>
+      <div id="line-5" class="stage-line mb-4"></div>
+
+      <!-- Stage 6 -->
+      <div class="flex flex-col items-center gap-2 stage-btn" onclick="selectStage('peace')">
+        <div id="sdot-peace" class="sdot inactive">6</div>
+        <div class="text-center">
+          <div class="text-[10px] font-black text-stone-700 whitespace-nowrap">평화협정</div>
+          <div class="text-[8px] text-stone-400 whitespace-nowrap">Peace Deal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signal Box -->
+    <div id="signal-box" class="signal-box mt-6 rounded-2xl p-4 border" style="background:#fafaf9;border-color:#e7e5e4;">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1">
+          <div id="signal-stage" class="text-[9px] font-black tracking-widest uppercase text-stone-400 mb-1.5">단계를 선택하세요</div>
+          <div id="signal-desc" class="text-[12px] text-stone-500 leading-relaxed">좌측 타임라인에서 이벤트 단계를 클릭하면 해당 단계의 시그널과 수혜주가 표시됩니다.</div>
+        </div>
+        <div class="flex flex-col items-end gap-2 shrink-0">
+          <div id="signal-action" class="text-[10px] font-black tracking-wide text-stone-300 bg-stone-100 px-3 py-1.5 rounded-xl">—</div>
+          <div id="signal-risk" class="text-[9px] text-stone-400"></div>
+        </div>
+      </div>
+      <div id="signal-triggers" class="flex flex-wrap gap-1.5 mt-3 hidden"></div>
+    </div>
+  </div>
+
+  <!-- Stock Grid -->
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- 전쟁수혜주 -->
+    <div class="bg-white rounded-[1.75rem] border border-stone-200/60 shadow-sm p-6">
+      <div class="flex items-center gap-2 mb-5">
+        <div class="w-8 h-8 rounded-[0.75rem] bg-red-600 flex items-center justify-center">
+          <i data-lucide="swords" class="w-4 h-4 text-white"></i>
+        </div>
+        <div>
+          <div class="text-[14px] font-black text-stone-900">전쟁수혜주</div>
+          <div class="text-[9px] font-semibold text-stone-400 tracking-wide">War Beneficiaries</div>
+        </div>
+        <div id="war-active-count" class="ml-auto text-[9px] font-black tracking-widest uppercase text-stone-300 bg-stone-50 px-2.5 py-1 rounded-lg border border-stone-100">0 / 10 활성</div>
+      </div>
+
+      <!-- 방산 -->
+      <div class="sector-label">방산 · Defense</div>
+      <div class="flex flex-col gap-2 mb-4">
+        <div id="w-012450" class="stock-card p-3.5" data-side="war" data-ticker="012450">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">한화에어로스페이스</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">K9 자주포·천무 수출 주도</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">012450</div>
+              <div id="badge-012450" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="w-079550" class="stock-card p-3.5" data-side="war" data-ticker="079550">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">LIG넥스원</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">천궁·비궁 미사일 핵심, 수출 강세</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">079550</div>
+              <div id="badge-079550" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="w-064350" class="stock-card p-3.5" data-side="war" data-ticker="064350">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">현대로템</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">K2 전차 폴란드 수출, 지상 무기 대표</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">064350</div>
+              <div id="badge-064350" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="w-047810" class="stock-card p-3.5" data-side="war" data-ticker="047810">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">한국항공우주(KAI)</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">FA-50 수출 확대, 항공 방산 국산화</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">047810</div>
+              <div id="badge-047810" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="w-103140" class="stock-card p-3.5" data-side="war" data-ticker="103140">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">풍산</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">탄약 국내 독점 — 장기전 최대 수혜</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">103140</div>
+              <div id="badge-103140" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 에너지 -->
+      <div class="sector-label">에너지 · Energy</div>
+      <div class="flex flex-col gap-2 mb-4">
+        <div id="w-036460" class="stock-card p-3.5" data-side="war" data-ticker="036460">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">한국가스공사</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">LNG 공급망 차질 시 가격 급등 직결</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">036460</div>
+              <div id="badge-036460" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="w-010950" class="stock-card p-3.5" data-side="war" data-ticker="010950">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">S-Oil</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">중동 공급 차질 시 정제마진 확대</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">010950</div>
+              <div id="badge-010950" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 사이버보안 -->
+      <div class="sector-label">사이버보안 · Cyber Security</div>
+      <div class="flex flex-col gap-2 mb-4">
+        <div id="w-053800" class="stock-card p-3.5" data-side="war" data-ticker="053800">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">안랩</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">사이버 공격 급증 — 국내 보안 1위</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">053800</div>
+              <div id="badge-053800" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="w-136540" class="stock-card p-3.5" data-side="war" data-ticker="136540">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">윈스</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">국방 네트워크 보안, 긴장 시 수주↑</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">136540</div>
+              <div id="badge-136540" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 식량·원자재 -->
+      <div class="sector-label">식량·원자재 · Commodities</div>
+      <div class="flex flex-col gap-2">
+        <div id="w-002630" class="stock-card p-3.5" data-side="war" data-ticker="002630">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">팜한농</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">공급망 차단 → 식량 안보 테마 부각</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">002630</div>
+              <div id="badge-002630" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 휴전수혜주 -->
+    <div class="bg-white rounded-[1.75rem] border border-stone-200/60 shadow-sm p-6">
+      <div class="flex items-center gap-2 mb-5">
+        <div class="w-8 h-8 rounded-[0.75rem] bg-blue-600 flex items-center justify-center">
+          <i data-lucide="handshake" class="w-4 h-4 text-white"></i>
+        </div>
+        <div>
+          <div class="text-[14px] font-black text-stone-900">휴전수혜주</div>
+          <div class="text-[9px] font-semibold text-stone-400 tracking-wide">Ceasefire Beneficiaries</div>
+        </div>
+        <div id="ceasefire-active-count" class="ml-auto text-[9px] font-black tracking-widest uppercase text-stone-300 bg-stone-50 px-2.5 py-1 rounded-lg border border-stone-100">0 / 10 활성</div>
+      </div>
+
+      <!-- 건설·재건 -->
+      <div class="sector-label">건설·재건 · Reconstruction</div>
+      <div class="flex flex-col gap-2 mb-4">
+        <div id="c-000720" class="stock-card p-3.5" data-side="ceasefire" data-ticker="000720">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">현대건설</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">중동·이라크 재건 경험, 수혜 최대</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">000720</div>
+              <div id="badge-000720" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="c-006360" class="stock-card p-3.5" data-side="ceasefire" data-ticker="006360">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">GS건설</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">플랜트 전문성, 에너지 인프라 복구</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">006360</div>
+              <div id="badge-006360" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="c-047040" class="stock-card p-3.5" data-side="ceasefire" data-ticker="047040">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">대우건설</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">해외 주거·인프라 재건 경험</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">047040</div>
+              <div id="badge-047040" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 해운·물류 -->
+      <div class="sector-label">해운·물류 · Shipping</div>
+      <div class="flex flex-col gap-2 mb-4">
+        <div id="c-011200" class="stock-card p-3.5" data-side="ceasefire" data-ticker="011200">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">HMM</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">봉쇄 해제 후 교역 회복, 운임 급반등</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">011200</div>
+              <div id="badge-011200" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="c-028670" class="stock-card p-3.5" data-side="ceasefire" data-ticker="028670">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">팬오션</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">재건 원자재 해운 수요 수혜</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">028670</div>
+              <div id="badge-028670" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 관광·항공 -->
+      <div class="sector-label">관광·항공 · Tourism</div>
+      <div class="flex flex-col gap-2 mb-4">
+        <div id="c-039130" class="stock-card p-3.5" data-side="ceasefire" data-ticker="039130">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">하나투어</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">분쟁지역 관광 재개, 억눌린 수요 폭발</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">039130</div>
+              <div id="badge-039130" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="c-080160" class="stock-card p-3.5" data-side="ceasefire" data-ticker="080160">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">모두투어</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">패키지 여행 수요 회복 수혜</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">080160</div>
+              <div id="badge-080160" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="c-089590" class="stock-card p-3.5" data-side="ceasefire" data-ticker="089590">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">제주항공</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">노선 복원 + 탑승률 회복, LCC 대표</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">089590</div>
+              <div id="badge-089590" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 철강·소재 -->
+      <div class="sector-label">철강·소재 · Steel</div>
+      <div class="flex flex-col gap-2">
+        <div id="c-005490" class="stock-card p-3.5" data-side="ceasefire" data-ticker="005490">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">POSCO홀딩스</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">재건 인프라 핵심 소재, 장기 수요↑</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">005490</div>
+              <div id="badge-005490" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="c-004020" class="stock-card p-3.5" data-side="ceasefire" data-ticker="004020">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[12px] font-bold text-stone-800 leading-snug">현대제철</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">건설용 철강재 — 평화협정 후 최대 수혜</div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              <div class="text-[9px] font-black text-stone-300 tabular-nums">004020</div>
+              <div id="badge-004020" class="text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="text-center text-[9px] text-stone-300 font-semibold tracking-widest uppercase pb-4">
+    파토스 프로젝트 · DART Insight 시그널 확장 연구 · 투자 참고용 — 최종 투자 판단은 본인 책임
+  </div>
+</main>
+
+<script>
+const DATA = {
+  stages: {
+    tension:     { label:'긴장 고조', color:'#f97316', bg:'#fff7ed', border:'#fed7aa',
+                   signal:'방산 선취매 구간 — 본격 교전 전 저점 매수 기회. 에너지 공급망 리스크 주목.',
+                   action:'BUY 방산 / WATCH 에너지', risk:'지정학 해소 시 급락 주의',
+                   desc:'외교 갈등 심화, 군사 훈련 확대, 국경 분쟁 발생',
+                   triggers:['외교 단절', '군사 훈련 확대', '국경 분쟁', '제재 발동'] },
+    outbreak:    { label:'교전 발발', color:'#ef4444', bg:'#fef2f2', border:'#fecaca',
+                   signal:'방산 본격 상승 — 최대 수혜 구간. 사이버보안 동반 급등. 휴전주는 전량 관망.',
+                   action:'HOLD 방산 / BUY 사이버보안', risk:'단기 급등 후 차익실현 주의',
+                   desc:'실제 군사 충돌 시작, 전면전 선포 또는 국지전 발생',
+                   triggers:['군사 충돌', '전쟁 선포', '사이버 공격 급증', '에너지 루트 차단'] },
+    escalation:  { label:'교전 확대', color:'#b91c1c', bg:'#fef2f2', border:'#fca5a5',
+                   signal:'에너지·식량주 추가 편입. 방산 고점 근접 — 추가 매수보다 보유 전략.',
+                   action:'HOLD 방산 / ADD 에너지·식량', risk:'고점 신호 감지 시 분할 매도',
+                   desc:'전선 확대, 동맹국 참전, 공급망 전면 붕괴',
+                   triggers:['동맹국 참전', '핵 위협', '에너지 봉쇄', '식량 공급망 차단'] },
+    negotiation: { label:'협상 신호', color:'#ca8a04', bg:'#fefce8', border:'#fde68a',
+                   signal:'방산 차익실현 구간. 건설·해운 선취매 시작 — 재건 기대감 선반영. 포트폴리오 전환 타이밍.',
+                   action:'SELL 방산 / BUY 건설·해운', risk:'협상 결렬 시 전쟁주 재반등',
+                   desc:'평화 협상 시작, 중재국 개입, 임시 교전 중단',
+                   triggers:['평화 협상 개시', '중재국 개입', '교전 중단 합의', '포로 교환'] },
+    ceasefire:   { label:'휴전 선언', color:'#16a34a', bg:'#f0fdf4', border:'#86efac',
+                   signal:'휴전주 본격 상승 — 건설·관광·해운 동시 급등. 방산은 단기 낙폭 소화 후 바닥 탐색.',
+                   action:'BUY 건설·관광·해운 / WATCH 방산', risk:'휴전 파기 시 급락 리스크',
+                   desc:'공식 휴전 선언, 병력 후퇴, 인도주의 지원 개시',
+                   triggers:['휴전 협정 서명', '군 철수', '인도주의 회랑 개설', '재건 펀드 논의'] },
+    peace:       { label:'평화협정', color:'#2563eb', bg:'#eff6ff', border:'#93c5fd',
+                   signal:'재건 수혜 최대 구간 — 철강·건설·해운 장기 상승. 관광 폭발적 회복.',
+                   action:'HOLD 건설·철강·해운 / BUY 관광', risk:'재건 기대 과대 선반영 주의',
+                   desc:'항구적 평화협정 체결, 대규모 재건 사업 본격화',
+                   triggers:['평화협정 서명', '제재 해제', '대규모 재건 계약', '관광 루트 복원'] }
+  },
+  active: {
+    war: {
+      '012450': { tension:'M', outbreak:'H', escalation:'H', negotiation:'L' },
+      '079550': { tension:'M', outbreak:'H', escalation:'H' },
+      '064350': { outbreak:'H', escalation:'H', negotiation:'L' },
+      '047810': { tension:'M', outbreak:'H', escalation:'H' },
+      '103140': { outbreak:'H', escalation:'H' },
+      '036460': { tension:'M', outbreak:'M', escalation:'M' },
+      '010950': { tension:'L', escalation:'M' },
+      '053800': { tension:'M', outbreak:'M', escalation:'M' },
+      '136540': { tension:'M', outbreak:'M' },
+      '002630': { outbreak:'L', escalation:'L' }
+    },
+    ceasefire: {
+      '000720': { negotiation:'M', ceasefire:'H', peace:'H' },
+      '006360': { ceasefire:'H', peace:'H' },
+      '047040': { ceasefire:'M', peace:'H' },
+      '011200': { negotiation:'M', ceasefire:'H', peace:'H' },
+      '028670': { negotiation:'M', ceasefire:'M', peace:'M' },
+      '039130': { ceasefire:'H', peace:'H' },
+      '080160': { ceasefire:'M', peace:'H' },
+      '089590': { ceasefire:'M', peace:'H' },
+      '005490': { ceasefire:'M', peace:'H' },
+      '004020': { peace:'H' }
+    }
+  }
+};
+
+const STAGE_ORDER = ['tension','outbreak','escalation','negotiation','ceasefire','peace'];
+let currentStage = null;
+
+const STRENGTH_LABEL = { H:'강', M:'중', L:'약' };
+const STRENGTH_WAR_COLOR = { H:'bg-red-100 text-red-600', M:'bg-orange-50 text-orange-500', L:'bg-stone-100 text-stone-400' };
+const STRENGTH_CF_COLOR  = { H:'bg-blue-100 text-blue-600', M:'bg-sky-50 text-sky-500', L:'bg-stone-100 text-stone-400' };
+
+function selectStage(stageId) {
+  currentStage = stageId;
+  const s = DATA.stages[stageId];
+  const stageIdx = STAGE_ORDER.indexOf(stageId);
+
+  // Update stage dots
+  STAGE_ORDER.forEach((id, i) => {
+    const dot = document.getElementById('sdot-' + id);
+    const line = document.getElementById('line-' + (i + 1));
+    if (i <= stageIdx) {
+      dot.classList.remove('inactive');
+      dot.classList.add('active');
+      dot.style.background = s.color;
+    } else {
+      dot.classList.remove('active');
+      dot.classList.add('inactive');
+      dot.style.background = '';
+    }
+    if (line) {
+      line.style.background = i < stageIdx ? s.color : '#e7e5e4';
+    }
+  });
+
+  // Signal box
+  const box = document.getElementById('signal-box');
+  box.style.background = s.bg;
+  box.style.borderColor = s.border;
+  box.classList.remove('fade-up');
+  void box.offsetWidth;
+  box.classList.add('fade-up');
+
+  document.getElementById('signal-stage').textContent = s.label + ' · ' + stageId.toUpperCase();
+  document.getElementById('signal-stage').style.color = s.color;
+  document.getElementById('signal-desc').textContent = s.signal;
+  document.getElementById('signal-action').textContent = s.action;
+  document.getElementById('signal-action').style.background = s.bg;
+  document.getElementById('signal-action').style.borderColor = s.border;
+  document.getElementById('signal-action').style.color = s.color;
+  document.getElementById('signal-action').style.border = '1.5px solid ' + s.border;
+  document.getElementById('signal-risk').textContent = '⚠ ' + s.risk;
+
+  // Triggers
+  const triggersEl = document.getElementById('signal-triggers');
+  triggersEl.innerHTML = s.triggers.map(t =>
+    `<span class="text-[9px] font-semibold px-2.5 py-1 rounded-full" style="background:${s.bg};border:1px solid ${s.border};color:${s.color}">${t}</span>`
+  ).join('');
+  triggersEl.classList.remove('hidden');
+
+  // Update stock cards
+  let warActive = 0, cfActive = 0;
+
+  Object.entries(DATA.active.war).forEach(([ticker, stages]) => {
+    const card = document.getElementById('w-' + ticker);
+    const badge = document.getElementById('badge-' + ticker);
+    if (!card) return;
+    const str = stages[stageId];
+    if (str) {
+      card.className = `stock-card p-3.5 active-war strength-${str}`;
+      badge.textContent = STRENGTH_LABEL[str];
+      badge.className = `text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${STRENGTH_WAR_COLOR[str]}`;
+      warActive++;
+    } else {
+      card.className = 'stock-card p-3.5';
+      badge.textContent = '—';
+      badge.className = 'text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300';
+    }
+  });
+
+  Object.entries(DATA.active.ceasefire).forEach(([ticker, stages]) => {
+    const card = document.getElementById('c-' + ticker);
+    const badge = document.getElementById('badge-' + ticker);
+    if (!card) return;
+    const str = stages[stageId];
+    if (str) {
+      card.className = `stock-card p-3.5 active-ceasefire strength-${str}`;
+      badge.textContent = STRENGTH_LABEL[str];
+      badge.className = `text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${STRENGTH_CF_COLOR[str]}`;
+      cfActive++;
+    } else {
+      card.className = 'stock-card p-3.5';
+      badge.textContent = '—';
+      badge.className = 'text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-stone-100 text-stone-300';
+    }
+  });
+
+  document.getElementById('war-active-count').textContent = `${warActive} / 10 활성`;
+  document.getElementById('war-active-count').style.color = warActive > 0 ? '#ef4444' : '#a8a29e';
+  document.getElementById('ceasefire-active-count').textContent = `${cfActive} / 10 활성`;
+  document.getElementById('ceasefire-active-count').style.color = cfActive > 0 ? '#2563eb' : '#a8a29e';
+}
+
+lucide.createIcons();
+selectStage('tension');
+</script>
+</body>
+</html>
