@@ -31,6 +31,10 @@
                 <a href="tech4.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
                 <a href="tech5.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
                 <a href="tech6.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 수집</a>
+                <a href="seminar.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition-colors">세미나</a>
+                <a href="seminar_slide.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-800 text-white hover:bg-slate-700 transition-colors">슬라이드</a>
+                <span class="w-px h-5 bg-slate-200 mx-0.5 shrink-0"></span>
+                <a href="dartinsight_ontology.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors">다트인사이트</a>
             </div>
         </div>
     </nav>
@@ -302,34 +306,34 @@
             </div>
         </div>
 
-        <!-- Layer 4: Audit Trail (미구현) -->
-        <div class="w-full relative bg-white rounded-2xl border border-amber-200 shadow-sm p-6 sm:p-8 mt-2 opacity-70">
-            <div class="absolute -top-3.5 left-8 bg-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide flex items-center gap-1.5">
-                4. 감사 추적 (Decision Audit Trail)
-                <span class="text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded">미구현</span>
+        <!-- Layer 4: Audit Trail (구현됨) -->
+        <div class="w-full relative bg-white rounded-2xl border border-emerald-200 shadow-sm p-6 sm:p-8 mt-2">
+            <div class="absolute -top-3.5 left-8 bg-emerald-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide flex items-center gap-1.5">
+                4. 감사 추적 + Action Framework
+                <span class="text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded">구현됨 ✓</span>
             </div>
 
             <div class="flex flex-col sm:flex-row items-start gap-6 mt-2">
-                <div class="p-4 bg-amber-50 text-amber-500 rounded-xl shrink-0">
+                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
                     <i data-lucide="clipboard-list" class="w-10 h-10"></i>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-lg font-bold text-slate-800 mb-2">결정 로그 DB</h3>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">결정 로그 DB + Action Framework L5</h3>
                     <p class="text-slate-500 text-sm leading-relaxed mb-4">
-                        모든 AI 판단에 <strong>"왜 이 결정을 내렸나"</strong>를 함께 저장합니다. 잘못된 결정을 역추적하여 추론 규칙을 개선하는 원료입니다. 팔란티어 FDE 모델의 핵심 원칙.
+                        모든 결정에 <strong>"왜 이 결정을 내렸나"</strong>를 함께 저장합니다. 4가지 액션 타입, 전제조건 자동 검증, 오버라이드 플래그, 결정 사유 — localStorage 기반 감사로그로 완전 구현됩니다.
                     </p>
                     <div class="grid sm:grid-cols-3 gap-3">
-                        <div class="bg-amber-50/50 border border-amber-200 p-3 rounded-lg text-center">
-                            <div class="text-xs font-bold text-amber-800 mb-1">결정 타임스탬프</div>
-                            <div class="text-[10px] text-amber-600 font-mono">decided_at</div>
+                        <div class="bg-emerald-50/50 border border-emerald-200 p-3 rounded-lg text-center">
+                            <div class="text-xs font-bold text-emerald-800 mb-1">결정 타임스탬프</div>
+                            <div class="text-[10px] text-emerald-600 font-mono">decided_at ✓</div>
                         </div>
-                        <div class="bg-amber-50/50 border border-amber-200 p-3 rounded-lg text-center">
-                            <div class="text-xs font-bold text-amber-800 mb-1">적용된 규칙 ID</div>
-                            <div class="text-[10px] text-amber-600 font-mono">rule_triggered</div>
+                        <div class="bg-emerald-50/50 border border-emerald-200 p-3 rounded-lg text-center">
+                            <div class="text-xs font-bold text-emerald-800 mb-1">전제조건 + 규칙 ID</div>
+                            <div class="text-[10px] text-emerald-600 font-mono">rule_triggered ✓</div>
                         </div>
-                        <div class="bg-amber-50/50 border border-amber-200 p-3 rounded-lg text-center">
-                            <div class="text-xs font-bold text-amber-800 mb-1">인간 최종 승인</div>
-                            <div class="text-[10px] text-amber-600 font-mono">human_approved</div>
+                        <div class="bg-emerald-50/50 border border-emerald-200 p-3 rounded-lg text-center">
+                            <div class="text-xs font-bold text-emerald-800 mb-1">인간 최종 승인</div>
+                            <div class="text-[10px] text-emerald-600 font-mono">human_approved ✓</div>
                         </div>
                     </div>
                 </div>
@@ -342,33 +346,33 @@
             <i data-lucide="chevron-down" class="w-5 h-5 text-amber-400 -mt-2 bg-slate-50 rounded-full z-10"></i>
         </div>
 
-        <!-- Layer 5: Feedback Loop (미구현) -->
-        <div class="w-full relative bg-white rounded-2xl border border-amber-200 shadow-sm p-6 sm:p-8 mt-2 opacity-70">
-            <div class="absolute -top-3.5 left-8 bg-amber-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide flex items-center gap-1.5">
+        <!-- Layer 5: Feedback Loop (구현됨) -->
+        <div class="w-full relative bg-white rounded-2xl border border-emerald-200 shadow-sm p-6 sm:p-8 mt-2">
+            <div class="absolute -top-3.5 left-8 bg-emerald-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide flex items-center gap-1.5">
                 5. 피드백 루프 (Outcome Feedback Loop)
-                <span class="text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded">미구현</span>
+                <span class="text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded">구현됨 ✓</span>
             </div>
 
             <div class="flex flex-col sm:flex-row items-start gap-6 mt-2">
-                <div class="p-4 bg-amber-50 text-amber-600 rounded-xl shrink-0">
+                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
                     <i data-lucide="refresh-cw" class="w-10 h-10"></i>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-lg font-bold text-slate-800 mb-2">암묵지 자동 업데이트 루프</h3>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">결과 기록 → 가중치 재보정 → 모델 진화</h3>
                     <p class="text-slate-500 text-sm leading-relaxed mb-4">
-                        실제 화재 결과(생존율, 대피 성공/실패)가 레이어 3의 추론 규칙으로 역류합니다. 이 루프가 완성되어야 <strong>암묵지가 데이터로 스스로 진화</strong>하는 시스템이 됩니다.
+                        실행 결정의 TP/FP/FN 결과를 기록하고, 누적 패턴을 분석하여 <strong>5인자 가중치 재보정 권고</strong>를 생성합니다. 피드백 루프가 완성되어 <strong>운영하면서 스스로 정확해지는 온톨로지</strong>가 됩니다.
                     </p>
-                    <div class="flex items-center bg-slate-50 border border-slate-200 p-4 rounded-xl gap-4 flex-wrap">
+                    <div class="flex items-center bg-emerald-50 border border-emerald-200 p-4 rounded-xl gap-4 flex-wrap">
                         <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
-                            <i data-lucide="activity" class="w-4 h-4 text-red-500"></i> 실화재 결과 데이터
+                            <i data-lucide="activity" class="w-4 h-4 text-red-500"></i> 결과 기록 (TP/FP/FN)
                         </div>
-                        <i data-lucide="arrow-right" class="w-5 h-5 text-slate-300"></i>
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-emerald-400"></i>
                         <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
-                            <i data-lucide="brain-circuit" class="w-4 h-4 text-indigo-500"></i> 규칙 가중치 보정
+                            <i data-lucide="brain-circuit" class="w-4 h-4 text-violet-500"></i> 가중치 재보정 엔진
                         </div>
-                        <i data-lucide="arrow-right" class="w-5 h-5 text-slate-300"></i>
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-emerald-400"></i>
                         <div class="flex items-center gap-2 text-sm font-bold text-emerald-700">
-                            <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i> 레이어 3 자동 갱신
+                            <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i> 취약도 재산출
                         </div>
                     </div>
                 </div>

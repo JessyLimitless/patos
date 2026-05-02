@@ -27,6 +27,10 @@
                 <a href="tech4.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
                 <a href="tech5.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
                 <a href="tech6.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 수집</a>
+                <a href="seminar.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition-colors">세미나</a>
+                <a href="seminar_slide.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-800 text-white hover:bg-slate-700 transition-colors">슬라이드</a>
+                <span class="w-px h-5 bg-slate-200 mx-0.5 shrink-0"></span>
+                <a href="dartinsight_ontology.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors">다트인사이트</a>
             </div>
         </div>
     </nav>
@@ -42,6 +46,10 @@
                 PATOS v5 Agentic Loop 로드맵
             </h1>
             <p class="text-slate-500 text-lg">세 가지 기술 한계를 넘는 자율 재구성 대응 시스템 설계</p>
+            <div class="mt-4 inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                Action Framework · Evidence Chain · 피드백 루프 · 모델 재보정 — 2026-05 구현 완료
+            </div>
         </div>
 
         <div class="w-full max-w-4xl flex flex-col gap-6">
@@ -245,6 +253,51 @@
                 </div>
             </div>
 
+            <!-- 구현 완료 현황 -->
+            <div class="w-full relative bg-white rounded-2xl border border-emerald-200 shadow-sm p-6 sm:p-8">
+                <div class="absolute -top-3.5 left-8 bg-emerald-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm tracking-wide">
+                    현재 구현 완료 (2026-05) — 의사결정 루프 전 구간
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="send" class="w-4 h-4 text-emerald-600"></i>
+                            <span class="text-xs font-bold text-emerald-700">Action Framework</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">취약도 기준 4종 액션 선택 → 사전조건 검증 → 확인 모달 → 감사로그 자동 기록</p>
+                        <div class="mt-2 text-[10px] font-mono bg-white border border-emerald-100 rounded px-2 py-1 text-emerald-700">localStorage 영속화</div>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="git-branch" class="w-4 h-4 text-emerald-600"></i>
+                            <span class="text-xs font-bold text-emerald-700">Evidence Chain</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">5개 TypeDB 규칙 실시간 평가 → L1 원시사실 → L2 발화규칙 → L4 최종판단 3단계 시각화</p>
+                        <div class="mt-2 text-[10px] font-mono bg-white border border-emerald-100 rounded px-2 py-1 text-emerald-700">computeRules() 실 데이터</div>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="clipboard-check" class="w-4 h-4 text-emerald-600"></i>
+                            <span class="text-xs font-bold text-emerald-700">Feedback Loop</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">실행 결과 TP·FP·FN 기록 → 정확도 추적 → 판단 근거 소급 확인 가능</p>
+                        <div class="mt-2 text-[10px] font-mono bg-white border border-emerald-100 rounded px-2 py-1 text-emerald-700">outcome 기록 즉시 반영</div>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-emerald-600"></i>
+                            <span class="text-xs font-bold text-emerald-700">모델 재보정 엔진</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">FP·FN 패턴 분석 → 5인자 가중치 자동 조정 → 정규화 → 취약도 순위 재산출 미리보기</p>
+                        <div class="mt-2 text-[10px] font-mono bg-white border border-emerald-100 rounded px-2 py-1 text-emerald-700">3건 이상 시 자동 활성화</div>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                    <i data-lucide="external-link" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+                    <span class="text-xs text-emerald-800">실서비스 확인: <a href="jeonnam_fire.html" class="font-bold underline">jeonnam_fire.html</a> → 화재대응 / 온톨로지 DB / 취약지역 지도 탭</span>
+                </div>
+            </div>
+
             <!-- v4 vs v5 comparison -->
             <div class="w-full bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
                 <h3 class="font-bold text-slate-800 mb-5 flex items-center gap-2">
@@ -255,35 +308,41 @@
                         <thead>
                             <tr class="border-b border-slate-200">
                                 <th class="text-left pb-3 pr-4 text-xs font-bold text-slate-400 uppercase tracking-wider">항목</th>
-                                <th class="text-left pb-3 pr-4 text-xs font-bold text-slate-400 uppercase tracking-wider">v4.4 현재</th>
+                                <th class="text-left pb-3 pr-4 text-xs font-bold text-slate-400 uppercase tracking-wider">v4.4 이전</th>
+                                <th class="text-left pb-3 pr-4 text-xs font-bold text-emerald-600 uppercase tracking-wider">현재 v4.5 ✓</th>
                                 <th class="text-left pb-3 text-xs font-bold text-violet-500 uppercase tracking-wider">v5 목표</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             <tr>
-                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">시나리오 생성</td>
-                                <td class="py-3 pr-4 text-xs text-slate-400">수동 조건 코딩</td>
-                                <td class="py-3 text-xs font-semibold text-violet-700">매뉴얼 → LLM 자동 추출</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">의사결정</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">취약도 점수 표시만</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-emerald-700">액션 실행 + 감사로그</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">이벤트마다 자동 재계획</td>
                             </tr>
                             <tr>
-                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">대응 계획</td>
-                                <td class="py-3 pr-4 text-xs text-slate-400">1회 실행 후 고정</td>
-                                <td class="py-3 text-xs font-semibold text-violet-700">이벤트마다 자동 재계획</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">판단 근거</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">점수만 표시, 근거 없음</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-emerald-700">5규칙 Evidence Chain</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">LLM 자동 규칙 추출</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">피드백</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">없음</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-emerald-700">TP/FP/FN 기록 + 정확도</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">자동 온라인 러닝</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">가중치</td>
+                                <td class="py-3 pr-4 text-xs text-slate-400">고정 (코드 수정 필요)</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-emerald-700">FP/FN 패턴 기반 재보정</td>
+                                <td class="py-3 text-xs font-semibold text-violet-700">실시간 연속 업데이트</td>
                             </tr>
                             <tr>
                                 <td class="py-3 pr-4 text-xs font-semibold text-slate-600">모델 연동</td>
                                 <td class="py-3 pr-4 text-xs text-slate-400">독립 실행 후 수동 합산</td>
+                                <td class="py-3 pr-4 text-xs font-semibold text-emerald-700">TypeDB 통합 추론</td>
                                 <td class="py-3 text-xs font-semibold text-violet-700">통합 추론 레이어 경유</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">새 변수 처리</td>
-                                <td class="py-3 pr-4 text-xs text-slate-400">불가 (재시작 필요)</td>
-                                <td class="py-3 text-xs font-semibold text-violet-700">&lt; 3초 내 자동 반영</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 pr-4 text-xs font-semibold text-slate-600">규칙 업데이트</td>
-                                <td class="py-3 pr-4 text-xs text-slate-400">코드 수정 후 재배포</td>
-                                <td class="py-3 text-xs font-semibold text-violet-700">매뉴얼 파일 교체만으로 반영</td>
                             </tr>
                         </tbody>
                     </table>

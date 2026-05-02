@@ -31,6 +31,10 @@
                 <a href="tech4.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">Re-planning</a>
                 <a href="tech5.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">핵심 질문</a>
                 <a href="tech6.html" class="px-3 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:bg-slate-100 transition-colors">데이터 수집</a>
+                <a href="seminar.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition-colors">세미나</a>
+                <a href="seminar_slide.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-800 text-white hover:bg-slate-700 transition-colors">슬라이드</a>
+                <span class="w-px h-5 bg-slate-200 mx-0.5 shrink-0"></span>
+                <a href="dartinsight_ontology.html" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors">다트인사이트</a>
             </div>
         </div>
     </nav>
@@ -138,6 +142,494 @@
                     <div class="text-base font-black text-emerald-400">15초~</div>
                     <div class="text-[10px] text-emerald-300 mt-1 leading-relaxed">도보 선발대<br>ARS 발령</div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scenario Narrative (A안) -->
+    <div class="w-full max-w-4xl mb-10">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-amber-50 text-amber-600 rounded-xl">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">대응 시나리오 — 상황 서술</h2>
+                <p class="text-slate-500 text-xs mt-0.5">소방청 화재 사고 조사 보고서 및 대응 매뉴얼 발췌</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-3 bg-slate-50 border-b border-slate-100 flex items-center gap-3 flex-wrap">
+                <span class="text-[10px] font-bold text-white bg-red-600 px-2.5 py-1 rounded-full uppercase tracking-widest">소방청 화재 조사 보고서</span>
+                <span class="text-[10px] text-slate-400">FIRE-2026-001 · 전남 고흥군 도양읍 소록마을</span>
+            </div>
+            <div class="p-6 sm:p-8">
+                <blockquote class="text-sm text-slate-700 leading-relaxed border-l-4 border-red-200 pl-5 mb-6">
+                    2026년 2월 심야 시간대, 전남 고흥군 소록마을 내 샌드위치 패널 구조의 단독주택에서 전기적 요인으로 추정되는 화재가 발생하였다. 발화 지점은 거실이었으며, 강풍(서풍 8m/s)으로 인해 인근 목조 가옥으로 화염이 빠르게 전이되었다. 해당 가구에는 80대 고령자 1인이 거주 중이었으나, 평소 난청으로 인해 마을 방송 및 재난문자를 인지하지 못해 대피가 지연되었다.
+                </blockquote>
+                <div class="bg-red-50 border border-red-100 rounded-xl p-4 mb-6">
+                    <div class="text-[10px] font-bold text-red-500 uppercase tracking-widest mb-2">이 시나리오가 PATOS의 출발점인 이유</div>
+                    <div class="grid sm:grid-cols-3 gap-3 text-xs text-red-800">
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-400 font-bold shrink-0">①</span>
+                            <span>표준 대응(소방차 12분)으로는 생존 불가 — 플래시오버 2.5분, HCN 치사 1.5분</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-400 font-bold shrink-0">②</span>
+                            <span>농어촌 복합 취약성 — 좁은 골목·독거노인·난청·야간·강풍이 동시에 작용</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-400 font-bold shrink-0">③</span>
+                            <span>베테랑 소방관의 판단이 결정적 — 이 판단을 15초 안에 자동화하는 것이 PATOS 목표</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                        <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">신고 시각</div>
+                        <div class="text-base font-black text-slate-800">03:14</div>
+                        <div class="text-[10px] text-slate-500">심야 수면 중</div>
+                    </div>
+                    <div class="bg-orange-50 rounded-xl p-3 text-center border border-orange-100">
+                        <div class="text-[10px] text-orange-400 uppercase tracking-wider mb-1">건물 구조</div>
+                        <div class="text-base font-black text-orange-600">샌드위치 패널</div>
+                        <div class="text-[10px] text-orange-500">접근로 1.8m — 차량 불가</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                        <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">기상 조건</div>
+                        <div class="text-base font-black text-slate-700">서풍 8m/s</div>
+                        <div class="text-[10px] text-slate-500">인접 목조가옥 전이 위험</div>
+                    </div>
+                    <div class="bg-violet-50 rounded-xl p-3 text-center border border-violet-100">
+                        <div class="text-[10px] text-violet-400 uppercase tracking-wider mb-1">최우선 구조</div>
+                        <div class="text-base font-black text-violet-700">마순례 84세</div>
+                        <div class="text-[10px] text-violet-500">난청 · 독거 · 거동불편</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Visualization (B안) -->
+    <div class="w-full max-w-4xl mb-10">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-amber-50 text-amber-600 rounded-xl">
+                <i data-lucide="clock" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">베테랑 소방관의 판단 타임라인</h2>
+                <p class="text-slate-500 text-xs mt-0.5">FIRE-2026-001 · 이 판단 흐름이 PATOS가 자동화해야 할 정답 기준선</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+
+            <!-- 기준선 설명 -->
+            <div class="bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 mb-6 flex items-start gap-3">
+                <i data-lucide="user" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                <p class="text-xs text-amber-800 leading-relaxed">
+                    <span class="font-bold">베테랑 소방관</span>은 신고 접수 후 15초 안에 아래 모든 판단을 머릿속에서 완료한다.
+                    이 판단은 <span class="font-semibold">기억(마을 지식) · 관계(사람-건물-자원) · 경험(재질·기상 계산)</span> 3가지로 구성된다.
+                    PATOS의 목표는 이 판단을 그대로 자동화하는 것이다.
+                </p>
+            </div>
+
+            <div class="space-y-0">
+
+                <!-- T+0 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-red-500">T+0</span>
+                        <div class="text-[9px] text-slate-400">03:14</div>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow ring-2 ring-red-100 mt-1 shrink-0 flex items-center justify-center">
+                            <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                        </div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[3rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-5">
+                        <div class="text-sm font-bold text-slate-800 mb-0.5">신고 접수</div>
+                        <div class="text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 leading-relaxed">
+                            "마 씨 집이면 23-7번지. 샌드위치 패널이고 골목이 좁아. 귀가 어두우셔서 방송은 못 들으실 거야."
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1.5">판단 근거: <span class="text-slate-600">마을 주소 암기 + 마순례씨 난청 사전 인지</span></div>
+                    </div>
+                </div>
+
+                <!-- T+7초 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-orange-500">T+7초</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-orange-400 border-2 border-white shadow mt-1 shrink-0"></div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[3rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-5">
+                        <div class="text-sm font-bold text-slate-800 mb-0.5">건물 조회</div>
+                        <div class="text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 leading-relaxed">
+                            "접근로 1.8m. 소방차 절대 못 들어가. 도보로 들어가야 해. 들것도 힘들다."
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1.5">판단 근거: <span class="text-slate-600">골목 폭 경험치 — 차량 진입 한계 3m 기준 즉시 계산</span></div>
+                    </div>
+                </div>
+
+                <!-- T+10초 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-red-500">T+10초</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow mt-1 shrink-0"></div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[3rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-5">
+                        <div class="text-sm font-bold text-slate-800 mb-0.5">거주자 확인</div>
+                        <div class="text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 leading-relaxed">
+                            "84세 귀 어두우시고 혼자. 서울 자녀 연락은 소용없어. 이장한테 직접 전화해야 해."
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1.5">판단 근거: <span class="text-slate-600">서울(150km) 자녀는 즉시 대응 불가 → 마을 내 자원(이장)으로 대체</span></div>
+                    </div>
+                </div>
+
+                <!-- T+13초 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-orange-500">T+13초</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-orange-400 border-2 border-white shadow mt-1 shrink-0"></div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[3rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-5">
+                        <div class="text-sm font-bold text-slate-800 mb-0.5">화재 계산</div>
+                        <div class="text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 leading-relaxed">
+                            "바람 세고 건조. 샌드위치 패널이면 2~3분이면 끝나. 지금 바로 발령 안 하면 늦는다."
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1.5">판단 근거: <span class="text-slate-600">재질별 연소 속도 경험 + 풍속·습도 조합 → 플래시오버 2.5분 계산</span></div>
+                    </div>
+                </div>
+
+                <!-- T+15초 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-slate-700">T+15초</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-5 h-5 rounded-full bg-slate-700 border-2 border-white shadow mt-0.5 shrink-0 flex items-center justify-center">
+                            <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                        </div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[3rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-5">
+                        <div class="text-sm font-bold text-slate-800 mb-1">인접 위험 + 초동 발령</div>
+                        <div class="text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 leading-relaxed mb-2">
+                            "바람이 BLDG-006 방향. 조만수 씨도 귀 어두우신데. 동시에 경보 넣어."
+                        </div>
+                        <div class="text-[10px] text-slate-400">판단 근거: <span class="text-slate-600">풍향 + 이웃 주민 취약성 동시 기억 → 2차 피해자 선제 대응</span></div>
+                        <div class="mt-2 inline-flex items-center gap-1.5 bg-slate-800 text-white text-[10px] font-bold px-3 py-1 rounded-full">
+                            <i data-lucide="target" class="w-3 h-3"></i>
+                            PATOS가 재현해야 할 판단의 끝
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 구분선 -->
+                <div class="flex gap-0 items-center my-1">
+                    <div class="w-20 shrink-0"></div>
+                    <div class="w-6 shrink-0 flex justify-center">
+                        <div class="w-px h-4 bg-slate-200"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-2">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">이후 현장 대응 (소방관 직접 지휘)</span>
+                    </div>
+                </div>
+
+                <!-- T+2분 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-slate-400">T+2분</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-3 h-3 rounded-full bg-slate-300 border-2 border-white shadow mt-1.5 shrink-0"></div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[2.5rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-4">
+                        <div class="text-sm font-bold text-slate-500 mb-0.5">이장 위치 확인</div>
+                        <div class="text-xs text-slate-400">"이장이 마을 안에 있나? 없으면 자율방재단 먼저."</div>
+                    </div>
+                </div>
+
+                <!-- T+2분30초 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-red-300">T+2분30초</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-3 h-3 rounded-full bg-red-300 border-2 border-white shadow mt-1.5 shrink-0"></div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[2.5rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-4">
+                        <div class="text-sm font-bold text-slate-500 mb-0.5">플래시오버</div>
+                        <div class="text-xs text-slate-400">"이 시간이면 비닐 다 탔어. 진입 강행하면 선발대 위험."</div>
+                    </div>
+                </div>
+
+                <!-- T+5분 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-slate-400">T+5분</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-3 h-3 rounded-full bg-slate-300 border-2 border-white shadow mt-1.5 shrink-0"></div>
+                        <div class="w-px flex-1 bg-slate-200 min-h-[2.5rem]"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-4">
+                        <div class="text-sm font-bold text-slate-500 mb-0.5">이장 도착</div>
+                        <div class="text-xs text-slate-400">"어두워서 손전등 없으면 못 들어가."</div>
+                    </div>
+                </div>
+
+                <!-- T+12분 -->
+                <div class="flex gap-0">
+                    <div class="w-20 shrink-0 pt-1 pr-3 text-right">
+                        <span class="text-xs font-mono font-bold text-slate-400">T+12분</span>
+                    </div>
+                    <div class="flex flex-col items-center w-6 shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-slate-400 border-2 border-white shadow mt-1 shrink-0"></div>
+                    </div>
+                    <div class="flex-1 pl-4 pb-2">
+                        <div class="text-sm font-bold text-slate-500 mb-0.5">소방차 도착</div>
+                        <div class="text-xs text-slate-400">"이미 이장이 할머니 데리고 나왔으면 진압만 하면 돼."</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 하단 요약 -->
+            <div class="mt-6 pt-5 border-t border-slate-100 bg-slate-900 rounded-xl px-5 py-4">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">PATOS가 자동화해야 할 것</div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    T+0 ~ T+15초 사이 소방관의 판단 5가지 —
+                    <span class="text-amber-300 font-semibold">기억(마을·주민 정보) + 관계(사람-건물-자원 연결) + 경험(재질·기상 계산)</span>을
+                    15초 안에 재현하는 것. 이 기준선이 있어야 데이터 수집의 목적과 범위가 나온다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firefighter Judgment Visualization (p.5) -->
+    <div class="w-full max-w-4xl mb-10">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-amber-50 text-amber-600 rounded-xl">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">소방관 시간대별 판단 시각화</h2>
+                <p class="text-slate-500 text-xs mt-0.5">FIRE-2026-001 · 기억·관계·경험 3가지 판단 유형 분류</p>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap gap-2 mb-5 items-center">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">판단 유형</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>기억
+                <span class="text-[10px] font-normal text-amber-600">마을·주민 사전 지식</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-indigo-500 inline-block"></span>관계
+                <span class="text-[10px] font-normal text-indigo-600">사람·건물·자원 연결</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-50 border border-orange-200 px-2.5 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-orange-500 inline-block"></span>경험
+                <span class="text-[10px] font-normal text-orange-600">재질·기상 계산 직관</span>
+            </span>
+        </div>
+
+        <!-- Card grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+
+            <!-- T+0 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900">
+                    <span class="font-mono text-sm font-black text-red-400">T+0</span>
+                    <span class="text-[10px] text-slate-400 font-medium">신고 접수 · 03:14</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "마 씨 집이면 23-7번지. 샌드위치 패널이고 골목이 좁아."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">기억 — 주소</span>
+                        <span class="text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">기억 — 건물 구조</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+7초 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900">
+                    <span class="font-mono text-sm font-black text-orange-400">T+7초</span>
+                    <span class="text-[10px] text-slate-400 font-medium">건물 조회</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "접근로 1.8m. 소방차 절대 못 들어가. 들것도 힘들다."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">기억 — 골목 폭</span>
+                        <span class="text-[10px] font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">경험 — 차량 진입 한계</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+10초 -->
+            <div class="bg-white rounded-xl border border-red-100 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-red-600">
+                    <span class="font-mono text-sm font-black text-white">T+10초</span>
+                    <span class="text-[10px] text-red-200 font-medium">거주자 확인</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "84세 귀 어두우시고 혼자. 서울 자녀 연락은 소용없어."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">기억 — 주민 취약성</span>
+                        <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">관계 — 서울 자녀 무효</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+13초 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900">
+                    <span class="font-mono text-sm font-black text-orange-400">T+13초</span>
+                    <span class="text-[10px] text-slate-400 font-medium">화재 계산</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "바람 세고 건조. 샌드위치 패널이면 2~3분이면 끝나."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">경험 — 재질별 연소</span>
+                        <span class="text-[10px] font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">경험 — 풍속·습도</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+15초 - PATOS 목표 (강조) -->
+            <div class="bg-white rounded-xl border-2 border-slate-700 shadow-lg overflow-hidden card-hover sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-800">
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono text-sm font-black text-white">T+15초</span>
+                        <span class="text-[9px] font-bold text-slate-800 bg-white px-1.5 py-0.5 rounded-full">PATOS 목표선</span>
+                    </div>
+                    <span class="text-[10px] text-slate-300 font-medium">인접 위험</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "바람이 BLDG-006 방향. 조만수 씨도 귀 어두우신데. 동시 경보 넣어."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">관계 — 인접 건물</span>
+                        <span class="text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">기억 — 조만수 난청</span>
+                        <span class="text-[10px] font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">경험 — 풍향</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+2분 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-700">
+                    <span class="font-mono text-sm font-black text-slate-200">T+2분</span>
+                    <span class="text-[10px] text-slate-400 font-medium">이장 위치</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "이장이 마을 안에 있나? 없으면 자율방재단 먼저."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">관계 — 가용 자원 파악</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+2분30초 -->
+            <div class="bg-white rounded-xl border border-red-100 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-red-700">
+                    <span class="font-mono text-sm font-black text-white">T+2분30초</span>
+                    <span class="text-[10px] text-red-200 font-medium">플래시오버</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "이 시간이면 비닐 다 탔어. 진입 강행하면 선발대 위험."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">경험 — 연소 진행 계산</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+5분 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-700">
+                    <span class="font-mono text-sm font-black text-slate-200">T+5분</span>
+                    <span class="text-[10px] text-slate-400 font-medium">이장 도착</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "어두워서 손전등 없으면 못 들어가."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">경험 — 야간 현장</span>
+                        <span class="text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">기억 — 지형</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T+12분 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-600">
+                    <span class="font-mono text-sm font-black text-slate-100">T+12분</span>
+                    <span class="text-[10px] text-slate-400 font-medium">소방차 도착</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5 leading-relaxed mb-3 italic">
+                        "이미 이장이 할머니 데리고 나왔으면 진압만 하면 돼."
+                    </p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">관계 — 구조 상태 확인</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Judgment summary -->
+        <div class="mt-4 bg-slate-900 rounded-2xl p-5 sm:p-6">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">판단 유형 분포 — FIRE-2026-001</div>
+            <div class="grid grid-cols-3 gap-4 text-center mb-5">
+                <div>
+                    <div class="text-3xl font-black text-amber-400">기억</div>
+                    <div class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">주소·주민·지형<br>사전 암기 지식</div>
+                    <div class="mt-2 text-[10px] text-amber-500 font-semibold">→ TypeDB 온톨로지</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-indigo-400">관계</div>
+                    <div class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">사람-건물-자원<br>연결 기반 판단</div>
+                    <div class="mt-2 text-[10px] text-indigo-400 font-semibold">→ TypeDB 그래프</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-orange-400">경험</div>
+                    <div class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">재질·기상·현장<br>직관적 계산</div>
+                    <div class="mt-2 text-[10px] text-orange-400 font-semibold">→ LLM 추론</div>
+                </div>
+            </div>
+            <div class="pt-4 border-t border-white/10 text-xs text-slate-400 text-center leading-relaxed">
+                이 3가지 판단이 PATOS 설계의 근거 —
+                <span class="text-white font-semibold">기억·관계는 온톨로지로, 경험은 LLM으로 각각 자동화할 수 있다</span>
             </div>
         </div>
     </div>
@@ -685,33 +1177,33 @@
 
             <div class="space-y-2">
                 <!-- Layer 5 -->
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-amber-400/20">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0">
-                        <span class="text-amber-300 font-bold text-sm">5</span>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-400/20">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0">
+                        <span class="text-emerald-300 font-bold text-sm">5</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="text-sm font-bold text-white">피드백 루프</span>
-                            <span class="text-[10px] text-slate-400">실제 결과 → 규칙 자동 개선</span>
+                            <span class="text-[10px] text-slate-400">결과 기록 → 모델 정확도 추적 → 가중치 재보정</span>
                         </div>
-                        <div class="text-[11px] text-slate-500 mt-0.5">실화재 결과 데이터 축적 후 inference rules 보정 → 암묵지 자동 업데이트</div>
+                        <div class="text-[11px] text-emerald-400/70 mt-0.5 font-mono">TP/FP/FN 기록 → 5인자 가중치 재보정 엔진 → 취약도 재산출</div>
                     </div>
-                    <span class="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">미구현</span>
+                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">구현됨 ✓</span>
                 </div>
 
                 <!-- Layer 4 -->
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-amber-400/20">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0">
-                        <span class="text-amber-300 font-bold text-sm">4</span>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-400/20">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0">
+                        <span class="text-emerald-300 font-bold text-sm">4</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2 flex-wrap">
-                            <span class="text-sm font-bold text-white">감사 추적</span>
-                            <span class="text-[10px] text-slate-400">누가 / 언제 / 왜 결정했나 기록</span>
+                            <span class="text-sm font-bold text-white">감사 추적 + Action Framework</span>
+                            <span class="text-[10px] text-slate-400">결정·실행·근거 전 과정 기록</span>
                         </div>
-                        <div class="text-[11px] text-slate-500 mt-0.5">모든 판단에 reasoning_chain 저장 → 책임 소재 추적 · 팔란티어 핵심 원칙</div>
+                        <div class="text-[11px] text-emerald-400/70 mt-0.5 font-mono">액션 타입 4종 · 전제조건 검증 · localStorage 감사로그 · 오버라이드 플래그</div>
                     </div>
-                    <span class="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">미구현</span>
+                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">구현됨 ✓</span>
                 </div>
 
                 <!-- Layer 3 -->
@@ -761,10 +1253,9 @@
             </div>
 
             <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between flex-wrap gap-2">
-                <div class="text-xs text-slate-500">레이어 1~3 구현 완료 · 레이어 4~5가 v5 핵심 과제</div>
+                <div class="text-xs text-emerald-400 font-semibold">레이어 1~5 전 구간 구현 완료 · 2026-05</div>
                 <div class="flex gap-3">
                     <span class="flex items-center gap-1.5 text-[11px] text-emerald-400"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>구현됨</span>
-                    <span class="flex items-center gap-1.5 text-[11px] text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>미구현</span>
                 </div>
             </div>
         </div>
